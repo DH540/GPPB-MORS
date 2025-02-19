@@ -1,0 +1,140 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Inbox
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="Inbox.css">
+  <script>
+   function toggleArrow(button) {
+     const icon = button.querySelector('i');
+     if (icon.classList.contains('fa-arrow-up')) {
+       icon.classList.remove('fa-arrow-up');
+       icon.classList.add('fa-arrow-down');
+     } else {
+       icon.classList.remove('fa-arrow-down');
+       icon.classList.add('fa-arrow-up');
+     }
+   }
+  </script>
+ </head>
+ <body>
+  <div class="flex h-screen">
+   <!-- Sidebar -->
+   <div class="sidebar">
+    <div class="mb-4">
+     <img alt="Government Procurement Policy Board - Technical Support Office logo" height="100" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgh_XVflDGear3KCtuF--2bhgzKY0Au2ibeQ&s" width="150"/>
+    </div>
+    <nav class="space-y-4">
+     <a class="flex items-center" href="#">
+      <i class="fas fa-inbox">
+      </i>
+      <span>
+       Inbox
+      </span>
+     </a>
+     <a class="flex items-center" href="#">
+      <i class="fas fa-history">
+      </i>
+      <span>
+       History
+      </span>
+     </a>
+     <a class="flex items-center" href="#">
+      <i class="fas fa-calendar-alt">
+      </i>
+      <span>
+       Calendar
+      </span>
+     </a>
+    </nav>
+    <div class="bottom-section">
+     <div class="user-info">
+      <i class="fas fa-user-circle text-2xl">
+      </i>
+      <span>
+       Account Email
+      </span>
+     </div>
+     <a href="#">
+      Sign out
+     </a>
+    </div>
+   </div>
+   <!-- Main Content -->
+   <div class="main-content">
+    <!-- Background image placeholder -->
+    <img src="https://lh3.googleusercontent.com/gps-cs-s/AB5caB-5YWOEj_fUX2dXw9L1aQJc6kUp8IXndi3S0a91-FFBWTwfV5rmIc6NyO9FPB751QY97fYsqeyoZg5q7dgasbBRd-70IQtdx9w0LYyGHU1seLwusuHgMP1VB5hss6t5DBSw7YwY9Q=s680-w680-h510" alt="Background image" class="background-image">
+    <!-- Inbox Content -->
+    <div class="content">
+     <div class="header">
+      <div class="flex justify-between items-center">
+       <h1>
+        INBOX
+       </h1>
+      </div>
+      <div class="flex justify-between items-center mt-2">
+       <input class="search-input" placeholder="Search Inbox" type="text"/>
+      </div>
+     </div>
+     <div class="filters">
+      <div class="filter-buttons">
+       <div class="left-buttons">
+        <button>
+         <i class="fas fa-check-square">
+         </i>
+        </button>
+        <button>
+         <i class="fas fa-sync-alt">
+         </i>
+        </button>
+       </div>
+       <div class="right-buttons">
+        <button onclick="toggleArrow(this)">
+         <i class="fas fa-arrow-up">
+         </i>
+        </button>
+        <select>
+         <option>
+          Date
+         </option>
+         <option>
+          Name
+         </option>
+         <option>
+          Request Date
+         </option>
+        </select>
+       </div>
+      </div>
+      <table class="table">
+       <thead>
+        <tr class="text-left">
+         <th>
+          <input type="checkbox"/>
+         </th>
+         <th>
+          Sender
+         </th>
+         <th>
+          Subject
+         </th>
+         <th>
+          Date
+         </th>
+        </tr>
+       </thead>
+       <tbody>
+        <!-- No entries -->
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+  </div>
+ </body>
+</html>
