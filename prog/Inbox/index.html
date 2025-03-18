@@ -1,0 +1,175 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+
+</head>
+<body>
+    <div class="flex h-screen">
+        <div class="hidden md:flex md:flex-col bg-white shadow-lg p-4 w-64">
+            <div class="mb-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgh_XVflDGear3KCtuF--2bhgzKY0Au2ibeQ&s" 
+                     alt="Government Procurement Policy Board - Technical Support Office logo" width="150" height="100" />
+            </div>
+            <nav class="space-y-4">
+                <a href="../Inbox/inbox.html" class="flex items-center">
+                    <i class="fas fa-inbox mr-2"></i>
+                    <span>Inbox</span>
+                </a>
+                <a href="../History/History.html" class="flex items-center">
+                    <i class="fas fa-history mr-2"></i>
+                    <span>History</span>
+                </a>
+                <a href="../Calendar/Calendar.html" class="flex items-center">
+                    <i class="fas fa-calendar-alt mr-2"></i>
+                    <span>Calendar</span>
+                </a>
+            </nav>
+            <div class="mt-auto">
+                <div class="user-info flex items-center space-x-2">
+                    <i class="fas fa-user-circle text-2xl"></i>
+                    <span>Account Email</span>
+                </div>
+                <a href="../Consultation Form/ConsultationForm.html" class="text-red-500">Sign out</a>
+            </div>
+        </div>
+        <div class="main-content">
+            <img src="../images/bg.png" alt="Background image" class="background-image">
+            <div class="content">
+                <div class="header">
+                    <h1>INBOX</h1>
+                    <input class="search-input" placeholder="Search Inbox" type="text"/>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg relative">
+                    <a class="absolute top-2 left-2 text-xl font-bold" href="inbox.html">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="ml-4">
+                            <h2 class="text-lg font-bold">Juan Jose Dela Cruz</h2>
+                            <p class="text-gray-600">iawt4ji@gmail.com</p>
+                            <p class="text-gray-600">to me</p>
+                        </div>
+                        <p class="text-gray-600">Received on Feb. 2, 2025</p>
+                    </div>
+                </div>
+                <div class="bg-white bg-opacity-80 p-4 rounded-lg shadow-md mt-2 h-[calc(100vh-15.8rem)]">
+                    <h3 class="text-lg font-bold mb-2 ml-10">Appointment Summary</h3>
+                    <p class="text-gray-600 mb-2 ml-10">Details</p>
+                    <hr class="mb-4"/>
+                    <div class="space-y-2 text-center">
+                        <p><span class="font-bold">Name:</span><span class="ml-2">Juan Jose Dela Cruz</span></p>
+                        <p><span class="font-bold">Email:</span><span class="ml-2">iawt4ji@gmail.com</span></p>
+                        <p><span class="font-bold">Phone Number:</span><span class="ml-2">+1 234567891</span></p>
+                        <p><span class="font-bold">Company Name:</span><span class="ml-2">ABC Group</span></p>
+                        <p><span class="font-bold">Consultation Interest:</span><span class="ml-2">Marketing</span></p>
+                        <p><span class="font-bold">Date:</span><span class="ml-2">2/01/2025</span></p>
+                        <p><span class="font-bold">Time:</span><span class="ml-2">1:00 PM</span></p>
+                        <p><span class="font-bold">Additional comments:</span><span class="ml-2">None</span></p>
+                    </div>
+                    <div class="flex justify-center space-x-4 mt-12">
+                        <button class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Accept</button>
+                        <button class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reject</button>
+                        <button class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reschedule</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Mobile Bottom Navigation -->
+<div class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-300 z-20">
+  <div class="flex justify-around text-gray-700">
+    <a href="../Inbox/Inbox.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+      <i class="fas fa-inbox"></i><span class="text-xs">Inbox</span>
+    </a>
+    <a href="../History/History.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+      <i class="fas fa-history"></i><span class="text-xs">History</span>
+    </a>
+    <a href="../Calendar/Calendar.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+      <i class="fas fa-calendar-alt"></i><span class="text-xs">Calendar</span>
+    </a>
+    <a href="../Consulation Form/ConsultationForm.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+      <i class="fas fa-sign-out-alt"></i><span class="text-xs">Sign Out</span>
+    </a>
+  </div>
+</div>
+
+
+
+
+    <script>
+        function sendMail(action){
+
+            var testEmail = "dylanaguillosalazar@gmail.com";
+            var userName = document.querySelector(".text-right:nth-child(2)")?.innerText || "Client";
+            var userEmail = document.querySelector(".text-right:nth-child(4)")?.innerText || "example@example.com";
+            var userDate = document.querySelector(".text-right:nth-child(12)")?.innerText || "N/A";
+            var userTime = document.querySelector(".text-right:nth-child(14)")?.innerText || "N/A";
+            var requestID = document.querySelector(".text-right:nth-child(16)")?.innerText || "REQ0000";
+        
+            let templateID;
+        
+            if (action === "approved") {
+                templateID = "template_wkj756d";  // Use the approval template
+            } else if (action === "rejected") {
+                templateID = "template_ujmyzh4";  // Use the rejection template
+            } else if (action === "rescheduled") {
+                templateID = " ";  // Use the reschedule template
+            }
+        
+            const params = {
+                name: userName,
+                email: testEmail,
+                appt_date: userDate,
+                appt_time: userTime,
+                request_id: requestID,
+                consultation_mode: "Online",  // Can be changed dynamically
+                consultation_link: action === "approved" ? "https://meet.example.com/12345" : "" 
+            };
+        
+            const serviceID = "service_ob944xf";  
+        
+            emailjs.send(serviceID, templateID, params)
+                .then(res => {
+                    alert("Email sent successfully!");
+                    console.log(res);
+                })
+                .catch(err => console.error("Failed to send email", err));
+        }
+        
+        
+            
+            var params = {
+                name: document.getElementById("name").value ,
+                email: document.getElementById("email").value ,
+                message: document.getElementById("message").value
+            }
+        
+            const serviceID = "service_ob944xf";
+            const templateID = "template_wkvq4nl";
+        
+            emailjs.send(serviceID,templateID,params)
+            .then(
+                res => {
+            document.getElementById("name").value = " ";
+            document.getElementById("email").value = " ";
+            document.getElementById("message").value = " ";
+            console.log(res);
+            alert("your message sent successfully");
+                }
+            )
+            .catch(err => console.log(err));
+        
+    
+    </script>
+
+
+
+
+</body>
+</html>

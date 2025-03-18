@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>History</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="History.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="history.css">
+</head>
+
+<body class="bg-gray-200 pb-20"> <!-- Added padding bottom for mobile nav -->
+  <div class="flex flex-col md:flex-row h-screen overflow-hidden">
+
+    <!-- DESKTOP SIDEBAR -->
+    <div class="hidden md:flex flex-col w-60 bg-gray-100 p-4 flex-shrink-0 h-screen">
+      <div class="mb-4">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgh_XVflDGear3KCtuF--2bhgzKY0Au2ibeQ&s" width="150" height="100" alt="Logo" />
+      </div>
+      <nav class="space-y-4">
+        <a class="flex items-center gap-2 text-gray-700 hover:text-gray-900" href="../Inbox/inbox.html"><i class="fas fa-inbox"></i>Inbox</a>
+        <a class="flex items-center gap-2 text-gray-700 hover:text-gray-900" href="../History/History.html"><i class="fas fa-history"></i>History</a>
+        <a class="flex items-center gap-2 text-gray-700 hover:text-gray-900" href="../Calendar/Calendar.html"><i class="fas fa-calendar-alt"></i>Calendar</a>
+      </nav>
+      <div class="mt-auto">
+        <div class="user-info flex items-center gap-2">
+          <i class="fas fa-user-circle text-2xl"></i><span>Account Email</span>
+        </div>
+        <a href="../Consultation Form/ConsultationForm.html" class="text-sm text-gray-500 hover:text-gray-700">Sign out</a>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content flex-1 flex flex-col relative overflow-hidden">
+      <img src="../images/bg.png" alt="Background" class="absolute inset-0 w-full h-full object-cover z-0">
+
+      <div class="content bg-white bg-opacity-75 p-4 relative z-10 flex-1 flex flex-col overflow-hidden">
+
+        <!-- Header -->
+        <div class="header bg-blue-700 text-white p-4 rounded-t">
+          <div class="flex justify-between items-center">
+            <h1 class="text-lg font-bold">HISTORY</h1>
+          </div>
+          <div class="mt-2">
+            <input class="search-input p-2 w-full rounded text-black" placeholder="Search History" type="text" onkeyup="searchTable()" />
+          </div>
+        </div>
+
+        <!-- Filters and Table Wrapper -->
+        <div class="filters bg-gray-100 bg-opacity-75 p-4 flex-1 overflow-auto rounded-b">
+          <div class="filter-buttons flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+
+            <!-- Left Buttons -->
+            <div class="left-buttons flex items-center gap-2">
+              <button class="btn bg-white p-2 rounded" onclick="toggleSelectAll(this)"><i class="fas fa-check-square"></i></button>
+              <button class="btn bg-white p-2 rounded" onclick="deleteSelectedRows()"><i class="fas fa-trash-alt"></i></button>
+              <button class="btn bg-white p-2 rounded" onclick="refreshPage()"><i class="fas fa-sync-alt"></i></button>
+
+              <button class="fstat p-2 rounded text-white" style="background-color: #00A651;" onclick="filterStatus('available', this)">Available</button>
+              <button class="fstat p-2 rounded text-white" style="background-color: #E12926;" onclick="filterStatus('cancelled', this)">Cancelled</button>
+              <button class="fstat p-2 rounded text-white" style="background-color: #F5A623;" onclick="filterStatus('rescheduled', this)">Rescheduled</button>
+            </div>
+
+            <!-- Right Buttons -->
+            <div class="right-buttons flex items-center gap-2">
+              <button id="sortArrow" onclick="toggleArrow(this)" class="btn bg-white p-2 rounded"><i class="fas fa-arrow-up"></i></button>
+              <select id="sortCriteria" onchange="applySorting()" class="bg-white p-2 rounded">
+                <option value="date">Date</option>
+                <option value="name">Name</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Scrollable Table -->
+          <div class="overflow-auto max-h-[60vh]">
+            <table class="table w-full table-auto">
+              <thead class="bg-blue-700 text-white">
+                <tr>
+                  <th></th>
+                  <th>Sender</th>
+                  <th>Subject</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="history-row available">
+                  <td><input type="checkbox" /></td>
+                  <td>Gavin Jacob Mallari</td>
+                  <td>Consultation Request for Feb. 15, 2025</td>
+                  <td class="status text-green-600">Approved</td>
+                  <td>Feb. 15, 2025</td>
+                </tr>
+                <tr class="history-row cancelled">
+                  <td><input type="checkbox" /></td>
+                  <td>Ryuu Del Mundo</td>
+                  <td>Consultation Request for Feb. 5, 2025</td>
+                  <td class="status text-red-700">Cancelled</td>
+                  <td>Feb. 5, 2025</td>
+                </tr>
+                <tr class="history-row rescheduled">
+                  <td><input type="checkbox" /></td>
+                  <td>Bryxx Nacario</td>
+                  <td>Consultation Request for Feb. 7, 2025</td>
+                  <td class="status text-yellow-500">Rescheduled</td>
+                  <td>Feb. 5, 2025</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-inner flex justify-around items-center py-3 border-t z-20">
+      <a href="../Inbox/inbox.html" class="flex flex-col items-center text-gray-700 hover:text-blue-600">
+        <i class="fas fa-inbox text-xl"></i>
+        <span class="text-xs">Inbox</span>
+      </a>
+      <a href="../History/History.html" class="flex flex-col items-center text-gray-700 hover:text-blue-600">
+        <i class="fas fa-history text-xl"></i>
+        <span class="text-xs">History</span>
+      </a>
+      <a href="../Calendar/Calendar.html" class="flex flex-col items-center text-gray-700 hover:text-blue-600">
+        <i class="fas fa-calendar-alt text-xl"></i>
+        <span class="text-xs">Calendar</span>
+      </a>
+      <a href="../Consultation Form/ConsultationForm.html" class="flex flex-col items-center text-gray-700 hover:text-blue-600">
+        <i class="fas fa-sign-out-alt text-xl"></i>
+        <span class="text-xs">Sign Out</span>
+      </a>
+    </nav>
+
+  </div>
+</body>
+</html>
