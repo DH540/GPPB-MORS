@@ -1,3 +1,19 @@
+const firebaseConfig = {
+    apiKey: "AIzaSyBEJMTq5PQNrwDELbuqGfIFGFxJ3S-ke_Q",
+    authDomain: "css151l-6290e.firebaseapp.com",
+    databaseURL: "https://css151l-6290e-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    projectId: "css151l-6290e",
+    storageBucket: "css151l-6290e.firebasestorage.app",
+    messagingSenderId: "907702008183",
+    appId: "1:907702008183:web:9dbb807a3db2e2958bc972"
+};
+
+// Initialize Firebase  
+firebase.initializeApp(firebaseConfig);
+
+// Reference Firebase database
+const contactFormDB = firebase.database().ref("contactFormDB");
+
 document.addEventListener('DOMContentLoaded', () => {
     try {
         emailjs.init('GtZXPUDV-aCRQ-MeK');
@@ -51,22 +67,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 templateId: 'template_1gom91e'
             });
 
-            const response = await emailjs.send(
+            const emailResponse = await emailjs.send(
                 'default_service',
                 'template_1gom91e',
                 emailParams
             );
 
-            console.log('Email sent successfully:', response);
+            console.log('Email sent successfully:', emailResponse);
+
+            // Save to Firebase
+            const dbResponse = await contactFormDB.push(formData);
+            console.log("Data saved to Firebase with key:", dbResponse.key);
+
+            // Store data in sessionStorage before redirecting
             sessionStorage.setItem('consultationData', JSON.stringify(formData));
             window.location.href = './receipt.html';
+
         } catch (error) {
             console.error('Detailed error information:', {
                 message: error.message,
                 stack: error.stack,
                 error: error
             });
-            alert('There was an error sending your consultation details. Please try again. Error: ' + error.message);
+            alert('There was an error processing your consultation request. Please try again. Error: ' + error.message);
         }
     });
 });
