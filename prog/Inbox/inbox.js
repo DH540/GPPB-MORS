@@ -1,3 +1,46 @@
+const firebaseConfig = {
+    apiKey: "AIzaSyBEJMTq5PQNrwDELbuqGfIFGFxJ3S-ke_Q",
+    authDomain: "css151l-6290e.firebaseapp.com",
+    databaseURL: "https://css151l-6290e-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    projectId: "css151l-6290e",
+    storageBucket: "css151l-6290e.firebasestorage.app",
+    messagingSenderId: "907702008183",
+    appId: "1:907702008183:web:9dbb807a3db2e2958bc972"
+};
+
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const inboxTableBody = document.getElementById("inbox-table-body");
+
+function loadInbox() {
+    const inboxTable = document.getElementById("inbox-table-body");
+    inboxTable.innerHTML = ""; // Clear previous entries
+
+    database.ref("contactFormDB").on("value", snapshot => {
+        inboxTable.innerHTML = ""; // Clear table before adding new data
+        snapshot.forEach(childSnapshot => {
+            const data = childSnapshot.val();
+            console.log("Retrieved data:", data); // Debugging log
+
+            const formattedDateWords = formatDate(data.appointmentDate); // "Month Day, Year"
+            const formattedDateNumeric = formatDateNumeric(data.appointmentDate); // "MM/DD/YYYY"
+
+            const row = document.createElement("tr");
+            row.classList.add("inbox-row"); // for search/sort to work
+
+            row.innerHTML = `
+                <td><input type="checkbox"/></td>
+                <td>${data.firstName || 'N/A'} ${data.lastName || 'N/A'}</td>
+                <td>Consultation Request for ${formattedDateWords}</td>
+                <td>${data.status || 'Pending'}</td>
+                <td>${formattedDateNumeric}</td>
+            `;
+            inboxTable.appendChild(row);
+        });
+    });
+}
+
+
 function showAllRows() {
     document.querySelectorAll('.inbox-row').forEach(row => {
         row.style.display = "";
@@ -18,23 +61,23 @@ function toggleSelectAll(button) {
     const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
 
     checkboxes.forEach(checkbox => {
-        checkbox.checked = !allChecked; // Toggle selection
+        checkbox.checked = !allChecked;
     });
 }
 
 function refreshPage() {
-    location.reload(); // Reload the page
+    location.reload();
 }
 
 function deleteSelectedRows() {
     const checkboxes = document.querySelectorAll("tbody input[type='checkbox']:checked");
 
     checkboxes.forEach((checkbox) => {
-        checkbox.closest("tr").remove(); // Remove the entire row
+        checkbox.closest("tr").remove();
     });
 }
 
-let currentOrder = "asc"; // Default order
+let currentOrder = "asc";
 let currentCriteria = "date";
 
 function toggleArrow() {
@@ -57,17 +100,16 @@ function sortTable(column, order) {
         let valueA, valueB;
 
         if (column === "date") {
-            valueA = new Date(rowA.cells[2].textContent.trim()); // Assuming Date is in column index 2
+            valueA = new Date(rowA.cells[2].textContent.trim());
             valueB = new Date(rowB.cells[2].textContent.trim());
         } else if (column === "name") {
-            valueA = rowA.cells[0].textContent.trim().toLowerCase(); // Assuming Name is in column index 0
+            valueA = rowA.cells[0].textContent.trim().toLowerCase();
             valueB = rowB.cells[0].textContent.trim().toLowerCase();
         }
 
         return order === "asc" ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
     });
 
-    // Reattach sorted rows to the table
     rows.forEach(row => table.appendChild(row));
 }
 
@@ -86,10 +128,24 @@ function openEntryView(name, email, phone, company, interest, date, time, commen
     console.log("Saved Data: ", appointmentData);
     window.location.href = "entry.html";
 }
+function formatDate(dateStr) {
+    const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+    const date = new Date(dateStr);
+    return date.toLocaleDateString(undefined, options); // e.g., "Monday, March 18, 2025"
+}
+
+function formatDateNumeric(dateStr) {
+    const date = new Date(dateStr);
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    const yyyy = date.getFullYear();
+    return `${mm}/${dd}/${yyyy}`; // e.g., "03/18/2025"
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const appointmentData = JSON.parse(localStorage.getItem("appointmentData"));
-    
+
     if (appointmentData) {
         document.getElementById("name").textContent = appointmentData.name;
         document.getElementById("email").textContent = appointmentData.email;
@@ -101,3 +157,4 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("comments").textContent = appointmentData.time;
     }
 });
+document.addEventListener("DOMContentLoaded", loadInbox);
