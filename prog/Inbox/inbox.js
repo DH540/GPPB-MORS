@@ -1,3 +1,9 @@
+function showAllRows() {
+    document.querySelectorAll('.inbox-row').forEach(row => {
+        row.style.display = "";
+    });
+}
+
 function searchTable() {
     const input = document.querySelector('.search-input').value.toLowerCase();
     const rows = document.querySelectorAll('.inbox-row');
