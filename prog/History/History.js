@@ -1,3 +1,5 @@
+// SAY YO MAMA IF U READ THIS!!
+
 // Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyBEJMTq5PQNrwDELbuqGfIFGFxJ3S-ke_Q",
