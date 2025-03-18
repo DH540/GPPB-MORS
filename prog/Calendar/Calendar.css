@@ -4,6 +4,10 @@ body {
   height: 100%;
 }
 
+.element {
+  width: 100%;
+}
+
 .sidebar {
   width: 12rem;
   background-color: #f3f4f6;
