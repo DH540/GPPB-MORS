@@ -226,8 +226,8 @@ body {
   font-weight: 700;
 }
 
-@media (max-height: 800px) {
-  .calendar-container {
-    max-height: 80vh;
+@media (min-width: 768px) {
+  .element {
+      width: 50%;
   }
 }
