@@ -64,8 +64,8 @@
                             <button>
                                 <i class="fas fa-check-square" onclick="toggleSelectAll(this)"></i>
                             </button>
-                            <button>
-                                <i class="fas fa-trash-alt" onclick="deleteSelectedRows()"></i> <!-- Delete button -->
+                            <button id="open">
+                                <i class="fas fa-trash-alt" id="open"></i> <!-- Delete button -->
                             </button>
                             <button>
                                 <i class="fas fa-sync-alt" onclick="refreshPage()"></i>
@@ -120,7 +120,19 @@
         </div>
     </div>
   
-
+    <!-- Modal -->
+    <div id="modal-container" class="modal-container">
+        <div class="modal">
+            <div class="modal-in">
+                <h1>Delete these items?</h1>
+                <p>These requests will be permanently deleted</p>
+                <div class="modal-btns">
+                    <button id="continue" style="background-color: #1d4ed8; color: #ffffff;">Continue</button>
+                    <button id="close" style="background-color: #e7e7e7;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

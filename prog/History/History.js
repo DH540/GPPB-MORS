@@ -41,9 +41,7 @@ function deleteSelectedRows() {
     if (checkboxes.length === 0) {
         alert("No rows selected for deletion.");
         return;
-    }
-
-    if (!confirm("Are you sure you want to delete the selected records?")) return;
+    } 
 
     checkboxes.forEach(checkbox => {
         const row = checkbox.closest("tr");
@@ -144,4 +142,39 @@ function sortTable(column, order) {
 
     rows.forEach(row => document.getElementById("history-table-body").appendChild(row));
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const openModalBtn = document.getElementById("open"); 
+    const closeModalBtn = document.getElementById("close");
+    const modalContainer = document.querySelector(".modal-container");
+    const continueBtn = document.getElementById("continue");
+
+    function hasSelectedRows() {
+        return document.querySelectorAll(".table tbody input[type='checkbox']:checked").length > 0;
+    }
+
+    // Open Modal when clicking the trash icon
+    openModalBtn.addEventListener("click", function () {
+        if (hasSelectedRows()) {
+            modalContainer.classList.add("show"); 
+        }
+    });
+
+    // Close Modal when clicking the "Cancel" button
+    closeModalBtn.addEventListener("click", function () {
+        modalContainer.classList.remove("show"); // Hide the modal
+    });
+
+    continueBtn.addEventListener("click", function () {
+        deleteSelectedRows(); // Call the function to delete selected rows
+        modalContainer.classList.remove("show"); // Hide modal after deleting
+    });
+
+    // Close Modal when clicking outside of it
+    modalContainer.addEventListener("click", function (event) {
+        if (event.target === modalContainer) {
+            modalContainer.classList.remove("show");
+        }
+    });
+});
 

@@ -169,3 +169,34 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 document.addEventListener("DOMContentLoaded", loadInbox);
 
+document.addEventListener("DOMContentLoaded", function () {
+    const openModalBtn = document.getElementById("open"); 
+    const closeModalBtn = document.getElementById("close");
+    const modalContainer = document.querySelector(".modal-container");
+    const continueBtn = document.getElementById("continue");
+
+    function hasSelectedRows() {
+        return document.querySelectorAll(".table tbody input[type='checkbox']:checked").length > 0;
+    }
+
+    openModalBtn.addEventListener("click", function () {
+        if (hasSelectedRows()) {
+            modalContainer.classList.add("show"); 
+        }
+    });
+
+    closeModalBtn.addEventListener("click", function () {
+        modalContainer.classList.remove("show");
+    });
+
+    continueBtn.addEventListener("click", function () {
+        deleteSelectedRows(); 
+        modalContainer.classList.remove("show"); 
+    });
+
+    modalContainer.addEventListener("click", function (event) {
+        if (event.target === modalContainer) {
+            modalContainer.classList.remove("show");
+        }
+    });
+});

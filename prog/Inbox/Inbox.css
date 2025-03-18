@@ -173,3 +173,56 @@
       width: 20%;
       text-align: left;
   }
+
+  .modal-container {
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    opacity: 0;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 50;
+  }
+
+  .modal-container.show {
+    pointer-events: auto;
+    opacity: 1;
+  }
+
+  .modal {
+    background-color: #ffffff;
+    height: 10rem;
+    width: 30rem;
+    border-radius: 10px;
+  }
+  
+  .modal-in {
+    padding: 15px;
+  }
+
+  .modal-in h1 {
+    font-size: 32px;
+    font-weight: bold;
+  }
+  
+  .modal-in p {
+    margin-top: 5px;
+  }
+
+  .modal-in .modal-btns {
+    display: flex;
+    justify-content: flex-end; /* Push buttons to the right */
+    gap: 10px; /* Space between buttons */
+    margin-top: 20px; /* Add space above buttons */
+  }
+
+  .modal-in .modal-btns button {
+    height: 2rem;
+    width: 5rem;
+    border-radius: 50px;
+  }
