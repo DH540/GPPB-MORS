@@ -40,88 +40,84 @@
             <a href="ConsultationForm.html">Sign out</a>
         </div>
     </div>
-    <!-- MAIN CONTENT -->
-    <div class="main-content flex-1 flex flex-col relative overflow-hidden">
-      <img src="../images/bg.png" alt="Background" class="absolute inset-0 w-full h-full object-cover z-0">
-
-      <div class="content bg-white bg-opacity-75 p-4 relative z-10 flex-1 flex flex-col overflow-hidden">
-
-        <!-- Header -->
-        <div class="header bg-blue-700 text-white p-4 rounded-t">
-          <div class="flex justify-between items-center">
-            <h1 class="text-lg font-bold">HISTORY</h1>
+        <!-- Main Content -->
+        <div class="main-content">
+          <!-- Background image placeholder -->
+          <img src="../images/bg.png" alt="Background image" class="background-image">
+          <!-- History Content -->
+          <div class="content">
+              <div class="header">
+                  <div class="flex justify-between items-center">
+                      <h1><b>HISTORY</b></h1>
+                  </div>
+                  <div class="flex justify-between items-center mt-2">
+                      <input class="search-input" placeholder="Search History" type="text" onkeyup="searchTable()"/>
+                  </div>
+              </div>
+              <div class="filters">
+                  <div class="filter-buttons">
+                      <div class="left-buttons">
+                          <button class="btn">
+                              <i class="fas fa-check-square" onclick="toggleSelectAll(this)"></i>
+                          </button>
+                          <button class="btn">
+                              <i class="fas fa-trash-alt" onclick="deleteSelectedRows()"></i> <!-- Delete button -->
+                          </button>
+                          <button class="btn">
+                              <i class="fas fa-sync-alt" onclick="refreshPage()"></i>
+                          </button>
+                          <button class="fstat" style="background-color: #00A651;" onclick="filterStatus('available', this)" data-filter="available">Available</button>
+                          <button class="fstat" style="background-color: #E12926;" onclick="filterStatus('cancelled', this)" data-filter="cancelled">Cancelled</button>
+                          <button class="fstat" style="background-color: #F5A623;" onclick="filterStatus('rescheduled', this)" data-filter="rescheduled">Rescheduled</button>
+                      </div>
+                       <div class="right-buttons">
+                          <button id="sortArrow" onclick="toggleArrow(this)" class="btn">
+                              <i class="fas fa-arrow-up"></i>
+                          </button>
+                          <select id="sortCriteria" onchange="applySorting()">
+                              <option value="date">Date</option>
+                              <option value="name">Name</option>
+                          </select>
+                      </div>
+                  </div>
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th></th>
+                              <th>Sender</th>
+                              <th>Subject</th>
+                              <th>Status</th>
+                              <th>Date</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr class="history-row available">
+                              <td><input type="checkbox"/></td>
+                              <td>Gavin Jacob Mallari</td>
+                              <td>Consultation Request for Feb. 15, 2025</td>
+                              <td class="status" style="color: #00A651;">Approved</td>
+                              <td>Feb. 15, 2025</td>
+                          </tr>
+                          <tr class="history-row cancelled">
+                              <td><input type="checkbox"/></td>
+                              <td>Ryuu Del Mundo</td>
+                              <td>Consultation Request for Feb. 5, 2025</td>
+                              <td class="status" style="color: #a60000;">Cancelled</td>
+                              <td>Feb. 5, 2025</td>
+                          </tr>
+                          <tr class="history-row rescheduled">
+                              <td><input type="checkbox"/></td>
+                              <td>Bryxx Nacario</td>
+                              <td>Consultation Request for Feb. 7, 2025</td>
+                              <td class="status" style="color: #F5A623;">Rescheduled</td>
+                              <td>Feb. 5, 2025</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
           </div>
-          <div class="mt-2">
-            <input class="search-input p-2 w-full rounded text-black" placeholder="Search History" type="text" onkeyup="searchTable()" />
-          </div>
-        </div>
-
-        <!-- Filters and Table Wrapper -->
-        <div class="filters bg-gray-100 bg-opacity-75 p-4 flex-1 overflow-auto rounded-b">
-          <div class="filter-buttons flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-
-            <!-- Left Buttons -->
-            <div class="left-buttons flex items-center gap-2">
-              <button class="btn bg-white p-2 rounded" onclick="toggleSelectAll(this)"><i class="fas fa-check-square"></i></button>
-              <button class="btn bg-white p-2 rounded" onclick="deleteSelectedRows()"><i class="fas fa-trash-alt"></i></button>
-              <button class="btn bg-white p-2 rounded" onclick="refreshPage()"><i class="fas fa-sync-alt"></i></button>
-
-              <button class="fstat p-2 rounded text-white" style="background-color: #00A651;" onclick="filterStatus('available', this)">Available</button>
-              <button class="fstat p-2 rounded text-white" style="background-color: #E12926;" onclick="filterStatus('cancelled', this)">Cancelled</button>
-              <button class="fstat p-2 rounded text-white" style="background-color: #F5A623;" onclick="filterStatus('rescheduled', this)">Rescheduled</button>
-            </div>
-
-            <!-- Right Buttons -->
-            <div class="right-buttons flex items-center gap-2">
-              <button id="sortArrow" onclick="toggleArrow(this)" class="btn bg-white p-2 rounded"><i class="fas fa-arrow-up"></i></button>
-              <select id="sortCriteria" onchange="applySorting()" class="bg-white p-2 rounded">
-                <option value="date">Date</option>
-                <option value="name">Name</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Scrollable Table -->
-          <div class="overflow-auto max-h-[60vh]">
-            <table class="table w-full table-auto">
-              <thead class="bg-blue-700 text-white">
-                <tr>
-                  <th></th>
-                  <th>Sender</th>
-                  <th>Subject</th>
-                  <th>Status</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="history-row available">
-                  <td><input type="checkbox" /></td>
-                  <td>Gavin Jacob Mallari</td>
-                  <td>Consultation Request for Feb. 15, 2025</td>
-                  <td class="status text-green-600">Approved</td>
-                  <td>Feb. 15, 2025</td>
-                </tr>
-                <tr class="history-row cancelled">
-                  <td><input type="checkbox" /></td>
-                  <td>Ryuu Del Mundo</td>
-                  <td>Consultation Request for Feb. 5, 2025</td>
-                  <td class="status text-red-700">Cancelled</td>
-                  <td>Feb. 5, 2025</td>
-                </tr>
-                <tr class="history-row rescheduled">
-                  <td><input type="checkbox" /></td>
-                  <td>Bryxx Nacario</td>
-                  <td>Consultation Request for Feb. 7, 2025</td>
-                  <td class="status text-yellow-500">Rescheduled</td>
-                  <td>Feb. 5, 2025</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-        </div>
       </div>
-    </div>
+  </div>
 
     <!-- MOBILE BOTTOM NAV -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-inner flex justify-around items-center py-3 border-t z-20">

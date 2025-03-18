@@ -2,7 +2,7 @@ function searchTable() {
     const input = document.querySelector('.search-input').value.toLowerCase();
     const rows = document.querySelectorAll('.inbox-row');
     rows.forEach(row => {
-        const rowText = row.textContent.toLowerCase();
+        const text = row.textContent.toLowerCase();
         row.style.display = text.includes(input) ? '' : 'none';
     });
 }
