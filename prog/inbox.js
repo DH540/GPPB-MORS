@@ -78,7 +78,7 @@ function openEntryView(name, email, phone, company, interest, date, time, commen
     };
     localStorage.setItem("appointmentData", JSON.stringify(appointmentData));
     console.log("Saved Data: ", appointmentData);
-    window.location.href = "index.html";
+    window.location.href = "entry.html";
 }
 
 document.addEventListener("DOMContentLoaded", function () {
