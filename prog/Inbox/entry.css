@@ -88,6 +88,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
 .dtl-container {
   width: 100%;
 }
