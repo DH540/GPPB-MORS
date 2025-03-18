@@ -30,15 +30,28 @@ function loadInbox() {
 
             row.innerHTML = `
                 <td><input type="checkbox"/></td>
-                <td>${data.firstName || 'N/A'} ${data.lastName || 'N/A'}</td>
+                <td class="cursor-pointer text-blue-600 hover:underline" onclick='openEntryView(
+    "${data.firstName || ''} ${data.lastName || ''}",
+    "${data.email || ''}",
+    "${data.phoneNumber || ''}",
+    "${data.company || ''}",
+    "${data.areaOfInterest || ''}",
+    "${data.appointmentDate || ''}",
+    "${data.appointmentTime || ''}",
+    "${data.comments || ''}"
+)'>
+    ${data.firstName || 'N/A'} ${data.lastName || 'N/A'}
+</td>
+
                 <td>Consultation Request for ${formattedDateWords}</td>
-                <td>${data.status || 'Pending'}</td>
-                <td>${formattedDateNumeric}</td>
+                <td>${data.appointmentDate || 'Pending'}</td>
+                
             `;
             inboxTable.appendChild(row);
         });
     });
 }
+
 
 
 function showAllRows() {
@@ -128,19 +141,18 @@ function openEntryView(name, email, phone, company, interest, date, time, commen
     console.log("Saved Data: ", appointmentData);
     window.location.href = "entry.html";
 }
-function formatDate(dateStr) {
-    const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
-    const date = new Date(dateStr);
-    return date.toLocaleDateString(undefined, options); // e.g., "Monday, March 18, 2025"
+function formatDate(dateString) {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 }
 
-function formatDateNumeric(dateStr) {
-    const date = new Date(dateStr);
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    const yyyy = date.getFullYear();
-    return `${mm}/${dd}/${yyyy}`; // e.g., "03/18/2025"
+function formatDateNumeric(dateString) {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US");
 }
+
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -158,3 +170,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 document.addEventListener("DOMContentLoaded", loadInbox);
+
