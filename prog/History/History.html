@@ -1,3 +1,4 @@
+<!-- SAY YO MAMA IF U READ THIS -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,12 +6,18 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <title>History</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="History.js"></script>
+  
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="history.css">
 </head>
 
-<body> <!-- Added padding bottom for mobile nav -->
+<body> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    
+    <script src="History.js"></script>
   <div class="flex h-screen">
     <!-- Sidebar -->
     <div class="sidebar">
@@ -40,81 +47,62 @@
             <a href="ConsultationForm.html">Sign out</a>
         </div>
     </div>
-        <!-- Main Content -->
-        <div class="main-content">
-          <!-- Background image placeholder -->
-          <img src="../images/bg.png" alt="Background image" class="background-image">
-          <!-- History Content -->
-          <div class="content">
-              <div class="header">
-                  <div class="flex justify-between items-center">
-                      <h1><b>HISTORY</b></h1>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <img src="../images/bg.png" alt="Background image" class="background-image">
+
+      <div class="content">
+          <div class="header">
+              <div class="flex justify-between items-center">
+                  <h1><b>HISTORY</b></h1>
+              </div>
+              <div class="flex justify-between items-center mt-2">
+                  <input class="search-input" placeholder="Search History" type="text" onkeyup="searchTable()"/>
+              </div>
+          </div>
+
+          <div class="filters">
+              <div class="filter-buttons">
+                  <div class="left-buttons">
+                      <button class="btn">
+                          <i class="fas fa-check-square" onclick="toggleSelectAll(this)"></i>
+                      </button>
+                      <button class="btn">
+                          <i class="fas fa-trash-alt" onclick="deleteSelectedRows()"></i>
+                      </button>
+                      <button class="btn">
+                          <i class="fas fa-sync-alt" onclick="refreshPage()"></i>
+                      </button>
+                      <button class="fstat" style="background-color: #00A651;" onclick="filterStatus('available')" data-filter="available">Available</button>
+                      <button class="fstat" style="background-color: #E12926;" onclick="filterStatus('cancelled')" data-filter="cancelled">Cancelled</button>
+                      <button class="fstat" style="background-color: #F5A623;" onclick="filterStatus('rescheduled')" data-filter="rescheduled">Rescheduled</button>
                   </div>
-                  <div class="flex justify-between items-center mt-2">
-                      <input class="search-input" placeholder="Search History" type="text" onkeyup="searchTable()"/>
+                  <div class="right-buttons">
+                      <button id="sortArrow" onclick="toggleArrow(this)" class="btn">
+                          <i class="fas fa-arrow-up"></i>
+                      </button>
+                      <select id="sortCriteria" onchange="applySorting()">
+                          <option value="date">Date</option>
+                          <option value="name">Name</option>
+                      </select>
                   </div>
               </div>
-              <div class="filters">
-                  <div class="filter-buttons">
-                      <div class="left-buttons">
-                          <button class="btn">
-                              <i class="fas fa-check-square" onclick="toggleSelectAll(this)"></i>
-                          </button>
-                          <button class="btn">
-                              <i class="fas fa-trash-alt" onclick="deleteSelectedRows()"></i> <!-- Delete button -->
-                          </button>
-                          <button class="btn">
-                              <i class="fas fa-sync-alt" onclick="refreshPage()"></i>
-                          </button>
-                          <button class="fstat" style="background-color: #00A651;" onclick="filterStatus('available', this)" data-filter="available">Available</button>
-                          <button class="fstat" style="background-color: #E12926;" onclick="filterStatus('cancelled', this)" data-filter="cancelled">Cancelled</button>
-                          <button class="fstat" style="background-color: #F5A623;" onclick="filterStatus('rescheduled', this)" data-filter="rescheduled">Rescheduled</button>
-                      </div>
-                       <div class="right-buttons">
-                          <button id="sortArrow" onclick="toggleArrow(this)" class="btn">
-                              <i class="fas fa-arrow-up"></i>
-                          </button>
-                          <select id="sortCriteria" onchange="applySorting()">
-                              <option value="date">Date</option>
-                              <option value="name">Name</option>
-                          </select>
-                      </div>
-                  </div>
-                  <table class="table">
-                      <thead>
-                          <tr>
-                              <th></th>
-                              <th>Sender</th>
-                              <th>Subject</th>
-                              <th>Status</th>
-                              <th>Date</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr class="history-row available">
-                              <td><input type="checkbox"/></td>
-                              <td>Gavin Jacob Mallari</td>
-                              <td>Consultation Request for Feb. 15, 2025</td>
-                              <td class="status" style="color: #00A651;">Approved</td>
-                              <td>Feb. 15, 2025</td>
-                          </tr>
-                          <tr class="history-row cancelled">
-                              <td><input type="checkbox"/></td>
-                              <td>Ryuu Del Mundo</td>
-                              <td>Consultation Request for Feb. 5, 2025</td>
-                              <td class="status" style="color: #a60000;">Cancelled</td>
-                              <td>Feb. 5, 2025</td>
-                          </tr>
-                          <tr class="history-row rescheduled">
-                              <td><input type="checkbox"/></td>
-                              <td>Bryxx Nacario</td>
-                              <td>Consultation Request for Feb. 7, 2025</td>
-                              <td class="status" style="color: #F5A623;">Rescheduled</td>
-                              <td>Feb. 5, 2025</td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
+
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th></th>
+                          <th>Sender</th>
+                          <th>Subject</th>
+                          <th>Status</th>
+                          <th>Date</th>
+                      </tr>
+                  </thead>
+                  <tbody id="history-table-body">
+                      <!-- Dynamic data will be loaded here -->
+                  </tbody>
+              </table>
           </div>
       </div>
   </div>
