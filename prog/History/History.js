@@ -8,6 +8,16 @@ const firebaseConfig = {
     appId: "1:907702008183:web:9dbb807a3db2e2958bc972"
 };
 
+function searchTable() {
+    const input = document.querySelector('.search-input').value.toLowerCase();
+    const rows = document.querySelectorAll('#history-table-body tr'); // Select only tbody rows
+
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(input) ? '' : 'none';
+    });
+}
+
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const historyTableBody = document.getElementById("history-table-body");

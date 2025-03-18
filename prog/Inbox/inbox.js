@@ -52,8 +52,6 @@ function loadInbox() {
     });
 }
 
-
-
 function showAllRows() {
     document.querySelectorAll('.inbox-row').forEach(row => {
         row.style.display = "";
