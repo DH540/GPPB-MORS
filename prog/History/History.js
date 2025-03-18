@@ -99,7 +99,5 @@ function formatDateNumeric(dateString) {
     return date.toLocaleDateString("en-US");
 }
 
-
-
 // Load history when page loads
 document.addEventListener("DOMContentLoaded", loadHistory);

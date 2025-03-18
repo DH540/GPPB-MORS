@@ -76,36 +76,22 @@
                             </select>
                         </div>
                     </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Sender</th>
-                                <th>Subject</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="inbox-row" onclick="openEntryView('John Doe', 'john@example.com', '123-456-7890', 'DILG','Procurement Consultation', 'March 20, 2025', '10:00 AM')">
-                                <td><input type="checkbox"/></td>
-                                <td>John Doe</td>
-                                <td>Request for Procurement Consultation</td>
-                                <td>March 20, 2025</td>
-                            </tr>
-                            <tr class="inbox-row">
-                                <td><input type="checkbox" /></td>
-                                <td>Jane Smith</td>
-                                <td>Clarification on Bidding Rules</td>
-                                <td>March 18, 2025</td>
-                            </tr>
-                            <tr class="inbox-row">
-                                <td><input type="checkbox" /></td>
-                                <td>Michael Johnson</td>
-                                <td>Inquiry on Government Contracts</td>
-                                <td>March 16, 2025</td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Sender</th>
+                                    <th>Subject</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inbox-table-body">
+                                <!--Dynamic data will be loaded here-->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
