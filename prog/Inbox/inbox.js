@@ -111,14 +111,16 @@ function sortTable(column, order) {
         let valueA, valueB;
 
         if (column === "date") {
-            valueA = new Date(rowA.cells[2].textContent.trim());
-            valueB = new Date(rowB.cells[2].textContent.trim());
+            valueA = new Date(rowA.cells[3].textContent.trim()); // Extract date column
+            valueB = new Date(rowB.cells[3].textContent.trim());
         } else if (column === "name") {
-            valueA = rowA.cells[0].textContent.trim().toLowerCase();
-            valueB = rowB.cells[0].textContent.trim().toLowerCase();
+            valueA = rowA.cells[1].textContent.trim().toLowerCase(); // Extract name column
+            valueB = rowB.cells[1].textContent.trim().toLowerCase();
         }
 
-        return order === "asc" ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
+        if (valueA < valueB) return order === "asc" ? -1 : 1;
+        if (valueA > valueB) return order === "asc" ? 1 : -1;
+        return 0; // Equal values remain unchanged
     });
 
     rows.forEach(row => table.appendChild(row));
@@ -150,8 +152,6 @@ function formatDateNumeric(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US");
 }
-
-
 
 document.addEventListener("DOMContentLoaded", function () {
     const appointmentData = JSON.parse(localStorage.getItem("appointmentData"));

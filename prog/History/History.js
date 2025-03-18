@@ -24,19 +24,20 @@ const historyTableBody = document.getElementById("history-table-body");
 
 // Function to toggle all checkboxes
 function toggleSelectAll(icon) {
-    const checkboxes = document.querySelectorAll(".row-checkbox");
-    const isChecked = icon.classList.contains("selected");
+    const checkboxes = document.querySelectorAll(".table tbody input[type='checkbox']");
+    const allChecked = [...checkboxes].every(checkbox => checkbox.checked);
 
     checkboxes.forEach(checkbox => {
-        checkbox.checked = !isChecked;
+        checkbox.checked = !allChecked;
     });
 
-    icon.classList.toggle("selected");
+    icon.classList.toggle("selected", !allChecked);
 }
 
 // Function to delete selected rows from Firebase
 function deleteSelectedRows() {
-    const checkboxes = document.querySelectorAll(".row-checkbox:checked");
+    const checkboxes = document.querySelectorAll(".table tbody input[type='checkbox']:checked");
+
     if (checkboxes.length === 0) {
         alert("No rows selected for deletion.");
         return;
@@ -46,12 +47,7 @@ function deleteSelectedRows() {
 
     checkboxes.forEach(checkbox => {
         const row = checkbox.closest("tr");
-        const appointmentId = row.dataset.id; // Ensure each row has a data-id attribute
-
-        // Remove from Firebase
-        database.ref("appointments/" + appointmentId).remove()
-            .then(() => row.remove())
-            .catch(error => console.error("Error deleting record:", error));
+        row.remove();
     });
 }
 // Function to refresh the page
@@ -108,3 +104,44 @@ function formatDateNumeric(dateString) {
 
 // Load history when page loads
 document.addEventListener("DOMContentLoaded", loadHistory);
+
+function toggleArrow() {
+    const arrow = document.getElementById("sortArrow");
+    const currentOrder = arrow.dataset.order === "asc" ? "desc" : "asc";
+    
+    arrow.dataset.order = currentOrder;
+    arrow.innerHTML = `<i class="fas fa-arrow-${currentOrder === "asc" ? "up" : "down"}"></i>`;
+
+    applySorting();
+}
+
+function applySorting() {
+    const sortCriteria = document.getElementById("sortCriteria").value;
+    const order = document.getElementById("sortArrow").dataset.order;
+    
+    sortTable(sortCriteria, order);
+}
+
+function sortTable(column, order) {
+    const rows = Array.from(document.querySelectorAll("#history-table-body tr"));
+
+    rows.sort((rowA, rowB) => {
+        let valueA, valueB;
+
+        if (column === "date") {
+            // Fix date sorting by converting to timestamps
+            valueA = new Date(rowA.cells[4].textContent.trim()).getTime() || 0;
+            valueB = new Date(rowB.cells[4].textContent.trim()).getTime() || 0;
+        } 
+        else if (column === "name") {
+            // Fix name sorting (convert to lowercase for consistency)
+            valueA = rowA.cells[1].textContent.trim().toLowerCase();
+            valueB = rowB.cells[1].textContent.trim().toLowerCase();
+        }
+
+        return order === "asc" ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
+    });
+
+    rows.forEach(row => document.getElementById("history-table-body").appendChild(row));
+}
+
