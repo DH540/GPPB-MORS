@@ -2,6 +2,7 @@ body {
   background-color: #e5e7eb;
   width: 100%;
   height: 100%;
+  overflow-y: auto;
 }
 
 .element {
@@ -188,6 +189,7 @@ body {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .month-navigation {
