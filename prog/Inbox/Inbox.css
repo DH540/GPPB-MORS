@@ -111,7 +111,7 @@
     table-layout: auto;
   }
   .main-content .table-container {
-    max-height: 500px;
+    max-height: 400px;
     overflow-y: auto;
     background-color: rgba(255, 255, 255, 0.75); /* bg-white bg-opacity-75 */
   }
@@ -121,7 +121,7 @@
     background-color: #1d4ed8; /* bg-blue-700 */
     color: #ffffff; /* text-white */
     text-align: left;
-    z-index: 2;
+    z-index: 10;
   }
   .main-content .table th,
   .main-content .table td {
