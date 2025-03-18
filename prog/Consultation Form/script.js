@@ -93,3 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const openModalButton = document.getElementById('button-open');
+    const closeModalButton = document.getElementById('button-close');
+    const modalContainer = document.getElementById('modal-container');
+
+    openModalButton.addEventListener('click', () => {
+        modalContainer.classList.add('show');
+    });
+
+    closeModalButton.addEventListener('click', () => {
+        modalContainer.classList.remove('show');
+    });
+});
