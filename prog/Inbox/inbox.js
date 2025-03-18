@@ -52,8 +52,6 @@ function loadInbox() {
     });
 }
 
-
-
 function showAllRows() {
     document.querySelectorAll('.inbox-row').forEach(row => {
         row.style.display = "";
@@ -62,7 +60,7 @@ function showAllRows() {
 
 function searchTable() {
     const input = document.querySelector('.search-input').value.toLowerCase();
-    const rows = document.querySelectorAll('.inbox-row');
+    const rows = document.querySelectorAll('tbody .inbox-row');
     rows.forEach(row => {
         const text = row.textContent.toLowerCase();
         row.style.display = text.includes(input) ? '' : 'none';
@@ -113,14 +111,16 @@ function sortTable(column, order) {
         let valueA, valueB;
 
         if (column === "date") {
-            valueA = new Date(rowA.cells[2].textContent.trim());
-            valueB = new Date(rowB.cells[2].textContent.trim());
+            valueA = new Date(rowA.cells[3].textContent.trim()); // Extract date column
+            valueB = new Date(rowB.cells[3].textContent.trim());
         } else if (column === "name") {
-            valueA = rowA.cells[0].textContent.trim().toLowerCase();
-            valueB = rowB.cells[0].textContent.trim().toLowerCase();
+            valueA = rowA.cells[1].textContent.trim().toLowerCase(); // Extract name column
+            valueB = rowB.cells[1].textContent.trim().toLowerCase();
         }
 
-        return order === "asc" ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
+        if (valueA < valueB) return order === "asc" ? -1 : 1;
+        if (valueA > valueB) return order === "asc" ? 1 : -1;
+        return 0; // Equal values remain unchanged
     });
 
     rows.forEach(row => table.appendChild(row));
@@ -153,8 +153,6 @@ function formatDateNumeric(dateString) {
     return date.toLocaleDateString("en-US");
 }
 
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const appointmentData = JSON.parse(localStorage.getItem("appointmentData"));
 
@@ -171,3 +169,34 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 document.addEventListener("DOMContentLoaded", loadInbox);
 
+document.addEventListener("DOMContentLoaded", function () {
+    const openModalBtn = document.getElementById("open"); 
+    const closeModalBtn = document.getElementById("close");
+    const modalContainer = document.querySelector(".modal-container");
+    const continueBtn = document.getElementById("continue");
+
+    function hasSelectedRows() {
+        return document.querySelectorAll(".table tbody input[type='checkbox']:checked").length > 0;
+    }
+
+    openModalBtn.addEventListener("click", function () {
+        if (hasSelectedRows()) {
+            modalContainer.classList.add("show"); 
+        }
+    });
+
+    closeModalBtn.addEventListener("click", function () {
+        modalContainer.classList.remove("show");
+    });
+
+    continueBtn.addEventListener("click", function () {
+        deleteSelectedRows(); 
+        modalContainer.classList.remove("show"); 
+    });
+
+    modalContainer.addEventListener("click", function (event) {
+        if (event.target === modalContainer) {
+            modalContainer.classList.remove("show");
+        }
+    });
+});

@@ -8,40 +8,44 @@ const firebaseConfig = {
     appId: "1:907702008183:web:9dbb807a3db2e2958bc972"
 };
 
+function searchTable() {
+    const input = document.querySelector('.search-input').value.toLowerCase();
+    const rows = document.querySelectorAll('#history-table-body tr'); // Select only tbody rows
+
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(input) ? '' : 'none';
+    });
+}
+
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const historyTableBody = document.getElementById("history-table-body");
 
 // Function to toggle all checkboxes
 function toggleSelectAll(icon) {
-    const checkboxes = document.querySelectorAll(".row-checkbox");
-    const isChecked = icon.classList.contains("selected");
+    const checkboxes = document.querySelectorAll(".table tbody input[type='checkbox']");
+    const allChecked = [...checkboxes].every(checkbox => checkbox.checked);
 
     checkboxes.forEach(checkbox => {
-        checkbox.checked = !isChecked;
+        checkbox.checked = !allChecked;
     });
 
-    icon.classList.toggle("selected");
+    icon.classList.toggle("selected", !allChecked);
 }
 
 // Function to delete selected rows from Firebase
 function deleteSelectedRows() {
-    const checkboxes = document.querySelectorAll(".row-checkbox:checked");
+    const checkboxes = document.querySelectorAll(".table tbody input[type='checkbox']:checked");
+
     if (checkboxes.length === 0) {
         alert("No rows selected for deletion.");
         return;
-    }
-
-    if (!confirm("Are you sure you want to delete the selected records?")) return;
+    } 
 
     checkboxes.forEach(checkbox => {
         const row = checkbox.closest("tr");
-        const appointmentId = row.dataset.id; // Ensure each row has a data-id attribute
-
-        // Remove from Firebase
-        database.ref("appointments/" + appointmentId).remove()
-            .then(() => row.remove())
-            .catch(error => console.error("Error deleting record:", error));
+        row.remove();
     });
 }
 // Function to refresh the page
@@ -98,3 +102,79 @@ function formatDateNumeric(dateString) {
 
 // Load history when page loads
 document.addEventListener("DOMContentLoaded", loadHistory);
+
+function toggleArrow() {
+    const arrow = document.getElementById("sortArrow");
+    const currentOrder = arrow.dataset.order === "asc" ? "desc" : "asc";
+    
+    arrow.dataset.order = currentOrder;
+    arrow.innerHTML = `<i class="fas fa-arrow-${currentOrder === "asc" ? "up" : "down"}"></i>`;
+
+    applySorting();
+}
+
+function applySorting() {
+    const sortCriteria = document.getElementById("sortCriteria").value;
+    const order = document.getElementById("sortArrow").dataset.order;
+    
+    sortTable(sortCriteria, order);
+}
+
+function sortTable(column, order) {
+    const rows = Array.from(document.querySelectorAll("#history-table-body tr"));
+
+    rows.sort((rowA, rowB) => {
+        let valueA, valueB;
+
+        if (column === "date") {
+            // Fix date sorting by converting to timestamps
+            valueA = new Date(rowA.cells[4].textContent.trim()).getTime() || 0;
+            valueB = new Date(rowB.cells[4].textContent.trim()).getTime() || 0;
+        } 
+        else if (column === "name") {
+            // Fix name sorting (convert to lowercase for consistency)
+            valueA = rowA.cells[1].textContent.trim().toLowerCase();
+            valueB = rowB.cells[1].textContent.trim().toLowerCase();
+        }
+
+        return order === "asc" ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
+    });
+
+    rows.forEach(row => document.getElementById("history-table-body").appendChild(row));
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const openModalBtn = document.getElementById("open"); 
+    const closeModalBtn = document.getElementById("close");
+    const modalContainer = document.querySelector(".modal-container");
+    const continueBtn = document.getElementById("continue");
+
+    function hasSelectedRows() {
+        return document.querySelectorAll(".table tbody input[type='checkbox']:checked").length > 0;
+    }
+
+    // Open Modal when clicking the trash icon
+    openModalBtn.addEventListener("click", function () {
+        if (hasSelectedRows()) {
+            modalContainer.classList.add("show"); 
+        }
+    });
+
+    // Close Modal when clicking the "Cancel" button
+    closeModalBtn.addEventListener("click", function () {
+        modalContainer.classList.remove("show"); // Hide the modal
+    });
+
+    continueBtn.addEventListener("click", function () {
+        deleteSelectedRows(); // Call the function to delete selected rows
+        modalContainer.classList.remove("show"); // Hide modal after deleting
+    });
+
+    // Close Modal when clicking outside of it
+    modalContainer.addEventListener("click", function (event) {
+        if (event.target === modalContainer) {
+            modalContainer.classList.remove("show");
+        }
+    });
+});
+

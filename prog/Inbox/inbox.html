@@ -40,10 +40,10 @@
                     <i class="fas fa-user-circle text-2xl"></i>
                     <span>Account Email</span>
                 </div>
-                <a href="ConsultationForm.html">Sign out</a>
+                <a href="../Consultation Form/ConsultationForm.html">Sign out</a>
             </div>
         </div>
-        
+
         <!-- Main Content -->
         <div class="main-content">
             <!-- Background image placeholder -->
@@ -64,8 +64,8 @@
                             <button>
                                 <i class="fas fa-check-square" onclick="toggleSelectAll(this)"></i>
                             </button>
-                            <button>
-                                <i class="fas fa-trash-alt" onclick="deleteSelectedRows()"></i> <!-- Delete button -->
+                            <button id="open">
+                                <i class="fas fa-trash-alt" id="open"></i> <!-- Delete button -->
                             </button>
                             <button>
                                 <i class="fas fa-sync-alt" onclick="refreshPage()"></i>
@@ -103,24 +103,36 @@
     </div>
 
     <!-- Mobile Bottom Navigation -->
-<div class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-300 z-20">
-    <div class="flex justify-around text-gray-700">
-      <a href="../Inbox/inbox.html" class="flex flex-col items-center py-2 hover:text-blue-600">
-        <i class="fas fa-inbox"></i><span class="text-xs">Inbox</span>
-      </a>
-      <a href="../History/History.html" class="flex flex-col items-center py-2 hover:text-blue-600">
-        <i class="fas fa-history"></i><span class="text-xs">History</span>
-      </a>
-      <a href="../Calendar/Calendar.html" class="flex flex-col items-center py-2 hover:text-blue-600">
-        <i class="fas fa-calendar-alt"></i><span class="text-xs">Calendar</span>
-      </a>
-      <a href="../Consultation Form/ConsultationForm.html" class="flex flex-col items-center py-2 hover:text-blue-600">
-        <i class="fas fa-sign-out-alt"></i><span class="text-xs">Sign Out</span>
-      </a>
+    <div class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-300 z-20">
+        <div class="flex justify-around text-gray-700">
+        <a href="../Inbox/inbox.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+            <i class="fas fa-inbox"></i><span class="text-xs">Inbox</span>
+        </a>
+        <a href="../History/History.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+            <i class="fas fa-history"></i><span class="text-xs">History</span>
+        </a>
+        <a href="../Calendar/Calendar.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+            <i class="fas fa-calendar-alt"></i><span class="text-xs">Calendar</span>
+        </a>
+        <a href="../Consultation Form/ConsultationForm.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+            <i class="fas fa-sign-out-alt"></i><span class="text-xs">Sign Out</span>
+        </a>
+        </div>
     </div>
-  </div>
   
-
+    <!-- Modal -->
+    <div id="modal-container" class="modal-container">
+        <div class="modal">
+            <div class="modal-in">
+                <h1>Delete these items?</h1>
+                <p>These requests will be permanently deleted</p>
+                <div class="modal-btns">
+                    <button id="continue" style="background-color: #1d4ed8; color: #ffffff;">Continue</button>
+                    <button id="close" style="background-color: #e7e7e7;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
