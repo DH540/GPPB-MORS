@@ -41,13 +41,38 @@ function deleteSelectedRows() {
     if (checkboxes.length === 0) {
         alert("No rows selected for deletion.");
         return;
-    } 
+    }
 
     checkboxes.forEach(checkbox => {
         const row = checkbox.closest("tr");
-        row.remove();
+        const fullName = row.cells[1].textContent.trim().toLowerCase(); // Example: "john doe"
+        const appointmentText = row.cells[2].textContent.trim().toLowerCase(); // e.g., "consultation request for march 20, 2025"
+
+        // Fetch Firebase data again to match and find the correct key
+        database.ref("contactFormDB").once("value", snapshot => {
+            snapshot.forEach(childSnapshot => {
+                const data = childSnapshot.val();
+                const dbFullName = `${(data.firstName || "").toLowerCase()} ${(data.lastName || "").toLowerCase()}`;
+                const dbAppointmentText = `consultation request for ${formatDate((data.appointmentDate || "")).toLowerCase()}`;
+
+                if (dbFullName === fullName && dbAppointmentText === appointmentText) {
+                    const key = childSnapshot.key;
+
+                    // Delete from Firebase
+                    database.ref(`contactFormDB/${key}`).remove()
+                        .then(() => {
+                            console.log(`🗑️ Deleted Firebase entry with ID: ${key}`);
+                            row.remove(); // Remove from table after successful delete
+                        })
+                        .catch(error => {
+                            console.error(`❌ Failed to delete entry with ID: ${key}`, error);
+                        });
+                }
+            });
+        });
     });
 }
+
 // Function to refresh the page
 function refreshPage() {
     location.reload();
@@ -59,6 +84,25 @@ function formatDate(dateString) {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString("en-US", options);
 }
+function getStatusColor(status) {
+    switch ((status || "").toLowerCase()) {
+        case "approved":
+        case "available":
+            return "#00A651"; // Green
+        case "rejected":
+            return "#E12926"; // Red
+        case "rescheduled":
+            return "#F5A623"; // Orange
+        default:
+            return "#ccc"; // Gray for unknown/pending
+    }
+}
+
+function capitalize(word) {
+    if (!word) return '';
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+}
+
 
 function loadHistory() {
     const historyTable = document.getElementById("history-table-body");
@@ -78,7 +122,9 @@ function loadHistory() {
                 <td><input type="checkbox"/></td>
                 <td>${data.firstName || 'N/A'} ${data.lastName || 'N/A'}</td>
                 <td>Consultation Request for ${formattedDateWords}</td>
-                <td>${data.status || 'Pending'}</td>
+                <td style="background-color: ${getStatusColor(data.status)}; color: white; padding: 6px 12px; border-radius: 4px; text-align: center;">
+                     ${data.status ? capitalize(data.status) : 'Pending'}
+                                    </td>
                 <td>${formattedDateNumeric}</td> <!-- Now shows MM/DD/YYYY format -->
             `;
             historyTable.appendChild(row);
