@@ -9,27 +9,36 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="Calendar.css">
 </head>
-
-<body class="bg-gray-200 pb-20"> <!-- Prevent nav overlap -->
-
-  <div class="flex flex-col md:flex-row min-h-screen overflow-hidden">
-
-    <!-- Sidebar for Desktop -->
-    <div class="hidden md:flex w-60 bg-gray-100 p-4 flex-shrink-0 flex-col justify-between">
-      <div>
-        <img class="mb-6" alt="GPPB Logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgh_XVflDGear3KCtuF--2bhgzKY0Au2ibeQ&s" width="150" />
+<body> 
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="mb-4">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgh_XVflDGear3KCtuF--2bhgzKY0Au2ibeQ&s" 
+                 alt="Government Procurement Policy Board - Technical Support Office logo" width="150" height="100" />
+        </div>
         <nav class="space-y-4">
-          <a class="flex items-center gap-2 text-gray-700 hover:text-gray-900" href="inbox.html"><i class="fas fa-inbox"></i>Inbox</a>
-          <a class="flex items-center gap-2 text-gray-700 hover:text-gray-900" href="History.html"><i class="fas fa-history"></i>History</a>
-          <a class="flex items-center gap-2 text-gray-700 hover:text-gray-900" href="Calendar.html"><i class="fas fa-calendar-alt"></i>Calendar</a>
+            <a href="inbox.html" class="flex items-center">
+                <i class="fas fa-inbox"></i>
+                <span>Inbox</span>
+            </a>
+            <a href="History.html" class="flex items-center">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </a>
+            <a href="Calendar.html" class="flex items-center">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Calendar</span>
+            </a>
         </nav>
-      </div>
-      <div>
-        <div class="flex items-center gap-2 mb-2"><i class="fas fa-user-circle text-2xl"></i>Account Email</div>
-        <a href="ConsultationForm.html" class="text-sm text-gray-500 hover:text-gray-700">Sign out</a>
-      </div>
+        <div class="bottom-section">
+            <div class="user-info">
+                <i class="fas fa-user-circle text-2xl"></i>
+                <span>Account Email</span>
+            </div>
+            <a href="ConsultationForm.html">Sign out</a>
+        </div>
     </div>
-
     <!-- Main Content -->
     <div class="flex-1 relative overflow-hidden">
       <img src="images/GPPB Building Pic 2.jpg" alt="Background" class="absolute inset-0 w-full h-full object-cover z-0">
