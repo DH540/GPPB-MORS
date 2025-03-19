@@ -132,21 +132,6 @@ function deleteSelectedRows() {
     });
 }
 
-function getStatusColor(status) {
-    switch ((status || "").toLowerCase()) {
-        case "approved":
-        case "available":
-            return "#00A651"; // Green
-        case "rejected":
-            return "#E12926"; // Red
-        case "rescheduled":
-            return "#F5A623"; // Orange
-        default:
-            return "#ccc"; // Gray for unknown/pending
-    }
-}
-
-
 let currentOrder = "asc";
 let currentCriteria = "date";
 
