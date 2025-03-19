@@ -102,6 +102,7 @@ body {
     height: 2rem;
     width: 6rem;
     border-radius: 0.275rem; /* rounded */
+    cursor: pointer;
   }
   .main-content .filters .filter-buttons select {
     background-color: #ffffff; /* bg-white */

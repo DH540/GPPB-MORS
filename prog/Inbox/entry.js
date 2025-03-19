@@ -99,8 +99,6 @@ function fetchEntryIdByEmail(email) {
     });
 }
 
-
-
 function handleStatusUpdate(newStatus) {
     const emailElement = document.getElementById("h-email");
     if (!emailElement) {

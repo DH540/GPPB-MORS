@@ -189,6 +189,26 @@ function sortTable(column, order) {
     rows.forEach(row => document.getElementById("history-table-body").appendChild(row));
 }
 
+let activeFilter = null; // Track the active filter
+
+function filterStatus(status) {
+    const rows = document.querySelectorAll("#history-table-body tr");
+
+    if (activeFilter === status) {
+        rows.forEach(row => row.style.display = "");
+        activeFilter = null; 
+        return;
+    }
+
+    // Otherwise, apply the new filter
+    rows.forEach(row => {
+        const statusCell = row.cells[3].textContent.trim().toLowerCase();
+        row.style.display = (statusCell === status) ? "" : "none";
+    });
+
+    activeFilter = status;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const openModalBtn = document.getElementById("open"); 
     const closeModalBtn = document.getElementById("close");

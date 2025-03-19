@@ -5,6 +5,7 @@ body {
     margin: 0 auto;
     padding: 40px 100px;
     box-sizing: border-box;
+    z-index: 51;
 }
 
 .header {
@@ -12,11 +13,13 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 50px;
+    z-index: 51;
 }
 
 .logo {
     width: 200px;
     height: auto;
+    z-index: 51;
 }
 
 .login-btn {
@@ -28,21 +31,25 @@ body {
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
+    z-index: 51;
 }
 
 .form-title {
     font-size: 32px;
     margin: 0;
+    z-index: 51;
 }
 
 .form-row {
     display: flex;
     gap: 30px;
     margin-bottom: 30px;
+    z-index: 51;
 }
 
 .form-group {
     flex: 1;
+    z-index: 51;
 }
 
 label {
@@ -50,6 +57,7 @@ label {
     margin-bottom: 12px;
     font-weight: 500;
     font-size: 16px;
+    z-index: 51;
 }
 
 input[type="text"],
@@ -63,6 +71,7 @@ textarea {
     border-radius: 8px;
     box-sizing: border-box;
     font-size: 16px;
+    z-index: 51;
 }
 
 .time-slots {
@@ -72,6 +81,7 @@ textarea {
     margin-top: 0;
     height: 100%;
     align-content: center;
+    z-index: 51;
 }
 
 .time-slot {
@@ -87,6 +97,7 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 51;
 }
 
 .date-picker-container {
@@ -97,17 +108,20 @@ textarea {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    z-index: 51;
 }
 
 .timezone {
     color: #666;
     margin-top: 8px;
     font-size: 14px;
+    z-index: 51;
 }
 
 textarea {
     height: 200px;
     resize: vertical;
+    z-index: 51;
 }
 
 .submit-btn {
@@ -121,57 +135,132 @@ textarea {
     cursor: pointer;
     display: block;
     margin: 40px auto;
+    z-index: 51;
 }
 
 .required::after {
     content: " *";
     color: #3730F5;
+    z-index: 51;
 }
 
 .time-slot.selected {
     background-color: #3730F5;
     color: white;
+    z-index: 51;
+}
+
+.modal-container{
+    background-color: rgb(0, 0, 0, 0.2);
+    display: none; /* change to none. */
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    position: fixed;
+    opacity: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1000;
+}
+
+.modal-container.show {
+    display: flex;
+    pointer-events: auto;
+    opacity: 1;
+}
+
+.modal{
+    background-color: #fff;
+    max-width: 100%;
+    width: 800px;
+    padding: 20px 50px;
+    border-radius: 10px;
+}
+
+.modal #email {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    border: 1px solid #ccc;
+}
+
+.modal #password {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    border: 1px solid #ccc;
+}
+
+.modal button {
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #3730F5;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    font-weight: bold;
+    width: auto;
+    height: auto;
 }
 
 @media screen and (max-width: 767px) {
     body {
         padding: 20px;
+        z-index: 51;
     }
 
     .header {
         flex-direction: column;
         gap: 20px;
         margin-bottom: 30px;
+        z-index: 51;
     }
 
     .logo {
         width: 150px;
+        z-index: 51;
     }
 
     .form-title {
         font-size: 24px;
         text-align: center;
+        z-index: 51;
     }
 
     .form-row {
         flex-direction: column;
         gap: 20px;
         margin-bottom: 20px;
+        z-index: 51;
     }
 
     .time-slots {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
+        z-index: 51;
     }
 
     .date-picker-container {
         height: auto;
         padding: 15px;
+        z-index: 51;
     }
 
     .submit-btn {
         width: 100%;
         margin: 30px auto;
+        z-index: 51;
     }
 }
 
@@ -179,11 +268,13 @@ textarea {
     .time-slot:active {
         background-color: #2820d0;
         color: white;
+        z-index: 51;
     }
 
     input, 
     select, 
     textarea {
         font-size: 16px;
+        z-index: 51;
     }
 }
