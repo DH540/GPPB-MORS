@@ -1,3 +1,4 @@
+///LOGIN MODAL NOT WORKING *CREDENTIALS NOT WORKING*
 const firebaseConfig = {
     apiKey: "AIzaSyBEJMTq5PQNrwDELbuqGfIFGFxJ3S-ke_Q",
     authDomain: "css151l-6290e.firebaseapp.com",
