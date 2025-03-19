@@ -201,6 +201,11 @@ textarea {
     border: 1px solid #ccc;
 }
 
+.modal #message { 
+    font-weight: bold; 
+    margin-top: 10px; 
+}
+
 .modal button {
     margin: 5px;
     border: 1px solid #ccc;
