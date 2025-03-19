@@ -90,14 +90,22 @@ body {
   align-items: center;
 }
 .dtl-container {
-  width: 100%;
-}
-.dtl-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 1rem; /* 16px column gap */
-  row-gap: 0.5rem; /* 8px row gap */
-  border: 2px solid black;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem 1rem; /* Adjust spacing between label and value */
+  width: 100%;
+  max-width: 600px;
+}
+
+.dtl-container .label {
+  font-weight: bold;
+  text-align: left;
+  color: #1f2937; /* Dark gray */
+}
+
+.dtl-container .value {
+  text-align: right;
+  color: #4b5563; /* Medium gray */
 }
 .a-summary h2 {
   font-size: 1.125rem; /* Large text */
