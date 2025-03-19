@@ -112,15 +112,30 @@ function loadHistory() {
         historyTable.innerHTML = ""; // Clear table before adding new data
         snapshot.forEach(childSnapshot => {
             const data = childSnapshot.val();
-            console.log("Retrieved data:", data); // Debugging log
+            console.log("Retrieved history data:", data); // Debugging log
 
-            const formattedDateWords = formatDate(data.appointmentDate); // Word-based format
-            const formattedDateNumeric = formatDateNumeric(data.appointmentDate); // MM/DD/YYYY format
+            const formattedDateWords = formatDate(data.appointmentDate); // "Month Day, Year"
+            const formattedDateNumeric = formatDateNumeric(data.appointmentDate); // "MM/DD/YYYY"
 
             const row = document.createElement("tr");
+            row.classList.add("history-row"); // Add a class for styling & selection
+
             row.innerHTML = `
                 <td><input type="checkbox"/></td>
-                <td>${data.firstName || 'N/A'} ${data.lastName || 'N/A'}</td>
+                <td class="cursor-pointer text-blue-600 hover:underline" onclick='openHistoryEntry(
+                    "${data.firstName || ''} ${data.lastName || ''}",
+                    "${data.email || ''}",
+                    "${data.phoneNumber || ''}",
+                    "${data.company || ''}",
+                    "${data.areaOfInterest || ''}",
+                    "${data.appointmentDate || ''}",
+                    "${data.appointmentTime || ''}",
+                    "${data.comments || ''}",
+                    "${childSnapshot.key}",
+                    "${data.status || 'Pending'}"
+                )'>
+                    ${data.firstName || 'N/A'} ${data.lastName || 'N/A'}
+                </td>
                 <td>Consultation Request for ${formattedDateWords}</td>
                 <td style="text-align: center;">
                     <span style="background-color: ${getStatusColor(data.status)}; color: white; padding: 6px 12px; border-radius: 20px; display: inline-block; min-width: 100px;">
@@ -129,10 +144,13 @@ function loadHistory() {
                 </td>
                 <td>${formattedDateNumeric}</td> <!-- Now shows MM/DD/YYYY format -->
             `;
+
             historyTable.appendChild(row);
         });
     });
 }
+
+document.addEventListener("DOMContentLoaded", loadHistory);
 
 // Function to format date in "Month Day, Year" format
 function formatDate(dateString) {
@@ -246,3 +264,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+function openHistoryEntry(name, email, phone, company, interest, date, time, comments, entryId, status) {
+    console.log("🔄 Redirecting to old.html with data:", { name, email, date, status });
+
+    if (!entryId) {
+        console.error("❌ Entry ID is missing! Cannot proceed.");
+        return;
+    }
+
+    const historyData = { name, email, phone, company, interest, date, time, comments, entryId, status };
+    localStorage.setItem("historyEntryData", JSON.stringify(historyData));
+
+    window.location.href = `old.html?id=${entryId}`;
+}

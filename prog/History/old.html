@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inbox</title>
+    <title>History</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <script type="text/javascript"
@@ -18,8 +18,8 @@
            });
         })();
      </script>
-    <link rel="stylesheet" href="entry.css">
-    <script src="entry.js"></script>
+    <link rel="stylesheet" href="old.css">
+    <script src="old.js"></script>
 </head>
 <body>
     <div class="flex h-screen">
@@ -56,7 +56,7 @@
             <div class="content">
                 <div class="header">
                     <div class="header-left">
-                        <a href="../Inbox/inbox.html" class="back-button">
+                        <a href="../History/History.html" class="back-button">
                             <i class="fas fa-arrow-left"></i>
                         </a>
                         <div class="sender-info">
@@ -64,7 +64,10 @@
                             <p><span id="h-email"></span></p>
                         </div>
                         <div class="header-right">
-                            <p class="date-info">Received on <span id="h-date"></span></p>
+                            <div class="header-right container">
+                                <h2><!--<span id="status"></span>-->Approved</h2>
+                                <p class="date-info">Received on <span id="h-date"></span></p>
+                            </div>
                         </div>  
                     </div>
                 </div>
@@ -73,28 +76,20 @@
                         <h2>Appointment Summary</h2>
                         <h3 style="text-align: center;">Details</h3>
                         <hr class="mb-4"/>
-                            <div class="dtl-container">
-                                <span class="label">Name:</span> <span class="value" id="d-name"></span>
-                                <span class="label">Email:</span> <span class="value" id="d-email"></span>
-                                <span class="label">Phone:</span> <span class="value" id="phone"></span>
-                                <span class="label">Company:</span> <span class="value" id="company"></span>
-                                <span class="label">Consultation Interest:</span> <span class="value" id="interest"></span>
-                                <span class="label">Date:</span> <span class="value" id="d-date"></span>
-                                <span class="label">Time:</span> <span class="value" id="time"></span>
-                                <span class="label">Comments:</span> <span class="value" id="comments"></span>
-                          </div>
-                
-                            <div class="flex justify-center space-x-4 mt-12">
-                                <button onclick="sendMail('approved')"  class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Accept</button>
-                                <button onclick="sendMail('rejected')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reject</button>
-                                <button onclick="sendMail('rescheduled')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reschedule</button>
-                            </div>
-                        </div>
-                    </div>    
+                        <div class="dtl-container">
+                            <span class="label">Name:</span> <span class="value" id="d-name"></span>
+                            <span class="label">Email:</span> <span class="value" id="d-email"></span>
+                            <span class="label">Phone:</span> <span class="value" id="phone"></span>
+                            <span class="label">Company:</span> <span class="value" id="company"></span>
+                            <span class="label">Consultation Interest:</span> <span class="value" id="interest"></span>
+                            <span class="label">Date:</span> <span class="value" id="d-date"></span>
+                            <span class="label">Time:</span> <span class="value" id="time"></span>
+                            <span class="label">Comments:</span> <span class="value" id="comments"></span>
+                        </div>    
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-  </div>
 </body>
 </html>
