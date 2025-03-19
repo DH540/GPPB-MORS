@@ -76,7 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Email sent successfully:', emailResponse);
 
             // Save to Firebase
-            const dbResponse = await contactFormDB.push(formData);
+            const dbResponse = await contactFormDB.push({
+                ...formData,
+                timestamp: Date.now() // Store the time when data is received
+            });
+            
             console.log("Data saved to Firebase with key:", dbResponse.key);
 
             // Store data in sessionStorage before redirecting
