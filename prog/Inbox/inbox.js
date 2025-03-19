@@ -81,12 +81,43 @@ function refreshPage() {
 }
 
 function deleteSelectedRows() {
-    const checkboxes = document.querySelectorAll("tbody input[type='checkbox']:checked");
+    const checkboxes = document.querySelectorAll(".table tbody input[type='checkbox']:checked");
 
-    checkboxes.forEach((checkbox) => {
-        checkbox.closest("tr").remove();
+    if (checkboxes.length === 0) {
+        alert("No rows selected for deletion.");
+        return;
+    }
+
+    checkboxes.forEach(checkbox => {
+        const row = checkbox.closest("tr");
+        const fullName = row.cells[1].textContent.trim().toLowerCase(); // Example: "john doe"
+        const appointmentText = row.cells[2].textContent.trim().toLowerCase(); // e.g., "consultation request for march 20, 2025"
+
+        // Fetch Firebase data again to match and find the correct key
+        database.ref("contactFormDB").once("value", snapshot => {
+            snapshot.forEach(childSnapshot => {
+                const data = childSnapshot.val();
+                const dbFullName = `${(data.firstName || "").toLowerCase()} ${(data.lastName || "").toLowerCase()}`;
+                const dbAppointmentText = `consultation request for ${formatDate((data.appointmentDate || "")).toLowerCase()}`;
+
+                if (dbFullName === fullName && dbAppointmentText === appointmentText) {
+                    const key = childSnapshot.key;
+
+                    // Delete from Firebase
+                    database.ref(`contactFormDB/${key}`).remove()
+                        .then(() => {
+                            console.log(`🗑️ Deleted Firebase entry with ID: ${key}`);
+                            row.remove(); // Remove from table after successful delete
+                        })
+                        .catch(error => {
+                            console.error(`❌ Failed to delete entry with ID: ${key}`, error);
+                        });
+                }
+            });
+        });
     });
 }
+
 
 let currentOrder = "asc";
 let currentCriteria = "date";
