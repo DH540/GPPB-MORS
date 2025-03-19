@@ -70,19 +70,24 @@ body {
     flex: 1; /* Allows it to take available space */
   }
   .header-right {
+      flex: none;
       white-space: nowrap;
       text-align: right;
       font-size: 0.875rem;
       min-width: 200px; /* Ensures it doesn't collapse */
       margin-left: auto;
-      padding-top: 30px;
   }
-  .main-content .header h2 {
+  .main-content .header-right h2 {
       font-size: 1.125rem;
+      background-color: #00A651;
+      margin-left: auto;
+      text-align: center;
+      width: 6rem;
+      border-radius: 20px;
   }
   .main-content .summary {
     background-color: rgba(255, 255, 255, 0.8); /* White with 80% opacity */
-    padding: 1rem 0 2.5rem 0; /* 16px padding */
+    padding: 0.5rem 0 4rem 0; /* 16px padding */
     border-radius: 0.5rem; /* Large border radius */
     margin-top: 0.5rem; /* 8px top margin */
     display: flex;
