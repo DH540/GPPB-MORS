@@ -31,17 +31,17 @@ function loadInbox() {
             row.innerHTML = `
                 <td><input type="checkbox"/></td>
                 <td class="cursor-pointer text-blue-600 hover:underline" onclick='openEntryView(
-    "${data.firstName || ''} ${data.lastName || ''}",
-    "${data.email || ''}",
-    "${data.phoneNumber || ''}",
-    "${data.company || ''}",
-    "${data.areaOfInterest || ''}",
-    "${data.appointmentDate || ''}",
-    "${data.appointmentTime || ''}",
-    "${data.comments || ''}"
-)'>
-    ${data.firstName || 'N/A'} ${data.lastName || 'N/A'}
-</td>
+                    "${data.firstName || ''} ${data.lastName || ''}",
+                    "${data.email || ''}",
+                    "${data.phoneNumber || ''}",
+                    "${data.company || ''}",
+                    "${data.consultationInterest || ''}",
+                    "${data.appointmentDate || ''}",
+                    "${data.appointmentTime || ''}",
+                    "${data.comments || ''}"
+                )'>
+                    ${data.firstName || 'N/A'} ${data.lastName || 'N/A'}
+                </td>
 
                 <td>Consultation Request for ${formattedDateWords}</td>
                 <td>${data.appointmentDate || 'Pending'}</td>
@@ -99,6 +99,7 @@ function deleteSelectedRows() {
                 const data = childSnapshot.val();
                 const dbFullName = `${(data.firstName || "").toLowerCase()} ${(data.lastName || "").toLowerCase()}`;
                 const dbAppointmentText = `consultation request for ${formatDate((data.appointmentDate || "")).toLowerCase()}`;
+                console.log("Retrieved interest:", data.consultationInterest);
 
                 if (dbFullName === fullName && dbAppointmentText === appointmentText) {
                     const key = childSnapshot.key;

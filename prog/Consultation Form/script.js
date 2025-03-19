@@ -111,3 +111,42 @@ document.addEventListener('DOMContentLoaded', () => {
         modalContainer.classList.remove('show');
     });
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const validUsername = "admin123@gmail.com";
+    const validPassword = "iampassword";
+
+    document.getElementById("button-login").addEventListener("click", function() {
+        // Get user input
+        let username = document.getElementById("email").value.trim();
+        let password = document.getElementById("password").value.trim();
+        let message = document.getElementById("message");
+
+        // Check if fields are empty
+        if (!username || !password) {
+            message.style.color = "orange";
+            message.textContent = "Please enter both username and password.";
+            return;
+        }
+
+        // Validate credentials
+        if (username === validUsername && password === validPassword) {
+            message.style.color = "green";
+            message.textContent = "Login successful! Redirecting...";
+
+            setTimeout(() => {
+                window.location.href = "../Inbox/inbox.html"; 
+            }, 1000);
+        } else {
+            message.style.color = "red";
+            message.textContent = "Invalid username or password.";
+        }
+    });
+
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); // Stop Enter from triggering anything
+        }
+    });
+});
