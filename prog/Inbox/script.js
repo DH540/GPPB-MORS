@@ -46,7 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 consultationInterest: this.querySelectorAll('input[type="text"]')[4].value,
                 appointmentDate: this.querySelector('input[type="date"]').value,
                 appointmentTime: document.querySelector('.time-slot.selected')?.textContent || '',
-                additionalInfo: this.querySelector('textarea').value
+                additionalInfo: this.querySelector('textarea').value,
+                status: "Pending"
             };
             console.log('Form data collected:', formData);
 
@@ -91,19 +92,5 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             alert('There was an error processing your consultation request. Please try again. Error: ' + error.message);
         }
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const openModalButton = document.getElementById('button-open');
-    const closeModalButton = document.getElementById('button-close');
-    const modalContainer = document.getElementById('modal-container');
-
-    openModalButton.addEventListener('click', () => {
-        modalContainer.classList.add('show');
-    });
-
-    closeModalButton.addEventListener('click', () => {
-        modalContainer.classList.remove('show');
     });
 });

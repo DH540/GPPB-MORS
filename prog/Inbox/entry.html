@@ -3,11 +3,12 @@
 <head>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="entry.css" rel="stylesheet">
     <script type="text/javascript"
         src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
 </script>
-<script src="entry.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
 <script type="text/javascript">
    (function(){
       emailjs.init({
@@ -17,11 +18,101 @@
 </script>
 </head>
 <body class="bg-gray-100">
-    <div class="flex h-screen">
+    <div class="flex">
         <!-- Sidebar -->
-        <div class="sidebar">
+        <div class="w-1/6 bg-gray-200 h-screen p-4 fixed">
             <div class="mb-4">
-                <img src="../images/logo.png" 
+                <img alt="Republic of the Philippines Government Procurement Policy Board Technical Support Office" height="100" src="../images/logo.png" width="200"/>
+            </div>
+            <nav class="space-y-4">
+                <a class="flex items-center space-x-2 text-black" href="../Inbox/inbox.html">
+                    <i class="fas fa-inbox"></i>
+                    <span>Inbox</span>
+                </a>
+                <a class="flex items-center space-x-2 text-black" href="../History/History.html">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </a>
+                <a class="flex items-center space-x-2 text-black" href="../Calendar/Calendar.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Calendar</span>
+                </a>
+            </nav>
+            <div class="absolute bottom-4 left-4">
+                <a class="flex items-center space-x-2 text-black" href="#">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Account Email</span>
+                </a>
+                <a class="text-sm text-gray-600" href="#">Sign out</a>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="w-5/6 ml-[16.666%] p-4 bg-cover bg-center h-screen overflow-y-auto" style="background-image: url('../images/bg.png');">
+            <h1 class="text-2xl font-bold text-white mb-4">INBOX</h1>
+            <div class="bg-gray-100 p-4 rounded-lg relative">
+                <a class="absolute top-2 left-2 text-xl font-bold" href="#">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <div class="flex justify-between items-center mb-6">
+                    <div class="ml-4 flex flex-col justify-center">
+                        <h2 class="text-lg font-bold mb-1"><span id="h-name"></span></h2>
+                        <p class="text-gray-600"> <span id="h-email"></span></p>
+                    </div>
+                    <p class="text-gray-600 mr-4">Received on <span id="h-date"></span></p>
+                </div>
+            </div>
+            <div class="bg-white bg-opacity-80 p-4 rounded-lg shadow-md mt-2 h-[calc(100vh-8rem)] flex flex-col items-center ml-4">
+                <h3 class="text-lg font-bold mb-2">Appointment Summary</h3>
+                <p class="text-gray-600 mb-2">Details</p>
+                <hr class="mb-4"/>
+                <div class="w-1/2">
+                    <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+                            <p><b>Name:</b> <span id="d-name"></span></p><br>
+                            <p><b>Email:</b> <span id="d-email"></span></p><br>
+                            <p><b>Phone:</b> <span id="phone"></span></p><br>
+                            <p><b>Company:</b> <span id="company"></span></p><br>
+                            <p><b>Consultation Interest:</b><span id="interest"></span></p><br>
+                            <p><b>Date:</b><span id="d-date"></span></p><br>
+                            <p><b>Time:</b><span id="time"></span></p><br>
+                            <p><b>Comments:</b> <br> <span id="comments"></span></p>
+                    </div>
+                </div>
+                <div class="flex justify-center space-x-4 mt-12">
+                <button onclick="handleStatusUpdate('approved')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Accept</button>
+                <button onclick="handleStatusUpdate('rejected')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reject</button>
+                <button onclick="handleStatusUpdate('rescheduled')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reschedule</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="entry.js"></script>
+</body>
+</html>
+
+
+<!--<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="entry.js"></script>
+    <script type="text/javascript">
+        (function(){
+           emailjs.init({
+             publicKey: "4j5bpweGF5mCdKDfd",
+           });
+        })();
+     </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="entry.css">
+</head>
+<body>
+    <div class="flex h-screen">
+            <div class="sidebar">
+            <div class="mb-4">
+                <img src="../images/logo.png"
                      alt="Government Procurement Policy Board - Technical Support Office logo" width="150" height="100" />
             </div>
             <nav class="space-y-4">
@@ -46,58 +137,48 @@
                 <a href="ConsultationForm.html">Sign out</a>
             </div>
         </div>
-    
-        <!-- Main Content -->
         <div class="main-content">
             <img src="../images/bg.png" alt="Background image" class="background-image">
             <div class="content">
-                <div class="header">
-                    <div class="header-left">
-                        <a href="../Inbox/inbox.html" class="back-button">
-                            <i class="fas fa-arrow-left"></i>
-                        </a>
-                        <div class="sender-info">
-                            <h2><span id="h-name"></span></h2>
-                            <p><span id="h-email"></span></p>
+                <div class="bg-gray-100 p-4 rounded-lg relative">
+                    <a class="absolute top-2 left-2 text-xl font-bold" href="inbox.html">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="ml-4">
+                            <h2 class="text-lg font-bold">Juan Jose Dela Cruz</h2>
+                            <p class="text-gray-600">iawt4ji@gmail.com</p>
+                         <p class="text-gray-600">to me</p>
                         </div>
-                        <div class="header-right">
-                            <p class="date-info">Received on <span id="h-date"></span></p>
-                        </div>  
+                        <p class="text-gray-600">Received on Feb. 2, 2025</p>
                     </div>
                 </div>
-
-                <div class="summary">
-                    <div class="a-summary">
-                        <h2>Appointment Summary</h2>
-                        <h3 style="text-align: center;">Details</h3>
-                        <hr class="mb-4"/>
-                        <div class="dtl-container">
-                            <div class="dtl-grid">
-                                <p><b>Name:</b> <span id="name"></span></p><br>
-                                <p><b>Email:</b> <span id="email"></span></p><br>
-                                <p><b>Phone:</b> <span id="phone"></span></p><br>
-                                <p><b>Company:</b> <span id="company"></span></p><br>
-                                <p><b>Consultation Interest:</b> <span id="interest"></span></p><br>
-                                <p><b>Date:</b> <span id="date"></span></p><br>
-                                <p><b>Time:</b> <span id="time"></span></p><br>
-                                <p><b>Comments:</b> <br> <span id="comments"></span></p>
-                            </div>
-                        </div>
-            
-                        <div class="flex justify-center space-x-4 mt-12">
-                            <button onclick="sendMail('approved')"  class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Accept</button>
-                            <button onclick="sendMail('rejected')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reject</button>
-                            <button onclick="sendMail('rescheduled')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reschedule</button>
-                        </div>
+                <div class="bg-white bg-opacity-80 p-4 rounded-lg shadow-md mt-2 h-[calc(100vh-15.8rem)] flex flex-col items-center ml-4">
+                    <h3 class="text-lg font-bold mb-2 ml-10">Appointment Summary</h3>
+                    <p class="text-gray-600 mb-2 ml-10">Details</p>
+                    <hr class="mb-4"/>
+                    <div class="w-1/2">
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+                            <p><b>Name:</b> <span id="name"></span></p><br>
+                            <p><b>Email:</b> <span id="email"></span></p><br>
+                            <p><b>Phone:</b> <span id="phone"></span></p><br>
+                            <p><b>Company:</b> <span id="company"></span></p><br>
+                            <p><b>Consultation Interest:</b> <span id="interest"></span></p><br>
+                            <p><b>Date:</b> <span id="date"></span></p><br>
+                            <p><b>Time:</b> <span id="time"></span></p><br>
+                            <p><b>Comments:</b> <br> <span id="comments"></span></p>
                     </div>
-                </div> 
-            </div> 
+
+                    <div class="flex justify-center space-x-4 mt-12">
+                        <button onclick="sendMail('approved')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Accept</button>
+                        <button onclick="sendMail('rejected')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reject</button>
+                        <button onclick="sendMail('rescheduled')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reschedule</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
- </body>
- </html>
 
-<!--
 Mobile Bottom Navigation 
 <div class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-300 z-20">
   <div class="flex justify-around text-gray-700">
