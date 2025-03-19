@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: "4j5bpweGF5mCdKDfd",
+      });
+   })();
+</script>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="sidebar hidden md:flex md:flex-col bg-white shadow-lg p-4 w-64">
+            <div class="mb-4">
+                <img alt="Republic of the Philippines Government Procurement Policy Board Technical Support Office" height="100" src="../images/logo.png" width="200"/>
+            </div>
+            <nav class="space-y-4">
+                <a class="flex items-center space-x-2 text-black" href="../Inbox/inbox.html">
+                    <i class="fas fa-inbox"></i>
+                    <span>Inbox</span>
+                </a>
+                <a class="flex items-center space-x-2 text-black" href="../History/History.html">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </a>
+                <a class="flex items-center space-x-2 text-black" href="../Calendar/Calendar.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Calendar</span>
+                </a>
+            </nav>
+            <div class="absolute bottom-4 left-4">
+                <a class="flex items-center space-x-2 text-black" href="#">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Account Email</span>
+                </a>
+                <a class="text-sm text-gray-600" href="#">Sign out</a>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="w-full md:w-5/6 md:ml-1/6 p-4 bg-cover bg-center h-screen overflow-y-auto" style="background-image: url('../images/bg.png');">
+
+            <h1 class="text-2xl font-bold text-white mb-4">INBOX</h1>
+            <div class="bg-gray-100 p-4 rounded-lg relative">
+                <a class="absolute top-2 left-2 text-xl font-bold" href="../Inbox/inbox.html">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <div class="flex justify-between items-center mb-6">
+                    <div class="ml-4 flex flex-col justify-center">
+                        <h2 class="text-lg font-bold mb-1"><span id="h-name"></span></h2>
+                        <p class="text-gray-600"> <span id="h-email"></span></p>
+                    </div>
+                    <p class="text-gray-600 mr-4">Received on <span id="h-date"></span></p>
+                </div>
+            </div>
+            <div class="bg-white bg-opacity-80 p-4 rounded-lg shadow-md mt-2 h-[calc(100vh-8rem)] flex flex-col items-center ml-4">
+                <h3 class="text-lg font-bold mb-2">Appointment Summary</h3>
+                <p class="text-gray-600 mb-2">Details</p>
+                <hr class="mb-4"/>
+                <div class="w-1/2">
+                    <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+                            <p><b>Name:</b> <span id="d-name"></span></p><br>
+                            <p><b>Email:</b> <span id="d-email"></span></p><br>
+                            <p><b>Phone:</b> <span id="phone"></span></p><br>
+                            <p><b>Company:</b> <span id="company"></span></p><br>
+                            <p><b>Consultation Interest:</b><span id="interest"></span></p><br>
+                            <p><b>Date:</b><span id="d-date"></span></p><br>
+                            <p><b>Time:</b><span id="time"></span></p><br>
+                            <p><b>Comments:</b> <br> <span id="comments"></span></p>
+                    </div>
+                </div>
+                <div class="flex justify-center space-x-4 mt-12">
+                <button onclick="handleStatusUpdate('approved')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Accept</button>
+                <button onclick="handleStatusUpdate('rejected')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reject</button>
+                <button onclick="handleStatusUpdate('rescheduled')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reschedule</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ <!-- Mobile Bottom Navigation -->
+ <div class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-300 z-20">
+    <div class="flex justify-around text-gray-700">
+    <a href="../Inbox/inbox.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+        <i class="fas fa-inbox"></i><span class="text-xs">Inbox</span>
+    </a>
+    <a href="../History/History.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+        <i class="fas fa-history"></i><span class="text-xs">History</span>
+    </a>
+    <a href="../Calendar/Calendar.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+        <i class="fas fa-calendar-alt"></i><span class="text-xs">Calendar</span>
+    </a>
+    <a href="../Consultation Form/ConsultationForm.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+        <i class="fas fa-sign-out-alt"></i><span class="text-xs">Sign Out</span>
+    </a>
+    </div>
+</div>
+
+
+<!-- Reschedule Modal -->
+<div id="rescheduleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-6 rounded-lg w-96">
+        <h2 class="text-xl font-bold mb-4">Reschedule Appointment</h2>
+
+        <label class="block mb-2">New Date:</label>
+        <input type="date" id="newDate" class="border p-2 w-full mb-4 rounded">
+
+        <label class="block mb-2">New Time:</label>
+        <select id="newTime" class="border p-2 w-full rounded">
+            <option value="" disabled selected>Select a time</option>
+            <option value="9:00 AM">9:00 AM</option>
+            <option value="10:00 AM">10:00 AM</option>
+            <option value="11:00 AM">11:00 AM</option>
+            <option value="12:00 PM">12:00 PM</option>
+            <option value="1:00 PM">1:00 PM</option>
+            <option value="2:00 PM">2:00 PM</option>
+            <option value="3:00 PM">3:00 PM</option>
+            <option value="4:00 PM">4:00 PM</option>
+        </select>
+
+        <div class="flex justify-end space-x-4 mt-6">
+            <button onclick="closeRescheduleModal()" class="px-4 py-2 border rounded">Cancel</button>
+            <button onclick="submitReschedule()" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+        </div>
+    </div>
+</div>
+
+
+    <script src="entry1.js"></script>
+</body>
+</html>
+
+
+<!-- 
+<!DOCTYPE html>
+
+<html lang="en">
+
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: "4j5bpweGF5mCdKDfd",
+      });
+   })();
+</script>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        
+        <div class="w-1/6 bg-gray-200 h-screen p-4 fixed">
+            <div class="mb-4">
+                <img alt="Republic of the Philippines Government Procurement Policy Board Technical Support Office" height="100" src="../images/logo.png" width="200"/>
+            </div>
+            <nav class="space-y-4">
+                <a class="flex items-center space-x-2 text-black" href="../Inbox/inbox.html">
+                    <i class="fas fa-inbox"></i>
+                    <span>Inbox</span>
+                </a>
+                <a class="flex items-center space-x-2 text-black" href="../History/History.html">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </a>
+                <a class="flex items-center space-x-2 text-black" href="../Calendar/Calendar.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Calendar</span>
+                </a>
+            </nav>
+            <div class="absolute bottom-4 left-4">
+                <a class="flex items-center space-x-2 text-black" href="#">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Account Email</span>
+                </a>
+                <a class="text-sm text-gray-600" href="#">Sign out</a>
+            </div>
+        </div>
+        
+        
+        <div class="w-5/6 ml-[16.666%] p-4 bg-cover bg-center h-screen overflow-y-auto" style="background-image: url('../images/bg.png');">
+            <h1 class="text-2xl font-bold text-white mb-4">INBOX</h1>
+            <div class="bg-gray-100 p-4 rounded-lg relative">
+                <a class="absolute top-2 left-2 text-xl font-bold" href="../Inbox/inbox.html">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <div class="flex justify-between items-center mb-6">
+                    <div class="ml-4 flex flex-col justify-center">
+                        <h2 class="text-lg font-bold mb-1"><span id="h-name"></span></h2>
+                        <p class="text-gray-600"> <span id="h-email"></span></p>
+                    </div>
+                    <p class="text-gray-600 mr-4">Received on <span id="h-date"></span></p>
+                </div>
+            </div>
+            <div class="bg-white bg-opacity-80 p-4 rounded-lg shadow-md mt-2 h-[calc(100vh-8rem)] flex flex-col items-center ml-4">
+                <h3 class="text-lg font-bold mb-2">Appointment Summary</h3>
+                <p class="text-gray-600 mb-2">Details</p>
+                <hr class="mb-4"/>
+                <div class="w-1/2">
+                    <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+                            <p><b>Name:</b> <span id="d-name"></span></p><br>
+                            <p><b>Email:</b> <span id="d-email"></span></p><br>
+                            <p><b>Phone:</b> <span id="phone"></span></p><br>
+                            <p><b>Company:</b> <span id="company"></span></p><br>
+                            <p><b>Consultation Interest:</b><span id="interest"></span></p><br>
+                            <p><b>Date:</b><span id="d-date"></span></p><br>
+                            <p><b>Time:</b><span id="time"></span></p><br>
+                            <p><b>Comments:</b> <br> <span id="comments"></span></p>
+                    </div>
+                </div>
+                <div class="flex justify-center space-x-4 mt-12">
+                <button onclick="handleStatusUpdate('approved')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Accept</button>
+                <button onclick="handleStatusUpdate('rejected')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reject</button>
+                <button onclick="handleStatusUpdate('rescheduled')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reschedule</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+ <div class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-300 z-20">
+    <div class="flex justify-around text-gray-700">
+    <a href="../Inbox/inbox.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+        <i class="fas fa-inbox"></i><span class="text-xs">Inbox</span>
+    </a>
+    <a href="../History/History.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+        <i class="fas fa-history"></i><span class="text-xs">History</span>
+    </a>
+    <a href="../Calendar/Calendar.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+        <i class="fas fa-calendar-alt"></i><span class="text-xs">Calendar</span>
+    </a>
+    <a href="../Consultation Form/ConsultationForm.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+        <i class="fas fa-sign-out-alt"></i><span class="text-xs">Sign Out</span>
+    </a>
+    </div>
+</div>
+
+
+
+<div id="rescheduleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-6 rounded-lg w-96">
+        <h2 class="text-xl font-bold mb-4">Reschedule Appointment</h2>
+
+        <label class="block mb-2">New Date:</label>
+        <input type="date" id="newDate" class="border p-2 w-full mb-4 rounded">
+
+        <label class="block mb-2">New Time:</label>
+        <select id="newTime" class="border p-2 w-full rounded">
+            <option value="" disabled selected>Select a time</option>
+            <option value="9:00 AM">9:00 AM</option>
+            <option value="10:00 AM">10:00 AM</option>
+            <option value="11:00 AM">11:00 AM</option>
+            <option value="12:00 PM">12:00 PM</option>
+            <option value="1:00 PM">1:00 PM</option>
+            <option value="2:00 PM">2:00 PM</option>
+            <option value="3:00 PM">3:00 PM</option>
+            <option value="4:00 PM">4:00 PM</option>
+        </select>
+
+        <div class="flex justify-end space-x-4 mt-6">
+            <button onclick="closeRescheduleModal()" class="px-4 py-2 border rounded">Cancel</button>
+            <button onclick="submitReschedule()" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+        </div>
+    </div>
+</div>
+
+
+    <script src="entry.js"></script>
+</body>
+</html>
+
+-->
+
+
+

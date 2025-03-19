@@ -27,53 +27,8 @@ function openEntryView(name, email, phone, company, interest, date, time, commen
     localStorage.setItem("appointmentData", JSON.stringify(appointmentData));
 
     // Ensure entryId is added to the URL
-    window.location.href = `old.html?id=${entryId}`;
+    window.location.href = `entry.html?id=${entryId}`;
 }
-document.addEventListener("DOMContentLoaded", async function () {
-    const appointmentData = JSON.parse(localStorage.getItem("appointmentData"));
-    if (!appointmentData || !appointmentData.entryId) {
-        console.error("❌ Missing appointment data or entryId in localStorage.");
-        return;
-    }
-
-    const entryId = appointmentData.entryId;
-
-    const entryRef = firebase.database().ref(`contactFormDB/${entryId}`);
-    try {
-        const snapshot = await entryRef.once("value");
-        if (!snapshot.exists()) {
-            console.error("❌ No entry found for ID:", entryId);
-            return;
-        }
-
-        const data = snapshot.val();
-
-        // Update all UI fields from Firebase
-        const updateElement = (id, value) => {
-            const el = document.getElementById(id);
-            if (el) el.textContent = value;
-        };
-
-        updateElement("h-name", data.firstName + " " + data.lastName);
-        updateElement("h-email", data.email);
-        updateElement("h-date", data.appointmentDate);
-        updateElement("d-name", data.firstName + " " + data.lastName);
-        updateElement("d-email", data.email);
-        updateElement("phone", data.phoneNumber);
-        updateElement("company", data.company);
-        updateElement("interest", data.consultationInterest);
-        updateElement("d-date", data.appointmentDate);
-        updateElement("time", data.appointmentTime);
-        updateElement("comments", data.additionalInfo || "—");
-
-        // ✅ Dynamic status
-        const status = data.status || "pending";
-        updateElement("status", status.charAt(0).toUpperCase() + status.slice(1));
-
-    } catch (error) {
-        console.error("🔥 Error loading appointment:", error);
-    }
-});
 
 // Load appointment data on entry page
 document.addEventListener("DOMContentLoaded", function () {
@@ -143,6 +98,8 @@ function fetchEntryIdByEmail(email) {
             });
     });
 }
+
+
 
 function handleStatusUpdate(newStatus) {
     const emailElement = document.getElementById("h-email");
@@ -289,3 +246,78 @@ document.getElementById("reschedule-btn").addEventListener("click", () => {
 
     handleStatusUpdate(email, "rescheduled");
 });
+
+
+
+/* =========== */
+
+function openRescheduleModal() {
+    document.getElementById('rescheduleModal').classList.remove('hidden');
+  }
+  
+  function closeRescheduleModal() {
+    document.getElementById('rescheduleModal').classList.add('hidden');
+  }
+  
+  function submitReschedule() {
+    const newDate = document.getElementById('newDate').value;
+    const newTime = document.getElementById('newTime').value;
+  
+    if (!newDate || !newTime) {
+      alert('Please select both a new date and time.');
+      return;
+    }
+  
+    const emailElement = document.getElementById("h-email");
+    if (!emailElement) {
+      console.error("❌ Element with ID 'h-email' not found!");
+      return;
+    }
+  
+    const userEmail = emailElement.textContent.trim().toLowerCase();
+    if (!userEmail) {
+      console.error("❌ Could not retrieve a valid email from the entry page.");
+      return;
+    }
+  
+    // Fetch the entry ID and update date & time in Firebase
+    fetchEntryIdByEmail(userEmail)
+      .then(entryId => {
+        if (!entryId) {
+          console.error("❌ No matching entry found for:", `"${userEmail}"`);
+          return;
+        }
+  
+        const entryRef = firebase.database().ref(`contactFormDB/${entryId}`);
+  
+        entryRef.update({
+          date: newDate,
+          time: newTime,
+          status: 'rescheduled' // Optional: You may want to set status as well!
+        })
+        .then(() => {
+          console.log(`✅ Rescheduled to ${newDate} at ${newTime} for Entry ID:`, entryId);
+  
+          // Update UI after successful update
+          document.getElementById('d-date').textContent = newDate;
+          document.getElementById('time').textContent = newTime;
+  
+          // Send email notification if needed
+          sendMail('rescheduled');
+  
+          closeRescheduleModal();
+        })
+        .catch(error => console.error("❌ Error updating date and time:", error));
+      })
+      .catch(error => console.error("❌ Error fetching Entry ID:", error));
+  }
+  
+  // Button handler for Accept, Reject, Reschedule
+  function handleStatusUpdate(status) {
+    if (status === 'rescheduled') {
+      openRescheduleModal();
+    } else {
+      console.log(`Appointment ${status}`);
+      // TODO: Add your accept/reject logic here
+    }
+  }
