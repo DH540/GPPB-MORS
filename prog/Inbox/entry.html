@@ -68,26 +68,27 @@
                         </div>  
                     </div>
                 </div>
+                
                 <div class="summary">
                     <div class="a-summary">
                         <h2>Appointment Summary</h2>
                         <h3 style="text-align: center;">Details</h3>
                         <hr class="mb-4"/>
                             <div class="dtl-container">
-                                <span class="label">Name:</span> <span class="value">FF06B5 FF06B5</span>
-                                <span class="label">Email:</span> <span class="value">FF06B5@THETRUTHWILLSETYOUFREE.com</span>
-                                <span class="label">Phone:</span> <span class="value">065949 49394</span>
-                                <span class="label">Company:</span> <span class="value">FF06B5</span>
-                                <span class="label">Consultation Interest:</span> <span class="value"></span>
-                                <span class="label">Date:</span> <span class="value">2025-03-08</span>
-                                <span class="label">Time:</span> <span class="value">3:00</span>
-                                <span class="label">Comments:</span> <span class="value"></span>
+                                <span class="label">Name:</span> <span class="value" id="d-name"></span>
+                                <span class="label">Email:</span> <span class="value" id="d-email"></span>
+                                <span class="label">Phone:</span> <span class="value" id="phone"></span>
+                                <span class="label">Company:</span> <span class="value" id="company"></span>
+                                <span class="label">Consultation Interest:</span> <span class="value" id="interest"></span>
+                                <span class="label">Date:</span> <span class="value" id="d-date"></span>
+                                <span class="label">Time:</span> <span class="value" id="time"></span>
+                                <span class="label">Comments:</span> <span class="value" id="comments"></span>
                           </div>
                 
                             <div class="flex justify-center space-x-4 mt-12">
-                                <button onclick="sendMail('approved')"  class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Accept</button>
-                                <button onclick="sendMail('rejected')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reject</button>
-                                <button onclick="sendMail('rescheduled')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reschedule</button>
+                                <button onclick="sendMail('approved'), handleStatusUpdate('approved')"  class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Accept</button>
+                                <button onclick="sendMail('rejected'), handleStatusUpdate('rejected')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reject</button>
+                                <button onclick="sendMail('rescheduled'), handleStatusUpdate('rescheduled')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reschedule</button>
                             </div>
                         </div>
                     </div>    
@@ -96,50 +97,49 @@
         </div>
     </div>
 
-<div class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-300 z-20">
-  <div class="flex justify-around text-gray-700">
-    <a href="../Inbox/Inbox.html" class="flex flex-col items-center py-2 hover:text-blue-600">
-      <i class="fas fa-inbox"></i><span class="text-xs">Inbox</span>
-    </a>
-    <a href="../History/History.html" class="flex flex-col items-center py-2 hover:text-blue-600">
-      <i class="fas fa-history"></i><span class="text-xs">History</span>
-    </a>
-    <a href="../Calendar/Calendar.html" class="flex flex-col items-center py-2 hover:text-blue-600">
-      <i class="fas fa-calendar-alt"></i><span class="text-xs">Calendar</span>
-    </a>
-    <a href="../Consulation Form/ConsultationForm.html" class="flex flex-col items-center py-2 hover:text-blue-600">
-      <i class="fas fa-sign-out-alt"></i><span class="text-xs">Sign Out</span>
-    </a>
-  </div>
-
-  <!-- Reschedule Modal -->
-<div id="rescheduleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-    <div class="bg-white p-6 rounded-lg w-96">
-        <h2 class="text-xl font-bold mb-4">Reschedule Appointment</h2>
-
-        <label class="block mb-2">New Date:</label>
-        <input type="date" id="newDate" class="border p-2 w-full mb-4 rounded">
-
-        <label class="block mb-2">New Time:</label>
-        <select id="newTime" class="border p-2 w-full rounded">
-            <option value="" disabled selected>Select a time</option>
-            <option value="9:00 AM">9:00 AM</option>
-            <option value="10:00 AM">10:00 AM</option>
-            <option value="11:00 AM">11:00 AM</option>
-            <option value="12:00 PM">12:00 PM</option>
-            <option value="1:00 PM">1:00 PM</option>
-            <option value="2:00 PM">2:00 PM</option>
-            <option value="3:00 PM">3:00 PM</option>
-            <option value="4:00 PM">4:00 PM</option>
-        </select>
-
-        <div class="flex justify-end space-x-4 mt-6">
-            <button onclick="closeRescheduleModal()" class="px-4 py-2 border rounded">Cancel</button>
-            <button onclick="submitReschedule()" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+    <div class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-300 z-20">
+        <div class="flex justify-around text-gray-700">
+            <a href="../Inbox/Inbox.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+            <i class="fas fa-inbox"></i><span class="text-xs">Inbox</span>
+            </a>
+            <a href="../History/History.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+            <i class="fas fa-history"></i><span class="text-xs">History</span>
+            </a>
+            <a href="../Calendar/Calendar.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+            <i class="fas fa-calendar-alt"></i><span class="text-xs">Calendar</span>
+            </a>
+            <a href="../Consulation Form/ConsultationForm.html" class="flex flex-col items-center py-2 hover:text-blue-600">
+            <i class="fas fa-sign-out-alt"></i><span class="text-xs">Sign Out</span>
+            </a>
         </div>
     </div>
-</div>
 
-</div>
+    <!-- Reschedule Modal -->
+    <div id="rescheduleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-6 rounded-lg w-96">
+            <h2 class="text-xl font-bold mb-4">Reschedule Appointment</h2>
+
+            <label class="block mb-2">New Date:</label>
+            <input type="date" id="newDate" class="border p-2 w-full mb-4 rounded">
+
+            <label class="block mb-2">New Time:</label>
+            <select id="newTime" class="border p-2 w-full rounded">
+                <option value="" disabled selected>Select a time</option>
+                <option value="9:00 AM">9:00 AM</option>
+                <option value="10:00 AM">10:00 AM</option>
+                <option value="11:00 AM">11:00 AM</option>
+                <option value="12:00 PM">12:00 PM</option>
+                <option value="1:00 PM">1:00 PM</option>
+                <option value="2:00 PM">2:00 PM</option>
+                <option value="3:00 PM">3:00 PM</option>
+                <option value="4:00 PM">4:00 PM</option>
+            </select>
+
+            <div class="flex justify-end space-x-4 mt-6">
+                <button onclick="closeRescheduleModal()" class="px-4 py-2 border rounded">Cancel</button>
+                <button onclick="submitReschedule()" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

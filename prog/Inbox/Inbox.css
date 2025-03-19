@@ -108,7 +108,7 @@
     width: 100%;
     background-color: rgba(255, 255, 255, 0.75); /* bg-white bg-opacity-75 */
     border-collapse: collapse;
-    table-layout: auto;
+    table-layout: fixed;
   }
   .main-content .table-container {
     max-height: 400px;

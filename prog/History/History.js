@@ -132,6 +132,21 @@ function deleteSelectedRows() {
     });
 }
 
+function getStatusColor(status) {
+    switch ((status || "").toLowerCase()) {
+        case "approved":
+        case "available":
+            return "#00A651"; // Green
+        case "rejected":
+            return "#E12926"; // Red
+        case "rescheduled":
+            return "#F5A623"; // Orange
+        default:
+            return "#ccc"; // Gray for unknown/pending
+    }
+}
+
+
 let currentOrder = "asc";
 let currentCriteria = "date";
 
@@ -148,26 +163,47 @@ function applySorting() {
 }
 
 function sortTable(column, order) {
-    const table = document.querySelector("tbody");
-    const rows = Array.from(table.rows);
+    const rows = Array.from(document.querySelectorAll("#history-table-body tr"));
 
     rows.sort((rowA, rowB) => {
         let valueA, valueB;
 
         if (column === "date") {
-            valueA = new Date(rowA.cells[3].textContent.trim());
-            valueB = new Date(rowB.cells[3].textContent.trim());
-        } else if (column === "name") {
+            // Fix date sorting by converting to timestamps
+            valueA = new Date(rowA.cells[4].textContent.trim()).getTime() || 0;
+            valueB = new Date(rowB.cells[4].textContent.trim()).getTime() || 0;
+        } 
+        else if (column === "name") {
+            // Fix name sorting (convert to lowercase for consistency)
             valueA = rowA.cells[1].textContent.trim().toLowerCase();
             valueB = rowB.cells[1].textContent.trim().toLowerCase();
         }
 
-        if (valueA < valueB) return order === "asc" ? -1 : 1;
-        if (valueA > valueB) return order === "asc" ? 1 : -1;
-        return 0;
+        return order === "asc" ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
     });
 
-    rows.forEach(row => table.appendChild(row));
+    rows.forEach(row => document.getElementById("history-table-body").appendChild(row));
+}
+
+
+let activeFilter = null; // Track the active filter
+
+function filterStatus(status) {
+    const rows = document.querySelectorAll("#history-table-body tr");
+
+    if (activeFilter === status) {
+        rows.forEach(row => row.style.display = "");
+        activeFilter = null; 
+        return;
+    }
+
+    // Otherwise, apply the new filter
+    rows.forEach(row => {
+        const statusCell = row.cells[3].textContent.trim().toLowerCase();
+        row.style.display = (statusCell === status) ? "" : "none";
+    });
+
+    activeFilter = status;
 }
 
 function openEntryView(name, email, phone, company, interest, date, time, comments, status) {

@@ -112,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-
 document.addEventListener('DOMContentLoaded', () => {
     const validUsername = "admin123@gmail.com";
     const validPassword = "iampassword";
