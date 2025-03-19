@@ -123,7 +123,7 @@ function loadHistory() {
                 <td>${data.firstName || 'N/A'} ${data.lastName || 'N/A'}</td>
                 <td>Consultation Request for ${formattedDateWords}</td>
                 <td style="text-align: center;">
-                    <span style="background-color: ${getStatusColor(data.status)}; color: white; padding: 6px 12px; border-radius: 50px; display: inline-block; min-width: 100px;">
+                    <span style="background-color: ${getStatusColor(data.status)}; color: white; padding: 6px 12px; border-radius: 20px; display: inline-block; min-width: 100px;">
                         ${data.status ? capitalize(data.status) : 'Pending'}
                     </span>
                 </td>

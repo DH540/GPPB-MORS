@@ -173,7 +173,7 @@ body {
 .main-content .table th:nth-child(4),
 .main-content .table td:nth-child(4) {
     width: 15%; /* Status */
-    text-align: left;
+    text-align: center;
 }
 
 .main-content .table th:nth-child(5),
