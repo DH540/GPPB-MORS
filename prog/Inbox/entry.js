@@ -196,7 +196,7 @@ document.getElementById("accept-btn").addEventListener("click", () => {
 
     const userEmail = emailElement.textContent.trim().toLowerCase(); // Extract email
     console.log("✅ Extracted Email from Page:", `"${userEmail}"`);
-
+    
     if (userEmail) {
         handleStatusUpdate(userEmail, "approved"); // Pass the email, not status
     } else {
