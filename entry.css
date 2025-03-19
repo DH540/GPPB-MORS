@@ -1,0 +1,121 @@
+body {
+    background-color: #e5e7eb; /* bg-gray-200 */
+  }
+  .sidebar {
+    width: 12rem; /* w-48 */
+    background-color: #f3f4f6; /* bg-gray-100 */
+    padding: 1rem; /* p-4 */
+  }
+  .sidebar img {
+    margin-bottom: 1rem; /* mb-4 */
+  }
+  .sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* space-x-2 */
+    color: #4b5563; /* text-gray-700 */
+    transition: color 0.3s;
+  }
+  .sidebar nav a:hover {
+    color: #1f2937; /* hover:text-gray-900 */
+  }
+  .sidebar .bottom-section {
+    position: absolute;
+    bottom: 1rem; /* bottom-4 */
+    left: 1rem; /* left-4 */
+  }
+  .sidebar .bottom-section .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* space-x-2 */
+  }
+  .sidebar .bottom-section a {
+    font-size: 0.875rem; /* text-sm */
+    color: #6b7280; /* text-gray-500 */
+    transition: color 0.3s;
+  }
+  .sidebar .bottom-section a:hover {
+    color: #374151; /* hover:text-gray-700 */
+  }
+  .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+  }
+  .main-content .background-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+  }
+  .main-content .content {
+      flex: 1;
+      background-color: rgba(255, 255, 255, 0.75);
+      padding: 1rem;
+      position: relative;
+      z-index: 10;
+  }
+  .main-content .header {
+      background-color: #1d4ed8;
+      color: #ffffff;
+      padding: 1rem;
+      border-radius: 0.5rem;
+  }
+  .main-content .header-left{
+    display: flex;
+    gap: 12px;
+    flex: 1; /* Allows it to take available space */
+  }
+  .header-right {
+      white-space: nowrap;
+      text-align: right;
+      font-size: 0.875rem;
+      min-width: 200px; /* Ensures it doesn't collapse */
+      margin-left: auto;
+      padding-top: 30px;
+  }
+  .main-content .header h2 {
+      font-size: 1.125rem;
+  }
+  .main-content .summary {
+    background-color: rgba(255, 255, 255, 0.8); /* White with 80% opacity */
+    padding: 1rem 0 2.5rem 0; /* 16px padding */
+    border-radius: 0.5rem; /* Large border radius */
+    margin-top: 0.5rem; /* 8px top margin */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .dtl-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem 1rem; /* Adjust spacing between label and value */
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .dtl-container .label {
+    font-weight: bold;
+    text-align: left;
+    color: #1f2937; /* Dark gray */
+  }
+
+  .dtl-container .value {
+    text-align: right;
+    color: #4b5563; /* Medium gray */
+  }
+  .a-summary h2 {
+    font-size: 1.125rem; /* Large text */
+    font-weight: bold;
+    text-align: center;
+  }
+  .a-summary p {
+    color: #4b5563; /* Tailwind gray-600 */
+    margin-left: 2.5rem;
+  }
+  .a-summary hr {
+    margin: 1rem  0 1rem 0;
+  }
