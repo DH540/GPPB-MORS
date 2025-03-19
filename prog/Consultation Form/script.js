@@ -118,19 +118,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const validPassword = "iampassword";
 
     document.getElementById("button-login").addEventListener("click", function() {
-        // Get user input
-        let username = document.getElementById("email").value.trim();
-        let password = document.getElementById("password").value.trim();
+        let emailInput = document.getElementById("emailmodal"); // Ensure it exists
+        let passwordInput = document.getElementById("password");
+    
         let message = document.getElementById("message");
 
-        // Check if fields are empty
+        console.log("Email input element:", emailInput); // Check if input exists
+        console.log("Password input element:", passwordInput);
+
+        let username = emailInput ? emailInput.value.trim() : null;
+        let password = passwordInput ? passwordInput.value.trim() : null;
+
         if (!username || !password) {
             message.style.color = "orange";
             message.textContent = "Please enter both username and password.";
             return;
         }
 
-        // Validate credentials
+        // Force re-evaluation of the password field
+        document.getElementById("password").focus();
+        document.getElementById("password").blur();
+        password = document.getElementById("password").value.trim();
+
         if (username === validUsername && password === validPassword) {
             message.style.color = "green";
             message.textContent = "Login successful! Redirecting...";
@@ -146,7 +155,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
-            event.preventDefault(); // Stop Enter from triggering anything
+            event.preventDefault();
+            document.getElementById("button-login").click(); // Trigger the button click
         }
+    });
+
+    // Prevent default form submission
+    document.getElementById("admin-login-form").addEventListener("submit", function(event) {
+        event.preventDefault();
     });
 });
