@@ -145,6 +145,4 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault(); // Stop Enter from triggering anything
         }
     });
-
-
 });
