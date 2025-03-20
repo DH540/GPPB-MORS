@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
             message.textContent = "Login successful! Redirecting...";
 
             setTimeout(() => {
-                window.location.href = "../Inbox/inbox.html"; 
+                window.location.href = "prog/";
             }, 1000);
         } else {
             message.style.color = "red";
