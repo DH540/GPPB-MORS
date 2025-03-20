@@ -332,8 +332,8 @@ function openRescheduleModal() {
 
     // Redirect user to inbox after a short delay
     setTimeout(() => {
-        window.location.href = "inbox.html"; // Change "/inbox" to your actual inbox URL
-    }, 1000); // Delay to allow the user to see the confirmation log
+        window.location.href = "inbox.html";
+    }, 1000);
 }
 
 // Attach event listeners
