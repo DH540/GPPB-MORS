@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css" />
-    <title>GPPB-TSO Online Consultation Request System</title>
+    <title>Admin Login</title>
 </head>
 <body>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
+    
     <!-- Add EmailJS SDK first -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
@@ -29,17 +29,25 @@
         <a class="visit-website-btn" href="https://www.gppb.gov.ph/" target="_blank">Visit our Website!</a>
     </div>
 
-    <div class="main-content" id="main-content">
-        <div class="card">
-            <div class="card-header">
-                <div class="greeting">GREETINGS FROM THE</div>
-                <div class="team-title">GPPB-TSO<br>Team!</div>
-                <div class="help-text">How can we help you today?</div>
-            </div>
-            <div class="action-buttons">
-                <a class="client-btn" id="client-btn" href="client-form.html">I'm a Client</a>
-                <a class="admin-btn" id="admin-btn" href="admin-login.html">I'm an Admin</a>
-            </div>
+    <div class="main-content">
+        <div class="card" style="max-width:400px;">
+            <h2 style="color:#3730F5; text-align: center;">Login as Admin</h2>
+            <form id="admin-login-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="johndoe@example.com">
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password">
+                </div>
+                <p id="message"></p>
+                <div class="btns" style="display: flex; align-items: center; justify-content: space-between;">
+                    <a href="index.html" class="admin-btn" style="text-align:center; text-decoration:none; padding:10px 20px;">Back</a>
+                    <button type="button" class="admin-btn login-btn" id="button-login" style="color: #fff; text-align:center; text-decoration:none; padding:12px 20px;">Login</button>
+                </div>
+            </form>
         </div>
     </div>
 </body>

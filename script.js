@@ -100,25 +100,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const openModalButton = document.getElementById('button-open');
-    const closeModalButton = document.getElementById('button-close');
-    const modalContainer = document.getElementById('modal-container');
-
-    openModalButton.addEventListener('click', () => {
-        modalContainer.classList.add('show');
-    });
-
-    closeModalButton.addEventListener('click', () => {
-        modalContainer.classList.remove('show');
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
     const validUsername = "admin123@gmail.com";
     const validPassword = "iampassword";
 
     document.getElementById("button-login").addEventListener("click", function() {
-        let emailInput = document.getElementById("emailmodal"); // Ensure it exists
+        let emailInput = document.getElementById("email"); // Ensure it exists
         let passwordInput = document.getElementById("password");
     
         let message = document.getElementById("message");
