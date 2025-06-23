@@ -177,6 +177,10 @@ function sendMail(status) {
             console.error(`❌ Failed to send ${status} email:`, error);
             alert(`Failed to send ${status} email. See console for details.`);
         });
+
+    setTimeout(() => {
+        window.location.href = "inbox.html";
+    }, 3000);
 }
 
 const statusMessages = {
