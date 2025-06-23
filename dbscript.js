@@ -68,14 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 templateId: 'template_1gom91e'
             });
 
-            const emailResponse = await emailjs.send(
-                'default_service',
-                'template_1gom91e',
-                emailParams
-            );
-
-            console.log('Email sent successfully:', emailResponse);
-
             // Save to Firebase
             const dbResponse = await contactFormDB.push(formData);
             console.log("Data saved to Firebase with key:", dbResponse.key);
