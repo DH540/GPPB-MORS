@@ -134,7 +134,6 @@ function handleStatusUpdate(newStatus) {
     }).catch(error => console.error("❌ Error fetching Entry ID:", error));
 }
 
-
 // Function to update status in Firebase
 function updateStatus(entryId, newStatus) {
     if (!entryId) {
@@ -150,100 +149,45 @@ function updateStatus(entryId, newStatus) {
         .catch((error) => console.error("Error updating status: ", error));
 }
 
-function sendMail(action) {
-    const emailElement = document.getElementById("h-email");
-    if (!emailElement) {
-        console.error("❌ Element with ID 'h-email' not found!");
+function sendMail(status) {
+    const appointment = JSON.parse(localStorage.getItem("appointmentData"));
+
+    if (!appointment) {
+        console.error("❌ No appointment data found in localStorage.");
         return;
     }
 
-    const userEmail = emailElement.textContent.trim();
-    console.log(`📩 Sending email about "${action}" for "${userEmail}"`);
-
-    // Your email sending logic goes here...
-}
-// Contact form email sending function
-function sendContactMessage() {
-    var params = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        message: document.getElementById("message").value
+     const emailParams = {
+        name: appointment.name,
+        email: appointment.email,
+        appt_date: appointment.date,
+        appt_time: appointment.time,
+        consultation_mode: appointment.interest,
+        consultation_link: appointment.consultation_link || "N/A",
+        status: status,
+        custom_message: getCustomMessage(status)
     };
 
-    const serviceID = "service_ob944xf";
-    const templateID = "template_wkvq4nl";
-
-    emailjs.send(serviceID, templateID, params)
-        .then(res => {
-            document.getElementById("name").value = "";
-            document.getElementById("email").value = "";
-            document.getElementById("message").value = "";
-            console.log(res);
-            alert("Your message was sent successfully!");
+    emailjs.send("service_ob944xf", "template_wkj756d", emailParams)
+        .then((response) => {
+            console.log(`✅ ${status.toUpperCase()} email sent successfully!`, response.status);
+            alert(`${status.toUpperCase()} email sent to ${appointment.email}`);
         })
-        .catch(err => console.log(err));
+        .catch((error) => {
+            console.error(`❌ Failed to send ${status} email:`, error);
+            alert(`Failed to send ${status} email. See console for details.`);
+        });
 }
 
+const statusMessages = {
+  approved: "We're excited to meet you on the scheduled date. Please be on time",
+  cancelled: "Unfortunately, your request could not be accommodated at this time",
+  rescheduled: "Please take note of the updated date and time for your consultation"
+};
 
-document.getElementById("accept-btn").addEventListener("click", () => {
-    const emailElement = document.getElementById("h-email");
-    if (!emailElement) {
-        console.error("❌ Element with ID 'h-email' not found!");
-        return;
-    }
-
-    const userEmail = emailElement.textContent.trim().toLowerCase(); // Extract email
-    console.log("✅ Extracted Email from Page:", `"${userEmail}"`);
-    
-    if (userEmail) {
-        handleStatusUpdate(userEmail, "approved"); // Pass the email, not status
-    } else {
-        console.error("❌ Could not retrieve email from entry page.");
-    }
-});
-
-document.getElementById("accept-btn").addEventListener("click", () => {
-    const emailElement = document.getElementById("h-email"); // Ensure this contains the actual email
-    if (!emailElement) {
-        console.error("❌ Element with ID 'h-email' not found!");
-        return;
-    }
-
-    const email = emailElement.textContent.trim().toLowerCase(); // Extract actual email
-    console.log("✅ Extracted Email from Page:", `"${email}"`);
-
-    if (email) {
-        handleStatusUpdate(email, "approved"); // Pass email correctly
-    } else {
-        console.error("❌ Could not retrieve email from entry page.");
-    }
-});
-
-document.getElementById("reject-btn").addEventListener("click", () => {
-    const emailElement = document.getElementById("h-email");
-    if (!emailElement) {
-        console.error("❌ Element with ID 'h-email' not found!");
-        return;
-    }
-
-    const email = emailElement.textContent.trim().toLowerCase();
-    console.log("🔎 Extracted Email from Page:", `"${email}"`);
-
-    handleStatusUpdate(email, "rejected");
-});
-
-document.getElementById("reschedule-btn").addEventListener("click", () => {
-    const emailElement = document.getElementById("h-email");
-    if (!emailElement) {
-        console.error("❌ Element with ID 'h-email' not found!");
-        return;
-    }
-
-    const email = emailElement.textContent.trim().toLowerCase();
-    console.log("🔎 Extracted Email from Page:", `"${email}"`);
-
-    handleStatusUpdate(email, "rescheduled");
-});
+function getCustomMessage(status) {
+  return statusMessages[status] || "";
+}
 
 function openRescheduleModal() {
     document.getElementById('rescheduleModal').classList.remove('hidden');
@@ -274,7 +218,6 @@ function openRescheduleModal() {
       return;
     }
   
-    // Fetch the entry ID and update date & time in Firebase
     fetchEntryIdByEmail(userEmail)
       .then(entryId => {
         if (!entryId) {
@@ -287,16 +230,14 @@ function openRescheduleModal() {
         entryRef.update({
           date: newDate,
           time: newTime,
-          status: 'rescheduled' // Optional: You may want to set status as well!
+          status: 'rescheduled'
         })
         .then(() => {
           console.log(`✅ Rescheduled to ${newDate} at ${newTime} for Entry ID:`, entryId);
   
-          // Update UI after successful update
           document.getElementById('d-date').textContent = newDate;
           document.getElementById('time').textContent = newTime;
   
-          // Send email notification if needed
           sendMail('rescheduled');
   
           closeRescheduleModal();
@@ -305,42 +246,3 @@ function openRescheduleModal() {
       })
       .catch(error => console.error("❌ Error fetching Entry ID:", error));
   }
-  
-  // Button handler for Accept, Reject, Reschedule
-  function handleStatusUpdate(status) {
-    if (status === 'rescheduled') {
-        openRescheduleModal();
-        return;
-    }
-
-    const emailElement = document.getElementById("h-email");
-    if (!emailElement) {
-        console.error("❌ Element with ID 'h-email' not found!");
-        return;
-    }
-
-    const email = emailElement.textContent.trim().toLowerCase();
-    console.log(`✅ Processing appointment for: "${email}" - Status: ${status}`);
-
-    if (email) {
-        // TODO: Implement actual API call or email notification logic here
-        console.log(`📩 Sending ${status.toUpperCase()} notification to ${email}`);
-    } else {
-        console.error("❌ Could not retrieve email from entry page.");
-        return;
-    }
-
-    // Redirect user to inbox after a short delay
-    setTimeout(() => {
-        window.location.href = "inbox.html";
-    }, 1000);
-}
-
-// Attach event listeners
-document.getElementById("accept-btn").addEventListener("click", () => {
-    handleStatusUpdate("approved");
-});
-
-document.getElementById("reject-btn").addEventListener("click", () => {
-    handleStatusUpdate("rejected");
-});

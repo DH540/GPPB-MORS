@@ -14,7 +14,7 @@
     <script type="text/javascript">
         (function(){
            emailjs.init({
-             publicKey: "4j5bpweGF5mCdKDfd",
+             publicKey: "mvAsUuvZ88Zbzp_q0",
            });
         })();
      </script>
@@ -86,9 +86,9 @@
                             </div>
                 
                             <div class="flex justify-center space-x-4 mt-12">
-                                <button onclick="sendMail('approved'), handleStatusUpdate('approved')"  class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Accept</button>
-                                <button onclick="sendMail('rejected'), handleStatusUpdate('rejected')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reject</button>
-                                <button onclick="sendMail('rescheduled'), handleStatusUpdate('rescheduled')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reschedule</button>
+                                <button onclick="handleStatusUpdate('approved')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Accept</button>
+                                <button onclick="handleStatusUpdate('cancelled')" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Cancel</button>
+                                <button onclick="openRescheduleModal()" class="border border-gray-400 px-6 py-2 rounded-md text-gray-800">Reschedule</button>
                             </div>
                         </div>
                     </div>    
