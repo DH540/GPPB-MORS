@@ -237,22 +237,14 @@ function openRescheduleModal() {
           status: 'rescheduled'
         })
         .then(() => {
-            console.log(`✅ Rescheduled to ${newDate} at ${newTime} for Entry ID:`, entryId);
-    
-            document.getElementById('d-date').textContent = newDate;
-            document.getElementById('time').textContent = newTime;
+          console.log(`✅ Rescheduled to ${newDate} at ${newTime} for Entry ID:`, entryId);
   
-            const appointment = JSON.parse(localStorage.getItem("appointmentData"));
-            if (appointment) {
-            appointment.date = newDate;
-            appointment.time = newTime;
-            appointment.status = "rescheduled";
-            localStorage.setItem("appointmentData", JSON.stringify(appointment));
-            }
-
-            sendMail('rescheduled');
-    
-            closeRescheduleModal();
+          document.getElementById('d-date').textContent = newDate;
+          document.getElementById('time').textContent = newTime;
+  
+          sendMail('rescheduled');
+  
+          closeRescheduleModal();
         })
         .catch(error => console.error("❌ Error updating date and time:", error));
       })
