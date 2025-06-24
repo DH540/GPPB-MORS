@@ -197,11 +197,11 @@ function openRescheduleModal() {
     document.getElementById('rescheduleModal').classList.remove('hidden');
   }
   
-  function closeRescheduleModal() {
+function closeRescheduleModal() {
     document.getElementById('rescheduleModal').classList.add('hidden');
   }
   
-  function submitReschedule() {
+function submitReschedule() {
     const newDate = document.getElementById('newDate').value;
     const newTime = document.getElementById('newTime').value;
   
@@ -232,19 +232,26 @@ function openRescheduleModal() {
         const entryRef = firebase.database().ref(`contactFormDB/${entryId}`);
   
         entryRef.update({
-          date: newDate,
-          time: newTime,
+          appointmentDate: newDate,
+          appointmentTime: newTime,
           status: 'rescheduled'
         })
         .then(() => {
-          console.log(`✅ Rescheduled to ${newDate} at ${newTime} for Entry ID:`, entryId);
+            console.log(`✅ Rescheduled to ${newDate} at ${newTime} for Entry ID:`, entryId);
+    
+            document.getElementById('d-date').textContent = newDate;
+            document.getElementById('time').textContent = newTime;
   
-          document.getElementById('d-date').textContent = newDate;
-          document.getElementById('time').textContent = newTime;
-  
-          sendMail('rescheduled');
-  
-          closeRescheduleModal();
+            const appointmentData = JSON.parse(localStorage.getItem("appointmentData"));
+            if (appointmentData) {
+                appointmentData.date = newDate;
+                appointmentData.time = newTime;
+                localStorage.setItem("appointmentData", JSON.stringify(appointmentData));
+            }
+
+            sendMail('rescheduled');
+    
+            closeRescheduleModal();
         })
         .catch(error => console.error("❌ Error updating date and time:", error));
       })
