@@ -42,6 +42,7 @@ body {
       display: flex;
       flex-direction: column;
       position: relative;
+      overflow-y: auto;
   }
   .main-content .background-image {
       position: absolute;
@@ -66,16 +67,17 @@ body {
   }
   .main-content .header-left{
     display: flex;
+    flex-wrap: wrap;
     gap: 12px;
     flex: 1; /* Allows it to take available space */
   }
   .header-right {
       white-space: nowrap;
-      text-align: right;
+      text-align: left;
       font-size: 0.875rem;
-      min-width: 200px; /* Ensures it doesn't collapse */
-      margin-left: auto;
-      padding-top: 30px;
+      min-width: fit-content;
+      margin-left: 0;
+      padding-top: 0;
   }
   .main-content .header h2 {
       font-size: 1.125rem;
@@ -95,6 +97,7 @@ body {
     gap: 0.75rem 1rem; /* Adjust spacing between label and value */
     width: 100%;
     max-width: 600px;
+    padding: 0 1rem;
   }
 
   .dtl-container .label {
@@ -118,4 +121,26 @@ body {
   }
   .a-summary hr {
     margin: 1rem  0 1rem 0;
+  }
+
+  /* Responsive Adjustments */
+  @media (min-width: 640px) {
+    .header-right {
+        text-align: right;
+        margin-left: auto;
+        padding-top: 30px;
+    }
+  }
+
+  @media (max-width: 767px) {
+      .sidebar {
+          display: none;
+      }
+      .dtl-container {
+          grid-template-columns: 1fr;
+      }
+      .dtl-container .value {
+          text-align: left;
+          margin-bottom: 0.5rem;
+      }
   }

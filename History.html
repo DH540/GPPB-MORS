@@ -12,13 +12,10 @@
 
 <body> 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
     <script src="History.js"></script>
   <div class="flex h-screen">
-    <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar hidden md:block">
         <div class="mb-4">
             <img src="images/logo.png"
                  alt="Government Procurement Policy Board - Technical Support Office logo" width="150" height="100" />
@@ -46,7 +43,6 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="main-content">
       <img src="images/bg.png" alt="Background image" class="background-image">
 
@@ -100,15 +96,13 @@
                         </tr>
                     </thead>
                     <tbody id="history-table-body">
-                        <!-- Dynamic data will be loaded here -->
-                    </tbody>
+                        </tbody>
                 </table>
               </div>
           </div>
       </div>
-  </div>
+    </div>
 
-    <!-- Modal -->
     <div id="modal-container" class="modal-container">
         <div class="modal">
             <div class="modal-in">
@@ -122,23 +116,22 @@
         </div>
     </div>
 
-    <!-- MOBILE BOTTOM NAV -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-inner flex justify-around items-center py-3 border-t z-20">
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg flex justify-around items-center py-2 border-t z-20">
       <a href="inbox.html" class="flex flex-col items-center text-gray-700 hover:text-blue-600">
-        <i class="fas fa-inbox text-xl"></i>
-        <span class="text-xs">Inbox</span>
+        <i class="fas fa-inbox text-lg"></i>
+        <span class="text-xs mt-1">Inbox</span>
       </a>
       <a href="History.html" class="flex flex-col items-center text-gray-700 hover:text-blue-600">
-        <i class="fas fa-history text-xl"></i>
-        <span class="text-xs">History</span>
+        <i class="fas fa-history text-lg"></i>
+        <span class="text-xs mt-1">History</span>
       </a>
       <a href="Calendar.html" class="flex flex-col items-center text-gray-700 hover:text-blue-600">
-        <i class="fas fa-calendar-alt text-xl"></i>
-        <span class="text-xs">Calendar</span>
+        <i class="fas fa-calendar-alt text-lg"></i>
+        <span class="text-xs mt-1">Calendar</span>
       </a>
       <a href="index.html" class="flex flex-col items-center text-gray-700 hover:text-blue-600">
-        <i class="fas fa-sign-out-alt text-xl"></i>
-        <span class="text-xs">Sign Out</span>
+        <i class="fas fa-sign-out-alt text-lg"></i>
+        <span class="text-xs mt-1">Sign Out</span>
       </a>
     </nav>
   </div>

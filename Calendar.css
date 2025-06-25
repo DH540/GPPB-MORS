@@ -1,22 +1,11 @@
 body {
   background-color: #e5e7eb;
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-}
-
-.element {
-  width: 100%;
 }
 
 .sidebar {
   width: 12rem;
   background-color: #f3f4f6;
   padding: 1rem;
-}
-
-.sidebar .logo {
-  margin-bottom: 1rem;
 }
 
 .sidebar nav a {
@@ -50,191 +39,13 @@ body {
 
 .sidebar .bottom-section a:hover {
   color: #374151;
-
 }
 
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  background-image: linear-gradient(135deg, #0061f2 0%, #00c6f9 100%);
-}
-
-.calendar {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-/* .calendar-container {
-  display: flex;
-  gap: 1.5rem;
-  padding: 2rem;
-  height: calc(100% - 80px);
-  max-height: 90vh;
-  overflow-y: auto;
-} */
-
-.calendar-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem;
-  min-height: 100%;
-  overflow-y: auto;
-}
-
-#calendar {
-  width: 100%;
-  height: 100%;
-}
-
-#calendar-panel {
-  width: auto;
-  height: auto;
-}
-
-
-.date-panel {
-  background-color: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border-radius: 1rem;
-  padding: 2rem;
-  width: 30%;
-  color: white;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 400px;
-  flex-shrink: 0;
-}
-
-.date-panel .date-number {
-  font-size: 6rem;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 0.5rem;
-}
-
-.date-panel .date-month {
-  font-size: 1.75rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-
-.date-panel .divider {
-  height: 2px;
-  background: rgba(255, 255, 255, 0.3);
-  margin: 1.5rem 0;
-  width: 100%;
-}
-
-.appointment-list {
-  flex-grow: 1;
-}
-
-.appointment-list h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.appointment-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  transition: all 0.2s;
-}
-
-.appointment-item:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-
-.appointment-dot {
-  height: 10px;
-  width: 10px;
-  background-color: #fff;
-  border-radius: 50%;
-  margin-right: 12px;
-}
-
-.details-button {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s;
-  margin-top: 1rem;
-  align-self: flex-start;
-}
-
-.details-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* .calendar-panel {
-  background-color: white;
-  border-radius: 1rem;
-  padding: 2rem;
-  width: 70%;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  max-height: 100%;
-  overflow-y: auto;
-} */
-
-.calendar-panel {
-  flex-grow: 1;
-  background-color: white;
-  border-radius: 1rem;
-  padding: 1rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-}
-
-.month-navigation {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.month-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #333;
-}
-
-.nav-button {
-  background: #f2f2f2;
-  border: none;
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.nav-button:hover {
-  background: #e0e0e0;
-}
-
+/* FullCalendar Customizations */
 .fc .fc-button-primary {    
   background-color:#204cdc !important;     
   border-color: #FFFFFF !important;
+  text-transform: capitalize;
 }
 
 .fc-toolbar-title {
@@ -242,8 +53,94 @@ body {
   font-weight: 700;
 }
 
-@media (min-width: 768px) {
-  .element {
-      width: 50%;
+
+/* --- Responsive Styles for Mobile --- */
+@media (max-width: 767px) {
+  
+  /* Adjust font size for the calendar on mobile for better fit */
+  .fc {
+    font-size: 13px;
+  }
+
+  /* Reduce the title size on the mobile calendar header */
+  .fc-toolbar-title {
+    font-size: 1.25rem; /* 20px */
+  }
+
+  /* Adjustments for the left panel on mobile */
+  #dayDisplay {
+    font-size: 2.5rem; /* smaller for better fit */
+    margin-bottom: 0.5rem;
+  }
+
+  #monthDisplay {
+    font-size: 1rem;
+    display: block;
+  }
+
+  #upcomingAppointments span {
+    font-size: 0.875rem;
+    word-break: break-word;
+  }
+
+  .relative.z-10 {
+    padding-bottom: 80px;
+  }
+
+  /* Make appointment list text smaller for better fit */
+  #upcomingAppointments span {
+    font-size: 0.875rem; /* text-sm */
+    word-break: break-word;
+  }
+  
+  /* Add padding to the bottom of the content area to avoid the mobile nav bar */
+  .relative.z-10 {
+    padding-bottom: 80px;
+  }
+}
+
+/* --- Responsive Styles for Tablets (768px to 1023px) --- */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .fc {
+    font-size: 15px;
+  }
+
+  .fc-toolbar-title {
+    font-size: 1.5rem;
+  }
+
+  #dayDisplay {
+    font-size: 4rem;
+  }
+
+  #monthDisplay {
+    font-size: 1.25rem;
+  }
+
+  #upcomingAppointments span {
+    font-size: 1rem;
+  }
+}
+
+/* --- Responsive Styles for Desktop (1024px and above) --- */
+@media (min-width: 1024px) {
+  .fc {
+    font-size: 16px;
+  }
+
+  .fc-toolbar-title {
+    font-size: 1.75rem;
+  }
+
+  #dayDisplay {
+    font-size: 5rem;
+  }
+
+  #monthDisplay {
+    font-size: 1.5rem;
+  }
+
+  #upcomingAppointments span {
+    font-size: 1rem;
   }
 }
