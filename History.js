@@ -269,3 +269,53 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+//JSON -> CSV
+function jsonToCsv(items) {
+  if (!items || !items.length) return '';
+
+  const replacer = (key, value) => value === null ? '' : value; // handle nulls
+  const header = Object.keys(items[0]);
+  const csv = [
+    header.join(','), // header row first
+    ...items.map(row => header.map(fieldName => 
+      JSON.stringify(row[fieldName], replacer) // quotes and escapes as needed
+    ).join(','))
+  ].join('\r\n');
+
+  return csv;
+}
+
+//CSV export
+window.exportContactFormDBAsCsv = function () {
+  const ref = database.ref("contactFormDB");
+  ref.once("value")
+    .then(snapshot => {
+      const data = snapshot.val();
+      if (!data) {
+        alert("No data to export.");
+        return;
+      }
+
+      // Firebase data is an object keyed by IDs, convert to array of objects
+      const itemsArray = Object.values(data);
+
+      // Convert JSON array to CSV string
+      const csv = jsonToCsv(itemsArray);
+
+      // Download CSV as a file
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "contactFormDB-export.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+      console.error("❌ Failed to export data:", error);
+      alert("Error exporting data. Check console for details.");
+    });
+};
