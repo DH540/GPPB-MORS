@@ -64,6 +64,26 @@ body {
       padding: 1rem;
       border-radius: 0.5rem;
   }
+
+  .header-left {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sender-info {
+  display: flex;
+  flex-direction: column;
+}
+
   .main-content .header-left{
     display: flex;
     gap: 12px;
@@ -79,7 +99,6 @@ body {
   }
   .main-content .header-right h2 {
       font-size: 1.125rem;
-      background-color: #00A651;
       margin-left: auto;
       text-align: center;
       width: 6rem;
@@ -124,3 +143,43 @@ body {
   .a-summary hr {
     margin: 1rem  0 1rem 0;
   }
+
+  /* Container for status */
+#status-container {
+  display: flex;
+  flex-direction: column;      /* Stack vertically */
+  align-items: flex-end;       /* Align to the right */
+  gap: 0.25rem;                /* Spacing between pill and text */
+  padding-right: 1rem;         /* Space from right edge */
+  margin-top: 0.5rem;
+}
+
+
+
+/* Status pill */
+#status {
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  margin-right: 0.rem; /* Optional: tiny nudge left */
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: white;
+  border-radius: 9999px;
+  text-align: center;
+  min-width: 6rem;
+  background-color: #666;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+
+/* Optional fallback background */
+#status.approved {
+    background-color: #00A651;
+}
+#status.rejected {
+    background-color: #E12926;
+}
+#status.rescheduled {
+    background-color: #F5A623;
+}
