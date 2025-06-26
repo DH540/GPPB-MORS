@@ -66,9 +66,40 @@ document.addEventListener("DOMContentLoaded", async function () {
         updateElement("time", data.appointmentTime);
         updateElement("comments", data.additionalInfo || "—");
 
+        console.log("🔥 Loaded Status from Firebase:", data.status);
+
         // ✅ Dynamic status
-        const status = data.status || "pending";
-        updateElement("status", status.charAt(0).toUpperCase() + status.slice(1));
+        const status = data.status;
+
+if (status && typeof status === "string" && status.trim() !== "") {
+    const capitalizedStatus = status.charAt(0).toUpperCase() + status.slice(1);
+    const statusElement = document.getElementById("status");
+
+    if (statusElement) {
+        let bgColor = "#666";
+        if (status === "approved") bgColor = "#00A651";
+        else if (status === "cancelled" || status === "rejected") bgColor = "#E12926";
+        else if (status === "rescheduled") bgColor = "#F5A623";
+
+        statusElement.textContent = capitalizedStatus;
+        statusElement.style.backgroundColor = bgColor;
+        statusElement.style.color = "white";
+        statusElement.style.display = "inline-block";
+        statusElement.style.fontSize = "1.125rem";
+        statusElement.style.fontWeight = "bold";
+        statusElement.style.borderRadius = "20px";
+        statusElement.style.padding = "0.25rem 1rem";
+        statusElement.style.textAlign = "center";
+        statusElement.style.width = "auto";
+        statusElement.style.marginLeft = "auto";
+    }
+} else {
+    const statusContainer = document.getElementById("status-container");
+    if (statusContainer) {
+        statusContainer.style.display = "none";
+    }
+}
+
 
     } catch (error) {
         console.error("🔥 Error loading appointment:", error);
