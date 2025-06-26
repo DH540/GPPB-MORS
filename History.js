@@ -1,4 +1,3 @@
-
 const firebaseConfig = {
     apiKey: "AIzaSyBEJMTq5PQNrwDELbuqGfIFGFxJ3S-ke_Q",
     authDomain: "css151l-6290e.firebaseapp.com",
@@ -23,7 +22,7 @@ function getStatusColor(status) {
         case "rescheduled":
             return "#F5A623"; // Orange
         default:
-            return "#ccc"; // Gray for unknown/pending
+            return "#ccc"; // Gray for unknown
     }
 }
 
@@ -53,16 +52,16 @@ function loadHistory() {
         "${data.appointmentDate || ''}",
         "${data.appointmentTime || ''}",
         "${data.comments || ''}",
-        "${data.status || 'Pending'}"
+        "${data.status || ''}"
     )'>
         ${data.firstName || 'N/A'} ${data.lastName || 'N/A'}
     </td>
     <td>Consultation Request for ${formattedDateWords}</td>
     <td style="color: ${getStatusColor(data.status)}; font-weight: bold;">
-    ${data.status || 'Pending'}
+    ${data.status || ''}
     </td>
 
-    <td class="font-semibold">${data.appointmentDate || 'Pending'}</td>`;
+    <td class="font-semibold">${data.appointmentDate || ''}</td>`;
 
             historyTable.appendChild(row);
         });
