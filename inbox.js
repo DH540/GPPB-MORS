@@ -20,14 +20,15 @@ function loadInbox() {
         inboxTable.innerHTML = ""; // Clear table before adding new data
         snapshot.forEach(childSnapshot => {
             const data = childSnapshot.val();
-            console.log("Retrieved data:", data); // Debugging log
+            // Only show entries with status "pending" (case-insensitive)
+            if ((data.status || '').toLowerCase() !== 'pending') return;
 
-            const formattedDateWords = formatDate(data.appointmentDate); // "Month Day, Year"
-            const formattedDateNumeric = formatDateNumeric(data.appointmentDate); // "MM/DD/YYYY"
+            const formattedDateWords = formatDate(data.appointmentDate);
 
             const row = document.createElement("tr");
-            row.classList.add("inbox-row"); // for search/sort to work
+            row.classList.add("inbox-row");
 
+            // Pass additionalInfo as an argument to openEntryView
             row.innerHTML = `
                 <td><input type="checkbox"/></td>
                 <td class="cursor-pointer text-blue-600 hover:underline" onclick='openEntryView(
@@ -38,14 +39,14 @@ function loadInbox() {
                     "${data.consultationInterest || ''}",
                     "${data.appointmentDate || ''}",
                     "${data.appointmentTime || ''}",
-                    "${data.comments || ''}"
+                    "${data.comments || ''}",
+                    "${childSnapshot.key}",
+                    "${data.additionalInfo ? data.additionalInfo.replace(/"/g, '&quot;').replace(/'/g, "\\'") : ''}"
                 )'>
                     ${data.firstName || 'N/A'} ${data.lastName || 'N/A'}
                 </td>
-
                 <td>Consultation Request for ${formattedDateWords}</td>
                 <td>${data.appointmentDate || 'Pending'}</td>
-                
             `;
             inboxTable.appendChild(row);
         });
@@ -158,7 +159,7 @@ function sortTable(column, order) {
     rows.forEach(row => table.appendChild(row));
 }
 
-function openEntryView(name, email, phone, company, interest, date, time, comments) {
+function openEntryView(name, email, phone, company, interest, date, time, comments, entryId, additionalInfo) {
     const appointmentData = {
         name: name,
         email: email,
@@ -167,7 +168,9 @@ function openEntryView(name, email, phone, company, interest, date, time, commen
         interest: interest,
         date: date,
         time: time,
-        comments: comments
+        comments: comments,
+        entryId: entryId, // Store the Firebase key
+        additionalInfo: additionalInfo // Store additionalInfo for comments
     };
     localStorage.setItem("appointmentData", JSON.stringify(appointmentData));
     console.log("Saved Data: ", appointmentData);

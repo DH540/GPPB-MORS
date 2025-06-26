@@ -18,6 +18,7 @@ function getStatusColor(status) {
         case "available":
             return "#00A651"; // Green
         case "rejected":
+        case "cancelled":
             return "#E12926"; // Red
         case "rescheduled":
             return "#F5A623"; // Orange
@@ -35,8 +36,20 @@ function loadHistory() {
         snapshot.forEach(childSnapshot => {
             const data = childSnapshot.val();
 
+            // Skip entries with status "pending" (case-insensitive)
+            if ((data.status || '').toLowerCase() === 'pending') return;
+
+            // Normalize status for display
+            let displayStatus = data.status || '';
+            if (displayStatus.toLowerCase() === 'cancelled' || displayStatus.toLowerCase() === 'rejected') {
+                displayStatus = 'Cancelled';
+            } else if (displayStatus.toLowerCase() === 'approved') {
+                displayStatus = 'Approved';
+            } else if (displayStatus.toLowerCase() === 'rescheduled') {
+                displayStatus = 'Rescheduled';
+            }
+
             const formattedDateWords = formatDate(data.appointmentDate);
-            const formattedDateNumeric = formatDateNumeric(data.appointmentDate);
 
             const row = document.createElement("tr");
             row.classList.add("history-row");
@@ -52,13 +65,13 @@ function loadHistory() {
         "${data.appointmentDate || ''}",
         "${data.appointmentTime || ''}",
         "${data.comments || ''}",
-        "${data.status || ''}"
+        "${displayStatus}"
     )'>
         ${data.firstName || 'N/A'} ${data.lastName || 'N/A'}
     </td>
     <td>Consultation Request for ${formattedDateWords}</td>
     <td style="color: ${getStatusColor(data.status)}; font-weight: bold;">
-    ${data.status || ''}
+    ${displayStatus}
     </td>
 
     <td class="font-semibold">${data.appointmentDate || ''}</td>`;
@@ -181,10 +194,14 @@ function filterStatus(status) {
         return;
     }
 
-    // Otherwise, apply the new filter
+    // For "cancelled" filter, match both "cancelled" and "rejected" statuses
     rows.forEach(row => {
         const statusCell = row.cells[3].textContent.trim().toLowerCase();
-        row.style.display = (statusCell === status) ? "" : "none";
+        if (status === 'rejected') {
+            row.style.display = (statusCell === 'cancelled' || statusCell === 'rejected') ? "" : "none";
+        } else {
+            row.style.display = (statusCell === status) ? "" : "none";
+        }
     });
 
     activeFilter = status;

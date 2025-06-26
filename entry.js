@@ -61,7 +61,8 @@ document.addEventListener("DOMContentLoaded", function () {
     updateElement("interest", appointmentData.interest);
     updateElement("d-date", appointmentData.date);
     updateElement("time", appointmentData.time);
-    updateElement("comments", appointmentData.comments);
+    // Use additionalInfo for Comments if available, otherwise fallback to comments
+    updateElement("comments", appointmentData.additionalInfo || appointmentData.comments);
 
     console.log(`📩 Extracted Email from Storage: "${appointmentData.email}"`);
 });
@@ -100,38 +101,21 @@ function fetchEntryIdByEmail(email) {
 }
 
 function handleStatusUpdate(newStatus) {
-    const emailElement = document.getElementById("h-email");
-    if (!emailElement) {
-        console.error("❌ Element with ID 'h-email' not found!");
+    const appointmentData = JSON.parse(localStorage.getItem("appointmentData"));
+    if (!appointmentData || !appointmentData.entryId) {
+        console.error("❌ No appointment data or entryId found in localStorage.");
         return;
     }
+    const entryId = appointmentData.entryId;
+    const entryRef = firebase.database().ref(`contactFormDB/${entryId}`);
 
-    const userEmail = emailElement.textContent.trim().toLowerCase(); // Normalize email
-    if (!userEmail) {
-        console.error("❌ Could not retrieve a valid email from the entry page.");
-        return;
-    }
-
-    console.log("🔎 Looking for entry with email:", `"${userEmail}"`);
-
-    fetchEntryIdByEmail(userEmail).then(entryId => {
-        if (!entryId) {
-            console.error("❌ No matching entry found for:", `"${userEmail}"`);
-            return;
-        }
-
-        console.log("✅ Entry ID found:", entryId);
-
-        const entryRef = firebase.database().ref(`contactFormDB/${entryId}`);
-
-        entryRef.update({ status: newStatus })
-            .then(() => {
-                console.log(`✅ Status updated to "${newStatus}" for Entry ID:`, entryId);
-                sendMail(newStatus); // Trigger email notification
-                document.getElementById("status").textContent = newStatus; // Update UI
-            })
-            .catch(error => console.error("❌ Error updating status:", error));
-    }).catch(error => console.error("❌ Error fetching Entry ID:", error));
+    entryRef.update({ status: newStatus })
+        .then(() => {
+            console.log(`✅ Status updated to "${newStatus}" for Entry ID:`, entryId);
+            sendMail(newStatus); // Trigger email notification
+            document.getElementById("status").textContent = newStatus; // Update UI
+        })
+        .catch(error => console.error("❌ Error updating status:", error));
 }
 
 // Function to update status in Firebase
@@ -204,56 +188,39 @@ function closeRescheduleModal() {
 function submitReschedule() {
     const newDate = document.getElementById('newDate').value;
     const newTime = document.getElementById('newTime').value;
-  
-    if (!newDate || !newTime) {
-      alert('Please select both a new date and time.');
-      return;
-    }
-  
-    const emailElement = document.getElementById("h-email");
-    if (!emailElement) {
-      console.error("❌ Element with ID 'h-email' not found!");
-      return;
-    }
-  
-    const userEmail = emailElement.textContent.trim().toLowerCase();
-    if (!userEmail) {
-      console.error("❌ Could not retrieve a valid email from the entry page.");
-      return;
-    }
-  
-    fetchEntryIdByEmail(userEmail)
-      .then(entryId => {
-        if (!entryId) {
-          console.error("❌ No matching entry found for:", `"${userEmail}"`);
-          return;
-        }
-  
-        const entryRef = firebase.database().ref(`contactFormDB/${entryId}`);
-  
-        entryRef.update({
-          appointmentDate: newDate,
-          appointmentTime: newTime,
-          status: 'rescheduled'
-        })
-        .then(() => {
-            console.log(`✅ Rescheduled to ${newDate} at ${newTime} for Entry ID:`, entryId);
-    
-            document.getElementById('d-date').textContent = newDate;
-            document.getElementById('time').textContent = newTime;
-  
-            const appointmentData = JSON.parse(localStorage.getItem("appointmentData"));
-            if (appointmentData) {
-                appointmentData.date = newDate;
-                appointmentData.time = newTime;
-                localStorage.setItem("appointmentData", JSON.stringify(appointmentData));
-            }
 
-            sendMail('rescheduled');
-    
-            closeRescheduleModal();
-        })
-        .catch(error => console.error("❌ Error updating date and time:", error));
-      })
-      .catch(error => console.error("❌ Error fetching Entry ID:", error));
-  }
+    if (!newDate || !newTime) {
+        alert('Please select both a new date and time.');
+        return;
+    }
+
+    const appointmentData = JSON.parse(localStorage.getItem("appointmentData"));
+    if (!appointmentData || !appointmentData.entryId) {
+        console.error("❌ No appointment data or entryId found in localStorage.");
+        return;
+    }
+    const entryId = appointmentData.entryId;
+    const entryRef = firebase.database().ref(`contactFormDB/${entryId}`);
+
+    entryRef.update({
+        appointmentDate: newDate,
+        appointmentTime: newTime,
+        status: 'rescheduled'
+    })
+    .then(() => {
+        console.log(`✅ Rescheduled to ${newDate} at ${newTime} for Entry ID:`, entryId);
+
+        document.getElementById('d-date').textContent = newDate;
+        document.getElementById('time').textContent = newTime;
+
+        if (appointmentData) {
+            appointmentData.date = newDate;
+            appointmentData.time = newTime;
+            localStorage.setItem("appointmentData", JSON.stringify(appointmentData));
+        }
+
+        sendMail('rescheduled');
+        closeRescheduleModal();
+    })
+    .catch(error => console.error("❌ Error updating date and time:", error));
+}
