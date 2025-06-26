@@ -1,3 +1,4 @@
+
 const firebaseConfig = {
     apiKey: "AIzaSyBEJMTq5PQNrwDELbuqGfIFGFxJ3S-ke_Q",
     authDomain: "css151l-6290e.firebaseapp.com",
@@ -17,12 +18,12 @@ function getStatusColor(status) {
         case "approved":
         case "available":
             return "#00A651"; // Green
-        case "rejected":
+        case "cancelled":
             return "#E12926"; // Red
         case "rescheduled":
             return "#F5A623"; // Orange
         default:
-            return "#ccc"; // Gray for unknown
+            return "#ccc"; // Gray for unknown/pending
     }
 }
 
@@ -34,6 +35,7 @@ function loadHistory() {
         historyTable.innerHTML = "";
         snapshot.forEach(childSnapshot => {
             const data = childSnapshot.val();
+            const entryId = childSnapshot.key;
 
             const formattedDateWords = formatDate(data.appointmentDate);
             const formattedDateNumeric = formatDateNumeric(data.appointmentDate);
@@ -42,26 +44,26 @@ function loadHistory() {
             row.classList.add("history-row");
 
             row.innerHTML = 
-    `<td><input type="checkbox"/></td>
-    <td class="cursor-pointer text-blue-600 hover:underline" onclick='openEntryView(
-        "${data.firstName || ''} ${data.lastName || ''}",
-        "${data.email || ''}",
-        "${data.phoneNumber || ''}",
-        "${data.company || ''}",
-        "${data.areaOfInterest || ''}",
-        "${data.appointmentDate || ''}",
-        "${data.appointmentTime || ''}",
-        "${data.comments || ''}",
-        "${data.status || ''}"
-    )'>
-        ${data.firstName || 'N/A'} ${data.lastName || 'N/A'}
-    </td>
-    <td>Consultation Request for ${formattedDateWords}</td>
-    <td style="color: ${getStatusColor(data.status)}; font-weight: bold;">
-    ${data.status || ''}
-    </td>
-
-    <td class="font-semibold">${data.appointmentDate || ''}</td>`;
+`<td><input type="checkbox"/></td>
+<td class="cursor-pointer text-blue-600 hover:underline" onclick='openEntryView(
+    "${childSnapshot.key}",
+    "${data.firstName || ''} ${data.lastName || ''}",
+    "${data.email || ''}",
+    "${data.phoneNumber || ''}",
+    "${data.company || ''}",
+    "${data.areaOfInterest || ''}",
+    "${data.appointmentDate || ''}",
+    "${data.appointmentTime || ''}",
+    "${data.comments || ''}",
+    "${data.status || 'Pending'}"
+)'>
+    ${data.firstName || 'N/A'} ${data.lastName || 'N/A'}
+</td>
+<td>Consultation Request for ${formattedDateWords}</td>
+<td style="color: ${getStatusColor(data.status)}; font-weight: bold;">
+${data.status || 'Pending'}
+</td>
+<td class="font-semibold">${data.appointmentDate || 'Pending'}</td>`;
 
             historyTable.appendChild(row);
         });
@@ -190,17 +192,18 @@ function filterStatus(status) {
     activeFilter = status;
 }
 
-function openEntryView(name, email, phone, company, interest, date, time, comments, status) {
+function openEntryView(entryId, name, email, phone, company, interest, date, time, comments, status) {
     const appointmentData = {
-        name: name,
-        email: email,
-        phone: phone,
-        company: company,
-        interest: interest,
-        date: date,
-        time: time,
-        comments: comments,
-        status: status
+        entryId, // 🔥 New: Save the unique Firebase key
+        name,
+        email,
+        phone,
+        company,
+        interest,
+        date,
+        time,
+        comments,
+        status
     };
     localStorage.setItem("appointmentData", JSON.stringify(appointmentData));
     console.log("Saved Data: ", appointmentData);
