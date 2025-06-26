@@ -2,9 +2,15 @@ body {
     background-color: #e5e7eb; /* bg-gray-200 */
   }
   .sidebar {
-    width: 12rem; /* w-48 */
-    background-color: #f3f4f6; /* bg-gray-100 */
-    padding: 1rem; /* p-4 */
+    width: 12rem;
+    background-color: #f3f4f6;
+    padding: 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 20;
+    overflow-y: auto;
   }
   .sidebar img {
     margin-bottom: 1rem; /* mb-4 */
@@ -38,18 +44,21 @@ body {
     color: #374151; /* hover:text-gray-700 */
   }
   .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-left: 12rem;
+    overflow-y: auto;
   }
   .main-content .background-image {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+    pointer-events: none;
   }
   .main-content .content {
       flex: 1;
@@ -57,6 +66,7 @@ body {
       padding: 1rem;
       position: relative;
       z-index: 10;
+      padding-bottom: 80px; /* Add padding for mobile nav if needed */
   }
   .main-content .header {
       background-color: #1d4ed8;
@@ -182,4 +192,18 @@ body {
 }
 #status.rescheduled {
     background-color: #F5A623;
+}
+
+@media (max-width: 767px) {
+    .sidebar {
+        display: none;
+        position: static;
+        width: 100%;
+        height: auto;
+        margin-left: 0;
+    }
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
 }
