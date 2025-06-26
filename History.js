@@ -1,4 +1,3 @@
-
 const firebaseConfig = {
     apiKey: "AIzaSyBEJMTq5PQNrwDELbuqGfIFGFxJ3S-ke_Q",
     authDomain: "css151l-6290e.firebaseapp.com",
@@ -40,7 +39,7 @@ function loadHistory() {
             // Skip entries with status "pending" (case-insensitive)
             if ((data.status || '').toLowerCase() === 'pending') return;
 
-            // Normalize status for display
+            // Normalize status for display (capitalize first letter for Approved, Cancelled, Rescheduled)
             let displayStatus = data.status || '';
             if (displayStatus.toLowerCase() === 'cancelled' || displayStatus.toLowerCase() === 'rejected') {
                 displayStatus = 'Cancelled';
@@ -58,7 +57,7 @@ function loadHistory() {
             row.innerHTML = 
 `<td><input type="checkbox"/></td>
 <td class="cursor-pointer text-blue-600 hover:underline" onclick='openEntryView(
-    "${childSnapshot.key}",
+    "${entryId}",
     "${data.firstName || ''} ${data.lastName || ''}",
     "${data.email || ''}",
     "${data.phoneNumber || ''}",
@@ -67,13 +66,13 @@ function loadHistory() {
     "${data.appointmentDate || ''}",
     "${data.appointmentTime || ''}",
     "${data.comments || ''}",
-    "${data.status || 'Pending'}"
+    "${displayStatus}"
 )'>
     ${data.firstName || 'N/A'} ${data.lastName || 'N/A'}
 </td>
 <td>Consultation Request for ${formattedDateWords}</td>
 <td style="color: ${getStatusColor(data.status)}; font-weight: bold;">
-${data.status || 'Pending'}
+${displayStatus}
 </td>
 <td class="font-semibold">${data.appointmentDate || 'Pending'}</td>`;
 
