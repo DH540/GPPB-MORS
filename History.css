@@ -103,14 +103,44 @@ body {
     border-radius: 0.375rem; /* rounded */
   }
   .main-content .filters .filter-buttons .fstat {
-    padding: 0.5rem; /* p-2 */
-    height: 2rem;
-    width: auto; /* Allow width to be flexible */
-    border-radius: 0.275rem; /* rounded */
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .main-content .filters .filter-buttons select {
+    padding: 0.25rem;
+    min-width: 120px;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 1rem;
+    border: none;
+    box-shadow: none;
+    transition: 
+        filter 0.15s,
+        box-shadow 0.15s,
+        transform 0.08s;
+    color: #fff !important;
+}
+.main-content .filters .filter-buttons .fstat[data-filter="approved"] {
+    background: #13a04b;
+}
+.main-content .filters .filter-buttons .fstat[data-filter="cancelled"] {
+    background: #e53935;
+}
+.main-content .filters .filter-buttons .fstat[data-filter="rescheduled"] {
+    background: #f5a623;
+    color: #fff !important;
+}
+.main-content .filters .filter-buttons .fstat.export-csv,
+.main-content .filters .filter-buttons .fstat[data-filter="export-csv"] {
+    background: #43b864;
+    color: #fff !important;
+}
+.main-content .filters .filter-buttons .fstat:hover,
+.main-content .filters .filter-buttons .fstat:focus {
+    filter: brightness(0.93);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    outline: none;
+}
+.main-content .filters .filter-buttons .fstat:active {
+    transform: scale(0.98);
+}
+.main-content .filters .filter-buttons select {
     background-color: #ffffff; /* bg-white */
     padding: 0.2rem; /* p-2 */
     height: 2rem;
