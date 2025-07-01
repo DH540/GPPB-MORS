@@ -4,18 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="login.css" />
+    <script type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init({
+                publicKey: "mvAsUuvZ88Zbzp_q0",
+            });
+        })();
+    </script>
     <title>Admin Login</title>
 </head>
 <body>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
-    <!-- Add EmailJS SDK first -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
-    <!-- Initialize EmailJS -->
-    <script type="text/javascript">
-        emailjs.init('GtZXPUDV-aCRQ-MeK')
     </script>
     <script src="login.js"></script>
     <div class="header">

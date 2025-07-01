@@ -9,9 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const value = e.target.value;
 
       if (value.length > 1) {
-        // If pasted more than 1 character (like full 6-digit paste)
-        handlePaste(value);
-        return;
+        // Ignore multi-character input (like paste)
+        e.target.value = value.charAt(0);
       }
 
       if (value.match(/[0-9]/)) {
@@ -29,26 +28,9 @@ document.addEventListener("DOMContentLoaded", function () {
         inputs[index - 1].focus();
       }
     });
-
-    input.addEventListener("paste", (e) => {
-      e.preventDefault();
-      const paste = e.clipboardData.getData("text");
-      handlePaste(paste);
-    });
   });
 
-  function handlePaste(paste) {
-    const digits = paste.replace(/\D/g, "").slice(0, 6).split("");
-    digits.forEach((digit, i) => {
-      if (inputs[i]) inputs[i].value = digit;
-    });
-
-    // Focus last filled box
-    const last = digits.length < 6 ? digits.length : 5;
-    inputs[last].focus();
-  }
-
-  // Optional: Get full OTP value on verify click
+  // Get full OTP value on verify click
   document.getElementById("button-verify").addEventListener("click", () => {
     const code = Array.from(inputs).map((input) => input.value).join("");
     const message = document.getElementById("message");
@@ -58,7 +40,6 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       message.textContent = "";
       console.log("✅ Entered code:", code);
-      // TODO: Proceed to verify against your backend/Firebase/email logic
     }
   });
 });

@@ -152,7 +152,7 @@ function sendMail(status) {
         custom_message: getCustomMessage(status)
     };
 
-    emailjs.send("service_ob944xf", "template_wkj756d", emailParams)
+    emailjs.send("service_yl0b9tl", "template_wkj756d", emailParams)
         .then((response) => {
             console.log(`✅ ${status.toUpperCase()} email sent successfully!`, response.status);
             alert(`${status.toUpperCase()} email sent to ${appointment.email}`);
