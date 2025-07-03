@@ -53,6 +53,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 calendar.removeAllEvents();
                 for (const consultationId in consultations) {
                     const consultation = consultations[consultationId];
+                    
+                    // Check if the consultation is cancelled
+                    if (consultation.status && consultation.status.toLowerCase() === 'cancelled') {
+                        continue; // skip this one
+                    }
+
                     const startDateTime = consultation.appointmentDate;
                     const title = `${consultation.firstName} ${consultation.lastName}`;
                     const description = `Email: ${consultation.email}, Phone: ${consultation.phoneNumber}, Job: ${consultation.jobPosition}, Company: ${consultation.company}, Additional Info: ${consultation.additionalInfo}`;
@@ -81,6 +87,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const upcoming = [];
                 for (const consultationId in consultations) {
                     const consultation = consultations[consultationId];
+                    
+                    if (consultation.status && consultation.status.toLowerCase() === 'cancelled') {
+                        continue;
+                    }
+
                     upcoming.push({
                         date: consultation.appointmentDate,
                         name: `${consultation.firstName} ${consultation.lastName}`
