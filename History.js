@@ -222,7 +222,7 @@ function openEntryView(entryId, name, email, phone, company, interest, date, tim
     };
     localStorage.setItem("appointmentData", JSON.stringify(appointmentData));
     console.log("Saved Data: ", appointmentData);
-    window.location.href = "old.html";
+    window.location.href = `entry.html?id=${entryId}&source=history`;;
 }
 
 function formatDate(dateString) {

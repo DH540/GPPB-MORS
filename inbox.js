@@ -174,7 +174,7 @@ function openEntryView(name, email, phone, company, interest, date, time, commen
     };
     localStorage.setItem("appointmentData", JSON.stringify(appointmentData));
     console.log("Saved Data: ", appointmentData);
-    window.location.href = "entry.html";
+    window.location.href = `entry.html?id=${entryId}&source=inbox`;;
 }
 function formatDate(dateString) {
     if (!dateString) return "N/A";

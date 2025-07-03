@@ -31,38 +31,123 @@ function openEntryView(name, email, phone, company, interest, date, time, commen
 }
 
 // Load appointment data on entry page
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
     const appointmentData = JSON.parse(localStorage.getItem("appointmentData"));
+    const status = appointmentData.status ? appointmentData.status.toLowerCase() : "pending";
 
-    if (!appointmentData) {
-        console.error("⚠ No appointment data found in localStorage.");
+    if (!appointmentData || !appointmentData.entryId) {
+        console.error("❌ Missing appointment data or entryId in localStorage.");
         return;
     }
 
-    function updateElement(id, value) {
-        const element = document.getElementById(id);
-        if (element) {
-            element.textContent = value;
-        } else {
-            console.warn(`⚠ Element with ID "${id}" not found.`);
+    const entryId = appointmentData.entryId;
+
+    const entryRef = firebase.database().ref(`contactFormDB/${entryId}`);
+    try {
+        const snapshot = await entryRef.once("value");
+        if (!snapshot.exists()) {
+            console.error("❌ No entry found for ID:", entryId);
+            return;
         }
+
+        const data = snapshot.val();
+
+        // Update all UI fields from Firebase
+        const updateElement = (id, value) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        };
+
+        updateElement("h-name", data.firstName + " " + data.lastName);
+        updateElement("h-email", data.email);
+        updateElement("h-date", data.appointmentDate);
+        updateElement("d-name", data.firstName + " " + data.lastName);
+        updateElement("d-email", data.email);
+        updateElement("phone", data.phoneNumber);
+        updateElement("company", data.company);
+        updateElement("interest", data.consultationInterest);
+        updateElement("d-date", data.appointmentDate);
+        updateElement("time", data.appointmentTime);
+        updateElement("comments", data.additionalInfo || "—");
+
+        console.log("🔥 Loaded Status from Firebase:", data.status);
+
+        // ✅ Dynamic status
+        const status = data.status;
+
+if (status && typeof status === "string" && status.trim() !== "") {
+    const capitalizedStatus = status.charAt(0).toUpperCase() + status.slice(1);
+    const statusElement = document.getElementById("status");
+
+    if (statusElement) {
+        let bgColor = "#666";
+        if (status === "approved") bgColor = "#00A651";
+        else if (status === "cancelled" || status === "rejected") bgColor = "#E12926";
+        else if (status === "rescheduled") bgColor = "#F5A623";
+
+        statusElement.textContent = capitalizedStatus;
+        statusElement.style.backgroundColor = bgColor;
+        statusElement.style.color = "white";
+        statusElement.style.display = "inline-block";
+        statusElement.style.fontSize = "1.125rem";
+        statusElement.style.fontWeight = "bold";
+        statusElement.style.borderRadius = "20px";
+        statusElement.style.padding = "0.25rem 1rem";
+        statusElement.style.textAlign = "center";
+        statusElement.style.width = "auto";
+        statusElement.style.marginLeft = "auto";
+    }
+} else {
+    const statusContainer = document.getElementById("status-container");
+    if (statusContainer) {
+        statusContainer.style.display = "none";
+    }
+}
+
+    } catch (error) {
+        console.error("🔥 Error loading appointment:", error);
+    }
+    
+    const acceptBtn = document.querySelector("button[onclick*='approved']");
+    const cancelBtn = document.querySelector("button[onclick*='cancelled']");
+    const rescheduleBtn = document.querySelector("button[onclick*='openRescheduleModal']");
+
+    if (status === "approved") {
+        acceptBtn.style.display = "none";
+        cancelBtn.style.display = "inline-block";
+        rescheduleBtn.style.display = "inline-block";
+    } 
+    else if (status === "cancelled") {
+        acceptBtn.style.display = "none";
+        cancelBtn.style.display = "none";
+        rescheduleBtn.style.display = "none";
+    } 
+    else if (status === "rescheduled") {
+        acceptBtn.style.display = "none";
+        cancelBtn.style.display = "none";
+        rescheduleBtn.style.display = "inline-block";
+    } 
+    else {
+    // Fallback for pending or unknown
+        acceptBtn.style.display = "inline-block";
+        cancelBtn.style.display = "inline-block";
+        rescheduleBtn.style.display = "inline-block";
     }
 
-    // Update header section
-    updateElement("h-name", appointmentData.name);
-    updateElement("h-email", appointmentData.email);
-    updateElement("h-date", appointmentData.date);
+    // Parse source parameter from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const source = urlParams.get("source") || "index";
 
-    // Update appointment details section
-    updateElement("d-name", appointmentData.name);
-    updateElement("d-email", appointmentData.email);
-    updateElement("phone", appointmentData.phone);
-    updateElement("company", appointmentData.company);
-    updateElement("interest", appointmentData.interest);
-    updateElement("d-date", appointmentData.date);
-    updateElement("time", appointmentData.time);
-    // Use additionalInfo for Comments if available, otherwise fallback to comments
-    updateElement("comments", appointmentData.additionalInfo || appointmentData.comments);
+    const backButton = document.getElementById("backButton");
+    if (source === "inbox") {
+        backButton.href = "inbox.html";
+    } 
+    else if (source === "history") {
+        backButton.href = "History.html";
+    } 
+    else {
+        backButton.href = "index.html"; // fallback
+    }
 
     console.log(`📩 Extracted Email from Storage: "${appointmentData.email}"`);
 });
