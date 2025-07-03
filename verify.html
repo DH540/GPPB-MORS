@@ -3,21 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="verify.css" />
-    <title>Admin Login</title>
-</head>
-<body>
+    <link rel="stylesheet" href="verify.css">
+    <script type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
-    <!-- Add EmailJS SDK first -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
-    <!-- Initialize EmailJS -->
-    <script type="text/javascript">
-        emailjs.init('GtZXPUDV-aCRQ-MeK')
-    </script>
+    <title>Admin Login</title>
     <script src="verify.js"></script>
+</head>
+<body>
     <div class="header">
         <div class="logo-container">
             <img src="images/logo.png" alt="GPPB-TSO Logo" class="logo">

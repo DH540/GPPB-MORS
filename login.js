@@ -17,7 +17,7 @@ const contactFormDB = firebase.database().ref("contactFormDB");
 
 document.addEventListener('DOMContentLoaded', () => {
     try {
-        emailjs.init('GtZXPUDV-aCRQ-MeK');
+        emailjs.init('mvAsUuvZ88Zbzp_q0');
         console.log('EmailJS initialized successfully');
     } catch (error) {
         console.error('EmailJS initialization error:', error);
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const emailParams = {
                 from_name: 'GPPB-TSO',
-                to_email: formData.email,
+                email: formData.email,
                 firstName: formData.firstName,
                 lastName: formData.lastName,
                 phoneNumber: formData.phoneNumber,
@@ -64,13 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Email parameters prepared:', emailParams);
 
             console.log('Attempting to send email with:', {
-                serviceId: 'default_service',
-                templateId: 'template_1gom91e'
+                serviceId: 'service_yl0b9tl',
+                templateId: 'template_4mpn41n'
             });
 
             const emailResponse = await emailjs.send(
-                'default_service',
-                'template_1gom91e',
+                'service_yl0b9tl',
+                'template_4mpn41n',
                 emailParams
             );
 
@@ -100,54 +100,75 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const validUsername = "admin123@gmail.com";
-    const validPassword = "iampassword";
+  const validUsername = "dhsalazar811@gmail.com";
+  const validPassword = "012345";
 
-    document.getElementById("button-login").addEventListener("click", function() {
-        let emailInput = document.getElementById("email"); // Ensure it exists
-        let passwordInput = document.getElementById("password");
-    
-        let message = document.getElementById("message");
+  const loginButton = document.getElementById("button-login");
+  const message = document.getElementById("message");
 
-        console.log("Email input element:", emailInput); // Check if input exists
-        console.log("Password input element:", passwordInput);
+  loginButton.addEventListener("click", async () => {
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
 
-        let username = emailInput ? emailInput.value.trim() : null;
-        let password = passwordInput ? passwordInput.value.trim() : null;
+    const username = emailInput.value.trim();
+    const password = passwordInput.value.trim();
 
-        if (!username || !password) {
-            message.style.color = "orange";
-            message.textContent = "Please enter both username and password.";
-            return;
-        }
+    if (!username || !password) {
+      message.style.color = "orange";
+      message.textContent = "Please enter both username and password.";
+      return;
+    }
 
-        // Force re-evaluation of the password field
-        document.getElementById("password").focus();
-        document.getElementById("password").blur();
-        password = document.getElementById("password").value.trim();
+    if (username === validUsername && password === validPassword) {
+      message.style.color = "green";
+      message.textContent = "Login successful! Generating OTP...";
 
-        if (username === validUsername && password === validPassword) {
-            message.style.color = "green";
-            message.textContent = "Login successful! Redirecting...";
+      // ✅ Generate 6-digit OTP
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      console.log("Generated OTP:", otp);
 
-            setTimeout(() => {
-                window.location.href = "inbox.html";
-            }, 1000);
-        } else {
-            message.style.color = "red";
-            message.textContent = "Invalid username or password.";
-        }
-    });
+      // ✅ Store OTP and email in sessionStorage
+      sessionStorage.setItem("generatedOTP", otp);
+      sessionStorage.setItem("adminEmail", username);
 
-    document.addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            document.getElementById("button-login").click(); // Trigger the button click
-        }
-    });
+      try {
+        // ✅ Send Email using EmailJS
+        await emailjs.send('service_yl0b9tl', 'template_4mpn41n', {
+          email: username,
+          otp_code: otp
+        });
 
-    // Prevent default form submission
-    document.getElementById("admin-login-form").addEventListener("submit", function(event) {
-        event.preventDefault();
-    });
+        console.log("OTP email sent successfully!");
+        message.style.color = "green";
+        message.textContent = "OTP sent! Redirecting to verification page...";
+
+        // ✅ Redirect to verify.html
+        setTimeout(() => {
+          window.location.href = "verify.html";
+        }, 1500);
+
+      } catch (error) {
+        console.error("Error sending OTP email:", error);
+        message.style.color = "red";
+        message.textContent = "Failed to send OTP. Please try again.";
+      }
+
+    } else {
+      message.style.color = "red";
+      message.textContent = "Invalid username or password.";
+    }
+  });
+
+  // ENTER key support
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      loginButton.click();
+    }
+  });
+
+  // Prevent default form submission
+  document.getElementById("admin-login-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+  });
 });
