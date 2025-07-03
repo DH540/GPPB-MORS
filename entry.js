@@ -80,7 +80,7 @@ if (status && typeof status === "string" && status.trim() !== "") {
     const statusElement = document.getElementById("status");
 
     if (statusElement) {
-        let bgColor = "#666";
+        let bgColor = "#C2C2C2";
         if (status === "approved") bgColor = "#00A651";
         else if (status === "cancelled" || status === "rejected") bgColor = "#E12926";
         else if (status === "rescheduled") bgColor = "#F5A623";
