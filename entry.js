@@ -124,7 +124,7 @@ if (status && typeof status === "string" && status.trim() !== "") {
     } 
     else if (status === "rescheduled") {
         acceptBtn.style.display = "none";
-        cancelBtn.style.display = "none";
+        cancelBtn.style.display = "inline-block";
         rescheduleBtn.style.display = "inline-block";
     } 
     else {
