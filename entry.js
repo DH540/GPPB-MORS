@@ -27,7 +27,7 @@ function openEntryView(name, email, phone, company, interest, date, time, commen
     localStorage.setItem("appointmentData", JSON.stringify(appointmentData));
 
     // Ensure entryId is added to the URL
-    window.location.href = `entry.html?id=${entryId}`;
+    window.location.href = `entry.html?id=${entryId}&source=${source}`;
 }
 
 // Load appointment data on entry page
