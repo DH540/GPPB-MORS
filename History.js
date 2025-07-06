@@ -302,6 +302,55 @@ function jsonToCsv(items) {
 
   return csv;
 }
+//JSON to PDF
+function exportContactFormDBAsPdf() {
+  const ref = database.ref("contactFormDB");
+
+  ref.once("value")
+    .then(snapshot => {
+      const data = snapshot.val();
+      if (!data) {
+        alert("No data to export.");
+        return;
+      }
+
+      const itemsArray = Object.values(data);
+
+      if (!itemsArray.length) {
+        alert("No records found.");
+        return;
+      }
+
+      // Define headers (same as CSV)
+      const headers = Object.keys(itemsArray[0]);
+
+      // Extract row data
+      const rows = itemsArray.map(item =>
+        headers.map(key => item[key] ?? "")
+      );
+
+      // Create PDF
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFontSize(14);
+      doc.text("Contact Form DB Export", 14, 15);
+
+      doc.autoTable({
+        startY: 20,
+        head: [headers],
+        body: rows,
+        styles: { fontSize: 10 },
+        margin: { left: 14, right: 14 }
+      });
+
+      doc.save("contactFormDB-export.pdf");
+    })
+    .catch(error => {
+      console.error("❌ Failed to export PDF:", error);
+      alert("Error exporting PDF. Check console for details.");
+    });
+}
 
 //CSV export
 window.exportContactFormDBAsCsv = function () {
@@ -336,3 +385,16 @@ window.exportContactFormDBAsCsv = function () {
       alert("Error exporting data. Check console for details.");
     });
 };
+function toggleExportMenu() {
+  const menu = document.getElementById("exportMenu");
+  menu.classList.toggle("hidden");
+}
+
+document.addEventListener("click", function (event) {
+  const dropdown = document.querySelector(".export-dropdown");
+  const menu = document.getElementById("exportMenu");
+
+  if (!dropdown.contains(event.target)) {
+    menu.classList.add("hidden");
+  }
+});
