@@ -302,8 +302,9 @@ function jsonToCsv(items) {
 
   return csv;
 }
-//JSON to PDF
-function exportContactFormDBAsPdf() {
+
+//CSV -> PDF
+function exportCsvAsPdf() {
   const ref = database.ref("contactFormDB");
 
   ref.once("value")
@@ -315,18 +316,13 @@ function exportContactFormDBAsPdf() {
       }
 
       const itemsArray = Object.values(data);
+      const csv = jsonToCsv(itemsArray);
 
-      if (!itemsArray.length) {
-        alert("No records found.");
-        return;
-      }
-
-      // Define headers (same as CSV)
-      const headers = Object.keys(itemsArray[0]);
-
-      // Extract row data
-      const rows = itemsArray.map(item =>
-        headers.map(key => item[key] ?? "")
+      // Parse CSV into rows and columns
+      const lines = csv.trim().split("\r\n");
+      const headers = lines[0].split(",").map(h => h.replace(/^"|"$/g, ""));
+      const rows = lines.slice(1).map(line =>
+        line.split(",").map(cell => cell.replace(/^"|"$/g, ""))
       );
 
       // Create PDF
@@ -334,23 +330,35 @@ function exportContactFormDBAsPdf() {
       const doc = new jsPDF();
 
       doc.setFontSize(14);
-      doc.text("Contact Form DB Export", 14, 15);
+      doc.setFont("helvetica", "bold");
+      doc.text("Contact Form Export", 14, 15);
 
       doc.autoTable({
-        startY: 20,
+        startY: 22,
         head: [headers],
         body: rows,
-        styles: { fontSize: 10 },
+        styles: {
+          fontSize: 9,
+          cellPadding: 3
+        },
+        headStyles: {
+          fillColor: [59, 130, 246],
+          textColor: 255
+        },
+        alternateRowStyles: {
+          fillColor: [245, 245, 245]
+        },
         margin: { left: 14, right: 14 }
       });
 
       doc.save("contactFormDB-export.pdf");
     })
     .catch(error => {
-      console.error("❌ Failed to export PDF:", error);
-      alert("Error exporting PDF. Check console for details.");
+      console.error("❌ CSV to PDF Export Error:", error);
+      alert("Error exporting PDF from CSV.");
     });
 }
+
 
 //CSV export
 window.exportContactFormDBAsCsv = function () {
