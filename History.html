@@ -16,9 +16,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="History.js"></script>
+
+    <!--TESTING BAR GRAPH-->
+
+    <canvas id="statusChart" width="400" height="200" style="display:none;"></canvas>
+
   <div class="flex h-screen">
     <div class="sidebar hidden md:block">
         <div class="mb-4">
@@ -82,7 +91,7 @@
   <div id="exportMenu" class="dropdown-menu hidden">
     <div class="dropdown-title">Export as:</div>
     <button class="dropdown-option" onclick="exportContactFormDBAsCsv()">CSV</button>
-   <button class="dropdown-option" onclick="exportCsvAsPdf()">PDF</button>
+   <button class="dropdown-option" onclick="exportCsvAsPdfWithGraph()">PDF</button>
 
   </div>
 </div>

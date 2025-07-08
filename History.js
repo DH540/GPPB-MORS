@@ -1,3 +1,6 @@
+//PDF with stats
+const { jsPDF } = window.jspdf;
+
 const firebaseConfig = {
     apiKey: "AIzaSyBEJMTq5PQNrwDELbuqGfIFGFxJ3S-ke_Q",
     authDomain: "css151l-6290e.firebaseapp.com",
@@ -304,60 +307,125 @@ function jsonToCsv(items) {
 }
 
 //CSV -> PDF
-function exportCsvAsPdf() {
-  const ref = database.ref("contactFormDB");
+async function exportCsvAsPdfWithGraph() {
+  const snapshot = await database.ref("contactFormDB").once("value");
+  const data = snapshot.val();
 
-  ref.once("value")
-    .then(snapshot => {
-      const data = snapshot.val();
-      if (!data) {
-        alert("No data to export.");
-        return;
+  if (!data) {
+    alert("No data found.");
+    return;
+  }
+
+  const items = Object.values(data);
+
+  // Step 1: Count statuses
+  const statusCounts = {};
+  items.forEach(entry => {
+    const status = (entry.status || "Unknown").toLowerCase();
+    statusCounts[status] = (statusCounts[status] || 0) + 1;
+  });
+
+  // Step 2: Create chart
+  const ctx = document.getElementById("statusChart").getContext("2d");
+  const chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: Object.keys(statusCounts).map(s => s[0].toUpperCase() + s.slice(1)),
+      datasets: [{
+        label: "Status Count",
+        data: Object.values(statusCounts),
+        backgroundColor: "#3B82F6"
+      }]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
       }
+    }
+  });
 
-      const itemsArray = Object.values(data);
-      const csv = jsonToCsv(itemsArray);
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const chartImage = chart.toBase64Image();
 
-      // Parse CSV into rows and columns
-      const lines = csv.trim().split("\r\n");
-      const headers = lines[0].split(",").map(h => h.replace(/^"|"$/g, ""));
-      const rows = lines.slice(1).map(line =>
-        line.split(",").map(cell => cell.replace(/^"|"$/g, ""))
-      );
+  // Step 3: Create PDF (landscape)
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: "landscape" });
 
-      // Create PDF
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text("Contact Form DB Export", 14, 15);
 
-      doc.setFontSize(14);
-      doc.setFont("helvetica", "bold");
-      doc.text("Contact Form Export", 14, 15);
+  // Step 4: Parse CSV into table format
+  const csv = jsonToCsv(items);
+  const lines = csv.trim().split("\r\n");
+  const headers = lines[0].split(",").map(h => h.replace(/^"|"$/g, ""));
+  const rows = lines.slice(1).map(line =>
+    line.split(",").map(cell => cell.replace(/^"|"$/g, ""))
+  );
 
-      doc.autoTable({
-        startY: 22,
-        head: [headers],
-        body: rows,
-        styles: {
-          fontSize: 9,
-          cellPadding: 3
-        },
-        headStyles: {
-          fillColor: [59, 130, 246],
-          textColor: 255
-        },
-        alternateRowStyles: {
-          fillColor: [245, 245, 245]
-        },
-        margin: { left: 14, right: 14 }
-      });
+  // Step 5: Add table
+  doc.autoTable({
+  startY: 22,
+  head: [headers],
+  body: rows,
+  styles: {
+    fontSize: 8,
+    cellPadding: 2,
+    overflow: 'linebreak',
+    valign: 'middle'
+  },
+  headStyles: {
+    fillColor: [59, 130, 246],
+    textColor: 255,
+    fontSize: 9
+  },
+  alternateRowStyles: {
+    fillColor: [245, 245, 245]
+  },
+  margin: { left: 10, right: 10 },
+  tableWidth: "auto",
+  columnStyles: {
+    4: { cellWidth: 40 }, // email
+    3: { cellWidth: 30 }, // company
+    2: { cellWidth: 22 }, // time
+    5: { cellWidth: 30 }, // interest
+    6: { cellWidth: 25 }, // first name
+    7: { cellWidth: 25 }, // job pos
+    8: { cellWidth: 25 }, // last name
+    9: { cellWidth: 30 }, // phone
+  },
+  didDrawPage: function (data) {
+    doc.lastTableY = data.cursor.y;
+  }
+});
 
-      doc.save("contactFormDB-export.pdf");
-    })
-    .catch(error => {
-      console.error("❌ CSV to PDF Export Error:", error);
-      alert("Error exporting PDF from CSV.");
-    });
+
+  // Step 6: Add chart below the table
+  const chartTop = doc.lastTableY + 10;
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("Status Overview", 14, chartTop);
+  // Get canvas dimensions
+const canvas = document.getElementById("statusChart");
+const imgWidth = 180; // Max desired width
+const aspectRatio = canvas.height / canvas.width;
+const imgHeight = imgWidth * aspectRatio;
+
+doc.setFontSize(12);
+doc.text("Status Overview", 14, chartTop);
+doc.addImage(chartImage, "PNG", 14, chartTop + 5, imgWidth, imgHeight);
+
+  doc.save("contactFormDB-export-with-graph.pdf");
+  chart.destroy();
 }
+
 
 
 //CSV export
