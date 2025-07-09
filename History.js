@@ -356,7 +356,7 @@ async function exportCsvAsPdfWithGraph() {
 
   // Step 3: Create PDF (landscape)
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: "landscape" });
+  const doc = new jsPDF({ orientation: "landscape" })
 
   doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
@@ -376,8 +376,8 @@ async function exportCsvAsPdfWithGraph() {
   head: [headers],
   body: rows,
   styles: {
-    fontSize: 8,
-    cellPadding: 2,
+    fontSize: 9,
+    cellPadding: 1,
     overflow: 'linebreak',
     valign: 'middle'
   },
@@ -412,9 +412,11 @@ async function exportCsvAsPdfWithGraph() {
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
   doc.text("Status Overview", 14, chartTop);
-  // Get canvas dimensions
+  // Smaller chart dimensions
 const canvas = document.getElementById("statusChart");
-const imgWidth = 180; // Max desired width
+
+// ↓ Reduce these values to shrink the graph
+const imgWidth = 120; // ↓ narrower width = smaller graph
 const aspectRatio = canvas.height / canvas.width;
 const imgHeight = imgWidth * aspectRatio;
 
