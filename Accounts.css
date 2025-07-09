@@ -1,0 +1,136 @@
+@import url("index.css");
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    background-image: url('images/bg2.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.main-content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px;
+  width: 100%;
+}
+
+.account-panel {
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 850px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  height: 90vh;             
+  overflow: hidden;
+}
+
+.account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mini-add-btn {
+  background-color: #3730F5;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.mini-add-btn:hover {
+  background-color: #2a23b7;
+}
+
+.add-form {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.account-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px;
+  max-height: 100%;
+}
+
+.account-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.account-table th,
+.account-table td {
+  padding: 14px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+.account-table th {
+  background-color: #f3f4f6;
+  color: #111827;
+  font-weight: 600;
+}
+.remove-btn {
+  background-color: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.remove-btn:hover {
+  background-color: #c62828;
+}
+
+.sidebar {
+  background-color: #f3f4f6;
+  padding: 20px;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+}
+
+.sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; 
+    color: #4b5563; 
+    transition: color 0.3s;
+}
+.sidebar nav a:hover,
+.sidebar nav a.active {
+   color: #1f2937; 
+}
+
+.bottom-section {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-top: 20px;
+  font-size: 0.9rem;
+}
