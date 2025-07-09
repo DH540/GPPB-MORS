@@ -14,6 +14,42 @@ firebase.initializeApp(firebaseConfig);
 // Reference Firebase database
 const contactFormDB = firebase.database().ref("contactFormDB");
 
+function getUnavailableTimesForDate(date) {
+    return new Promise((resolve, reject) => {
+        contactFormDB.once('value')
+            .then(snapshot => {
+                const data = snapshot.val();
+                const unavailableTimes = [];
+
+                for (let id in data) {
+                    const entry = data[id];
+                    if (
+                        entry.appointmentDate === date &&
+                        (entry.status === "approved" || entry.status === "rescheduled")
+                    ) {
+                        unavailableTimes.push(entry.appointmentTime.trim());
+                    }
+                }
+                resolve(unavailableTimes);
+            })
+            .catch(reject);
+    });
+}
+
+function disableUnavailableTimeSlots(unavailableTimes) {
+    const timeSlots = document.querySelectorAll('.time-slot');
+
+    timeSlots.forEach(button => {
+        const btnText = button.textContent.trim();
+        if (unavailableTimes.includes(btnText)) {
+            button.classList.add('disabled');
+            button.classList.remove('selected');
+        } else {
+            button.classList.remove('disabled');
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     try {
         emailjs.init('GtZXPUDV-aCRQ-MeK');
@@ -28,6 +64,29 @@ document.addEventListener('DOMContentLoaded', () => {
             timeSlots.forEach(btn => btn.classList.remove('selected'));
             button.classList.add('selected');
         });
+    });
+
+    const dateInput = document.getElementById('apt');
+
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    const formattedToday = `${yyyy}-${mm}-${dd}`;
+
+    dateInput.setAttribute('min', formattedToday);
+
+    dateInput.addEventListener('change', async (e) => {
+        const selectedDate = e.target.value.trim();
+        if (!selectedDate) return;
+
+        try {
+            const unavailableTimes = await getUnavailableTimesForDate(selectedDate);
+            disableUnavailableTimeSlots(unavailableTimes);
+            console.log('Unavailable times for', selectedDate, ':', unavailableTimes);
+        } catch (error) {
+            console.error('Error checking unavailable times:', error);
+        }
     });
 
     document.querySelector('form').addEventListener('submit', async function(e) {
@@ -50,6 +109,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 status: "Pending"
             };
             console.log('Form data collected:', formData);
+
+            if (!formData.appointmentTime) {
+                alert('Please select an available appointment time.');
+                return;
+            }
 
             const emailParams = {
                 from_name: 'GPPB-TSO',

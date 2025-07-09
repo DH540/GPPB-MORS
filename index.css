@@ -236,6 +236,14 @@ textarea {
     color: #fff;
 }
 
+.time-slot.disabled {
+    background: #ddd;
+    border-color: #aaa;
+    color: #888;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 .date-picker-container {
     display: flex;
     flex-direction: column;
