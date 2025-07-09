@@ -12,9 +12,22 @@
 </head>
 
 <body> 
+    <!--PDF SRC CODE-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="History.js"></script>
+
+    <!--TESTING BAR GRAPH-->
+
+    <canvas id="statusChart" width="400" height="200" style="display:none;"></canvas>
+
   <div class="flex h-screen">
     <div class="sidebar hidden md:block">
         <div class="mb-4">
@@ -72,7 +85,16 @@
                       <button class="fstat" style="background-color: #00A651; color: white;" onclick="filterStatus('approved')" data-filter="approved">Approved</button>
                       <button class="fstat" style="background-color: #E12926; color: white;" onclick="filterStatus('rejected')" data-filter="cancelled">Cancelled</button>
                       <button class="fstat" style="background-color: #F5A623; color: white;" onclick="filterStatus('rescheduled')" data-filter="rescheduled">Rescheduled</button>
-                      <button class="fstat" style="background-color: #34A853; color: white;" onclick="exportContactFormDBAsCsv()">Export CSV</button>
+                      <div class="relative export-dropdown">
+  <button class="fstat export-csv" onclick="toggleExportMenu()">Export</button>
+
+  <div id="exportMenu" class="dropdown-menu hidden">
+    <div class="dropdown-title">Export as:</div>
+    <button class="dropdown-option" onclick="exportContactFormDBAsCsv()">CSV</button>
+   <button class="dropdown-option" onclick="exportCsvAsPdfWithGraph()">PDF</button>
+
+  </div>
+</div>
 
                   </div>
                   <div class="right-buttons">
