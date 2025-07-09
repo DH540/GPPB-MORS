@@ -294,12 +294,12 @@ document.addEventListener("DOMContentLoaded", function () {
 function jsonToCsv(items) {
   if (!items || !items.length) return '';
 
-  const replacer = (key, value) => value === null ? '' : value; // handle nulls
+  const replacer = (key, value) => value === null ? '' : value; 
   const header = Object.keys(items[0]);
   const csv = [
-    header.join(','), // header row first
+    header.join(','), 
     ...items.map(row => header.map(fieldName => 
-      JSON.stringify(row[fieldName], replacer) // quotes and escapes as needed
+      JSON.stringify(row[fieldName], replacer)
     ).join(','))
   ].join('\r\n');
 
@@ -354,21 +354,65 @@ async function exportCsvAsPdfWithGraph() {
   await new Promise(resolve => setTimeout(resolve, 500));
   const chartImage = chart.toBase64Image();
 
-  // Step 3: Create PDF (landscape)
+  //  Create PDF (landscape)
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: "landscape" })
 
   doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
-  doc.text("Contact Form DB Export", 14, 15);
+  doc.text("GPPB-MORS", 14, 15);
 
-  // Step 4: Parse CSV into table format
+  //  Parse CSV into table format
   const csv = jsonToCsv(items);
-  const lines = csv.trim().split("\r\n");
-  const headers = lines[0].split(",").map(h => h.replace(/^"|"$/g, ""));
-  const rows = lines.slice(1).map(line =>
-    line.split(",").map(cell => cell.replace(/^"|"$/g, ""))
-  );
+const lines = csv.trim().split("\r\n");
+const rawRows = lines.map(line => line.split(",").map(cell => cell.replace(/^"|"$/g, "")));
+
+const desiredOrder = [
+  "firstName",
+  "lastName",
+  "email",
+  "phoneNumber",
+  "company",
+  "jobPosition",
+  "consultationInterest",
+  "appointmentDate",
+  "appointmentTime",
+  "status",
+  //"additionaInfo"
+];
+
+// Map raw header positions
+const headerMap = {};
+lines[0].split(",").forEach((h, i) => {
+  headerMap[h.replace(/^"|"$/g, "")] = i;
+});
+
+// Build ordered headers
+const headers = desiredOrder.map(key => {
+  switch (key) {
+    case "appointmentDate": return "Appointment Date";
+    case "appointmentTime": return "Appointment Time";
+    case "firstName": return "First Name";
+    case "lastName": return "Last Name";
+    case "email": return "Email";
+    case "phoneNumber": return "Phone Number";
+    case "company": return "Company";
+    case "consultationInterest": return "Consultation Interest";
+    case "jobPosition": return "Job Position";
+    case "status": return "Status";
+    //case "additionaInfo": return "Additional Info"; <- benched for now
+    default: return key;
+  }
+});
+
+// Build ordered rows
+const rows = rawRows.slice(1).map(row =>
+  desiredOrder.map(key => {
+    const index = headerMap[key];
+    return index !== undefined ? row[index] : "";
+  })
+);
+
 
   // Step 5: Add table
   doc.autoTable({
@@ -407,7 +451,7 @@ async function exportCsvAsPdfWithGraph() {
 });
 
 
-  // Step 6: Add chart below the table
+  
   const chartTop = doc.lastTableY + 10;
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
@@ -415,8 +459,8 @@ async function exportCsvAsPdfWithGraph() {
   // Smaller chart dimensions
 const canvas = document.getElementById("statusChart");
 
-// ↓ Reduce these values to shrink the graph
-const imgWidth = 120; // ↓ narrower width = smaller graph
+// dont ask me how these lines of code work, I dont know anymore.
+const imgWidth = 120; 
 const aspectRatio = canvas.height / canvas.width;
 const imgHeight = imgWidth * aspectRatio;
 
@@ -445,7 +489,57 @@ window.exportContactFormDBAsCsv = function () {
       const itemsArray = Object.values(data);
 
       // Convert JSON array to CSV string
-      const csv = jsonToCsv(itemsArray);
+     const csv = jsonToCsv(items);
+const lines = csv.trim().split("\r\n");
+const rawRows = lines.map(line => line.split(",").map(cell => cell.replace(/^"|"$/g, "")));
+
+// Define your desired column order by Firebase field name
+const desiredOrder = [
+  "firstName",
+  "lastName",
+  "email",
+  "phoneNumber",
+  "company",
+  "jobPosition",
+  "consultationInterest",
+  "appointmentDate",
+  "appointmentTime",
+  "status",
+  //"additionaInfo"
+];
+
+// Map raw header positions
+const headerMap = {};
+lines[0].split(",").forEach((h, i) => {
+  headerMap[h.replace(/^"|"$/g, "")] = i;
+});
+
+// Build ordered headers and rows
+const headers = desiredOrder.map(key => {
+  switch (key) {
+    case "appointmentDate": return "Appointment Date";
+    case "appointmentTime": return "Appointment Time";
+    case "firstName": return "First Name";
+    case "lastName": return "Last Name";
+    case "email": return "Email";
+    case "phoneNumber": return "Phone Number";
+    case "company": return "Company";
+    case "consultationInterest": return "Consultation Interest";
+    case "jobPosition": return "Job Position";
+    case "status": return "Status";
+    //case "additionaInfo": return "Additional Info";
+    default: return key;
+  }
+});
+
+// Build rows in the correct order
+const rows = rawRows.slice(1).map(row =>
+  desiredOrder.map(key => {
+    const index = headerMap[key];
+    return index !== undefined ? row[index] : "";
+  })
+);
+
 
       // Download CSV as a file
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
