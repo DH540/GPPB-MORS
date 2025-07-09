@@ -294,12 +294,12 @@ document.addEventListener("DOMContentLoaded", function () {
 function jsonToCsv(items) {
   if (!items || !items.length) return '';
 
-  const replacer = (key, value) => value === null ? '' : value; // handle nulls
+  const replacer = (key, value) => value === null ? '' : value; 
   const header = Object.keys(items[0]);
   const csv = [
-    header.join(','), // header row first
+    header.join(','), 
     ...items.map(row => header.map(fieldName => 
-      JSON.stringify(row[fieldName], replacer) // quotes and escapes as needed
+      JSON.stringify(row[fieldName], replacer)
     ).join(','))
   ].join('\r\n');
 
@@ -400,7 +400,7 @@ const headers = desiredOrder.map(key => {
     case "consultationInterest": return "Consultation Interest";
     case "jobPosition": return "Job Position";
     case "status": return "Status";
-    //case "additionaInfo": return "Additional Info";
+    //case "additionaInfo": return "Additional Info"; <- benched for now
     default: return key;
   }
 });
