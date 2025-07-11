@@ -80,25 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginButton = document.getElementById("button-login");
     const message = document.getElementById("message");
 
-    // Captcha functions
-    function generateCaptcha() {
-        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-        let captcha = '';
-        for (let i = 0; i < 6; i++) {
-            captcha += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return captcha;
-    }
-
-    function setCaptcha() {
-        window.currentCaptcha = generateCaptcha();
-        document.getElementById('captcha-text').textContent = window.currentCaptcha;
-        document.getElementById('captchaInput').value = '';
-    }
-
-    // Captcha setup
-    setCaptcha();
-    document.getElementById('refreshCaptcha').addEventListener('click', setCaptcha);
 
     loginButton.addEventListener("click", async () => {
         const emailInput = document.getElementById("email");
@@ -106,18 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const username = emailInput.value.trim();
         const password = passwordInput.value.trim();
-        const captchaInput = document.getElementById("captchaInput").value.trim();
 
         if (!username || !password) {
             message.style.color = "orange";
             message.textContent = "Please enter both username and password.";
-            return;
-        }
-
-        if (captchaInput !== window.currentCaptcha) {
-            message.style.color = "orange";
-            message.textContent = "Incorrect Captcha. Please try again.";
-            setCaptcha();
             return;
         }
 
