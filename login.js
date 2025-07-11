@@ -1,4 +1,4 @@
-///LOGIN MODAL FIXED - REMOVED OTP VERIFICATION FROM LOGIN PAGE
+/// LOGIN MODAL FIXED - REMOVED OTP VERIFICATION FROM LOGIN PAGE
 const firebaseConfig = {
     apiKey: "AIzaSyBEJMTq5PQNrwDELbuqGfIFGFxJ3S-ke_Q",
     authDomain: "css151l-6290e.firebaseapp.com",
@@ -11,77 +11,66 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const contactFormDB = firebase.database().ref("contactFormDB");
+const db = firebase.database();
+const contactFormDB = db.ref("contactFormDB");
 
 document.addEventListener('DOMContentLoaded', () => {
     try {
         emailjs.init('mvAsUuvZ88Zbzp_q0');
-        console.log('EmailJS initialized successfully');
     } catch (error) {
-        console.error('EmailJS initialization error:', error);
+        console.error('EmailJS init error:', error);
     }
 
-    const timeSlots = document.querySelectorAll('.time-slot');
-    timeSlots.forEach(button => {
-        button.addEventListener('click', () => {
-            timeSlots.forEach(btn => btn.classList.remove('selected'));
-            button.classList.add('selected');
+    // Handle consultation form (if present)
+    const form = document.querySelector('form');
+    if (form && form.id !== "admin-login-form") {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            try {
+                const formData = {
+                    firstName: this.querySelector('input[placeholder="First Name"]').value,
+                    lastName: this.querySelector('input[placeholder="Last Name"]').value,
+                    jobPosition: this.querySelector('input[placeholder="Position"]').value,
+                    email: this.querySelector('input[placeholder="johndoe@example.com"]').value,
+                    phoneNumber: this.querySelector('input[placeholder="+63"]').value + ' ' +
+                                this.querySelector('input[placeholder="91234567890"]').value,
+                    company: this.querySelector('input[placeholder="Company Name"]').value,
+                    consultationInterest: this.querySelectorAll('input[type="text"]')[4].value,
+                    appointmentDate: this.querySelector('input[type="date"]').value,
+                    appointmentTime: document.querySelector('.time-slot.selected')?.textContent || '',
+                    additionalInfo: this.querySelector('textarea').value
+                };
+
+                const emailParams = {
+                    from_name: 'GPPB-TSO',
+                    email: formData.email,
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    phoneNumber: formData.phoneNumber,
+                    appointmentDate: formData.appointmentDate,
+                    appointmentTime: formData.appointmentTime,
+                    consultationInterest: formData.consultationInterest
+                };
+
+                await emailjs.send('service_yl0b9tl', 'template_4mpn41n', emailParams);
+                await contactFormDB.push({ ...formData, timestamp: Date.now() });
+
+                sessionStorage.setItem('consultationData', JSON.stringify(formData));
+                window.location.href = './receipt.html';
+
+            } catch (error) {
+                console.error('Form error:', error);
+                alert('Error: ' + error.message);
+            }
         });
-    });
+    }
 
-    document.querySelector('form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        console.log('Form submission started');
-
-        try {
-            const formData = {
-                firstName: this.querySelector('input[placeholder="First Name"]').value,
-                lastName: this.querySelector('input[placeholder="Last Name"]').value,
-                jobPosition: this.querySelector('input[placeholder="Position"]').value,
-                email: this.querySelector('input[placeholder="johndoe@example.com"]').value,
-                phoneNumber: this.querySelector('input[placeholder="+63"]').value + ' ' +
-                            this.querySelector('input[placeholder="91234567890"]').value,
-                company: this.querySelector('input[placeholder="Company Name"]').value,
-                consultationInterest: this.querySelectorAll('input[type="text"]')[4].value,
-                appointmentDate: this.querySelector('input[type="date"]').value,
-                appointmentTime: document.querySelector('.time-slot.selected')?.textContent || '',
-                additionalInfo: this.querySelector('textarea').value
-            };
-
-            const emailParams = {
-                from_name: 'GPPB-TSO',
-                email: formData.email,
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                phoneNumber: formData.phoneNumber,
-                appointmentDate: formData.appointmentDate,
-                appointmentTime: formData.appointmentTime,
-                consultationInterest: formData.consultationInterest
-            };
-
-            await emailjs.send('service_yl0b9tl', 'template_4mpn41n', emailParams);
-            const dbResponse = await contactFormDB.push({
-                ...formData,
-                timestamp: Date.now()
-            });
-
-            sessionStorage.setItem('consultationData', JSON.stringify(formData));
-            window.location.href = './receipt.html';
-
-        } catch (error) {
-            console.error('Detailed error information:', error);
-            alert('There was an error processing your consultation request. Please try again. Error: ' + error.message);
-        }
-    });
-
-    const validUsername = "dhsalazar811@gmail.com";
-    const validPassword = "012345";
-
+    // Admin login
     const loginButton = document.getElementById("button-login");
     const message = document.getElementById("message");
 
-
-    loginButton.addEventListener("click", async () => {
+    loginButton?.addEventListener("click", async () => {
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
 
@@ -90,18 +79,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!username || !password) {
             message.style.color = "orange";
-            message.textContent = "Please enter both username and password.";
+            message.textContent = "Please enter both email and password.";
             return;
         }
 
-        if (username === validUsername && password === validPassword) {
-            message.style.color = "green";
-            message.textContent = "Login successful! Sending OTP...";
+        const encodedEmail = username.replace(/\./g, ',');
+        const accountRef = db.ref("adminOtps/" + encodedEmail);
 
+        try {
+            const snapshot = await accountRef.once('value');
+            const account = snapshot.val();
+
+            if (!account) {
+                message.style.color = "red";
+                message.textContent = "Account not found.";
+                return;
+            }
+
+            if (account.password !== password) {
+                message.style.color = "red";
+                message.textContent = "Incorrect password.";
+                return;
+            }
+
+            // Authenticated, generate OTP
             const otp = Math.floor(100000 + Math.random() * 900000).toString();
-            const sanitizedEmail = username.replace('.', ',');
-
-            await firebase.database().ref("adminOtps").child(sanitizedEmail).set({
+            await db.ref("adminOtps/" + encodedEmail).update({
                 otp,
                 timestamp: Date.now()
             });
@@ -113,28 +116,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 sessionStorage.setItem("adminEmail", username);
+                message.style.color = "green";
+                message.textContent = "Login successful! Sending OTP...";
                 window.location.href = "verify.html";
 
-            } catch (error) {
-                console.error("Error sending OTP email:", error);
+            } catch (emailError) {
+                console.error("EmailJS error:", emailError);
                 message.style.color = "red";
-                message.textContent = "Failed to send OTP. Please try again.";
+                message.textContent = "OTP failed to send. Try again.";
             }
 
-        } else {
+        } catch (error) {
+            console.error("Login error:", error);
             message.style.color = "red";
-            message.textContent = "Invalid username or password.";
+            message.textContent = "Login failed. Try again.";
         }
     });
 
+    // Allow Enter key to trigger login
     document.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
             event.preventDefault();
-            loginButton.click();
+            loginButton?.click();
         }
     });
 
-    document.getElementById("admin-login-form").addEventListener("submit", (event) => {
+    document.getElementById("admin-login-form")?.addEventListener("submit", (event) => {
         event.preventDefault();
     });
 });
