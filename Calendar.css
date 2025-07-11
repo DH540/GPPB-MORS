@@ -53,6 +53,21 @@ body {
   font-weight: 700;
 }
 
+.fc-day-selected {
+  background-color: #204cdc !important;
+  color: #fff !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.fc .fc-col-header-cell {
+  cursor: pointer;
+}
+
+.fc .fc-daygrid-day {
+  cursor: pointer;
+}
 
 /* --- Responsive Styles for Mobile --- */
 @media (max-width: 767px) {
