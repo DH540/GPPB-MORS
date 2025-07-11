@@ -11,7 +11,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <title>Admin Login</title>
     <link rel="icon" type="image/x-icon" href="images/logo.png">
-    <script src="verify.js"></script>
 </head>
 <body>
     <div class="header">
@@ -45,5 +44,12 @@
             <button type="button" class="admin-btn login-btn verify-btn" id="button-verify">Verify</button>
         </div>
     </div>
+     <!-- ✅ Firebase scripts loaded FIRST -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+  <!-- ✅ Your verify.js comes AFTER Firebase is loaded -->
+  <script src="verify.js"></script>
 </div>
 </html>
