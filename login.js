@@ -1,4 +1,4 @@
-///LOGIN MODAL NOT WORKING *CREDENTIALS NOT WORKING*
+///LOGIN MODAL FIXED - REMOVED OTP VERIFICATION FROM LOGIN PAGE
 const firebaseConfig = {
     apiKey: "AIzaSyBEJMTq5PQNrwDELbuqGfIFGFxJ3S-ke_Q",
     authDomain: "css151l-6290e.firebaseapp.com",
@@ -9,10 +9,8 @@ const firebaseConfig = {
     appId: "1:907702008183:web:9dbb807a3db2e2958bc972"
 };
 
-// Initialize Firebase  
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
-// Reference Firebase database
 const contactFormDB = firebase.database().ref("contactFormDB");
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -49,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 appointmentTime: document.querySelector('.time-slot.selected')?.textContent || '',
                 additionalInfo: this.querySelector('textarea').value
             };
-            console.log('Form data collected:', formData);
 
             const emailParams = {
                 from_name: 'GPPB-TSO',
@@ -61,114 +58,82 @@ document.addEventListener('DOMContentLoaded', () => {
                 appointmentTime: formData.appointmentTime,
                 consultationInterest: formData.consultationInterest
             };
-            console.log('Email parameters prepared:', emailParams);
 
-            console.log('Attempting to send email with:', {
-                serviceId: 'service_yl0b9tl',
-                templateId: 'template_4mpn41n'
-            });
-
-            const emailResponse = await emailjs.send(
-                'service_yl0b9tl',
-                'template_4mpn41n',
-                emailParams
-            );
-
-            console.log('Email sent successfully:', emailResponse);
-
-            // Save to Firebase
+            await emailjs.send('service_yl0b9tl', 'template_4mpn41n', emailParams);
             const dbResponse = await contactFormDB.push({
                 ...formData,
-                timestamp: Date.now() // Store the time when data is received
+                timestamp: Date.now()
             });
-            
-            console.log("Data saved to Firebase with key:", dbResponse.key);
 
-            // Store data in sessionStorage before redirecting
             sessionStorage.setItem('consultationData', JSON.stringify(formData));
             window.location.href = './receipt.html';
 
         } catch (error) {
-            console.error('Detailed error information:', {
-                message: error.message,
-                stack: error.stack,
-                error: error
-            });
+            console.error('Detailed error information:', error);
             alert('There was an error processing your consultation request. Please try again. Error: ' + error.message);
         }
     });
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-  const validUsername = "dhsalazar811@gmail.com";
-  const validPassword = "012345";
+    const validUsername = "dhsalazar811@gmail.com";
+    const validPassword = "012345";
 
-  const loginButton = document.getElementById("button-login");
-  const message = document.getElementById("message");
+    const loginButton = document.getElementById("button-login");
+    const message = document.getElementById("message");
 
-  loginButton.addEventListener("click", async () => {
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
+    loginButton.addEventListener("click", async () => {
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
 
-    const username = emailInput.value.trim();
-    const password = passwordInput.value.trim();
+        const username = emailInput.value.trim();
+        const password = passwordInput.value.trim();
 
-    if (!username || !password) {
-      message.style.color = "orange";
-      message.textContent = "Please enter both username and password.";
-      return;
-    }
+        if (!username || !password) {
+            message.style.color = "orange";
+            message.textContent = "Please enter both username and password.";
+            return;
+        }
 
-    if (username === validUsername && password === validPassword) {
-      message.style.color = "green";
-      message.textContent = "Login successful! Generating OTP...";
+        if (username === validUsername && password === validPassword) {
+            message.style.color = "green";
+            message.textContent = "Login successful! Sending OTP...";
 
-      // ✅ Generate 6-digit OTP
-      const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      console.log("Generated OTP:", otp);
+            const otp = Math.floor(100000 + Math.random() * 900000).toString();
+            const sanitizedEmail = username.replace('.', ',');
 
-      // ✅ Store OTP and email in sessionStorage
-      sessionStorage.setItem("generatedOTP", otp);
-      sessionStorage.setItem("adminEmail", username);
+            await firebase.database().ref("adminOtps").child(sanitizedEmail).set({
+                otp,
+                timestamp: Date.now()
+            });
 
-      try {
-        // ✅ Send Email using EmailJS
-        await emailjs.send('service_yl0b9tl', 'template_4mpn41n', {
-          email: username,
-          otp_code: otp
-        });
+            try {
+                await emailjs.send('service_yl0b9tl', 'template_4mpn41n', {
+                    email: username,
+                    otp_code: otp
+                });
 
-        console.log("OTP email sent successfully!");
-        message.style.color = "green";
-        message.textContent = "OTP sent! Redirecting to verification page...";
+                sessionStorage.setItem("adminEmail", username);
+                window.location.href = "verify.html";
 
-        // ✅ Redirect to verify.html
-        setTimeout(() => {
-          window.location.href = "verify.html";
-        }, 1500);
+            } catch (error) {
+                console.error("Error sending OTP email:", error);
+                message.style.color = "red";
+                message.textContent = "Failed to send OTP. Please try again.";
+            }
 
-      } catch (error) {
-        console.error("Error sending OTP email:", error);
-        message.style.color = "red";
-        message.textContent = "Failed to send OTP. Please try again.";
-      }
+        } else {
+            message.style.color = "red";
+            message.textContent = "Invalid username or password.";
+        }
+    });
 
-    } else {
-      message.style.color = "red";
-      message.textContent = "Invalid username or password.";
-    }
-  });
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            loginButton.click();
+        }
+    });
 
-  // ENTER key support
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      loginButton.click();
-    }
-  });
-
-  // Prevent default form submission
-  document.getElementById("admin-login-form").addEventListener("submit", (event) => {
-    event.preventDefault();
-  });
+    document.getElementById("admin-login-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+    });
 });

@@ -19,7 +19,7 @@
             });
         })();
     </script>
-    <script src="login.js"></script>
+    <script src="login.js" defer></script>
 </head>
 <body>
     <div class="header">
@@ -50,6 +50,13 @@
                 <div class="btns" style="display: flex; align-items: center; justify-content: space-between;">
                     <a href="index.html" class="admin-btn" style="text-align:center; text-decoration:none; padding:10px 20px;">Back</a>
                     <button type="button" class="admin-btn login-btn" id="button-login" style="color: #fff; text-align:center; text-decoration:none; padding:12px 20px;">Login</button>
+                </div>
+
+                <!-- OTP Input Section (Initially Hidden) -->
+                <div id="otpSection" style="display: none; margin-top: 20px;">
+                    <label for="otpInput">Enter OTP:</label>
+                    <input type="text" id="otpInput" placeholder="123456" class="form-group" style="margin-top: 5px;">
+                    <button type="button" id="verifyOtpBtn" class="admin-btn login-btn" style="margin-top: 10px; width: 100%;">Verify OTP</button>
                 </div>
             </form>
         </div>
