@@ -30,6 +30,16 @@
                 flex: 1 1 0; 
             }
         }
+        .center-captcha-row {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        #captcha-container {
+            max-width: 320px;
+            min-width: 220px;
+        }
     </style>
 </head>
 <body>
@@ -123,7 +133,17 @@
                     <label>Additional Information/Comments</label>
                     <textarea></textarea>
                 </div>
-
+                <br>
+                <!-- Captcha Section -->
+                <div class="center-captcha-row">
+                    <div class="form-group" id="captcha-container">
+                        <label for="captchaInput">Captcha: <span id="captcha-text"></span></label>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <input type="text" id="captchaInput" required placeholder="Enter Captcha" style="flex:1;">
+                            <button type="button" id="refreshCaptcha" class="refresh-captcha-btn">Refresh Captcha</button>
+                        </div>
+                    </div>
+                </div>
                 <button type="submit" class="submit-btn" href="receipt.html">Submit</button>
             </form>
         </div>

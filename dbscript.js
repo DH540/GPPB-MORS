@@ -50,6 +50,22 @@ function disableUnavailableTimeSlots(unavailableTimes) {
     });
 }
 
+// Captcha functions
+function generateCaptcha() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let captcha = '';
+    for (let i = 0; i < 6; i++) {
+        captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return captcha;
+}
+
+function setCaptcha() {
+    window.currentCaptcha = generateCaptcha();
+    document.getElementById('captcha-text').textContent = window.currentCaptcha;
+    document.getElementById('captchaInput').value = '';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     try {
         emailjs.init('GtZXPUDV-aCRQ-MeK');
@@ -89,8 +105,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Captcha setup
+    setCaptcha();
+    document.getElementById('refreshCaptcha').addEventListener('click', setCaptcha);
+
     document.querySelector('form').addEventListener('submit', async function(e) {
         e.preventDefault();
+        // Captcha validation
+        const captchaInput = document.getElementById('captchaInput').value.trim();
+        if (captchaInput !== window.currentCaptcha) {
+            alert('Incorrect Captcha. Please try again.');
+            setCaptcha();
+            return;
+        }
+
         console.log('Form submission started');
 
         try {

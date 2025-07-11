@@ -262,6 +262,32 @@ textarea {
     min-height: 20px;
 }
 
+#captcha-container {
+    max-width: 320px;
+    min-width: 220px;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.refresh-captcha-btn {
+    background: #3730F5;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px; /* Increased horizontal padding */
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: 0 1px 4px rgba(55,48,245,0.08);
+    min-width: 160px; /* Ensures button is wider */
+    margin-top: 3px; /* Aligns with input field */
+}
+
+.refresh-captcha-btn:hover {
+    background: #2a23b7;
+}
+
 @media (max-width: 900px) {
     .card {
         max-width: 98vw;
