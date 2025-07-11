@@ -144,13 +144,16 @@ document.addEventListener('DOMContentLoaded', function() {
         return false;
     }
 
-    // Update eventContent to save state before redirect
+    // Update eventContent to make the entire cell clickable and show text
     calendar.setOption('eventContent', function(arg) {
         const viewType = calendar.view.type;
         if (viewType === 'timeGridWeek' || viewType === 'timeGridDay') {
             const entryId = arg.event.id;
+            // Use a full-size <a> but keep the text visible and clickable
             return {
-                html: `<a href="entry.html?id=${entryId}&source=calendar" class="cursor-pointer" onclick="window.calendarEntryClick('${entryId}')">
+                html: `<a href="entry.html?id=${entryId}&source=calendar" 
+                        onclick="window.calendarEntryClick('${entryId}')" 
+                        style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:absolute;top:0;left:0;z-index:10;text-decoration:none;color:inherit;">
                         <span>${arg.event.title}</span>
                     </a>`
             };
