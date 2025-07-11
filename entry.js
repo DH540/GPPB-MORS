@@ -15,8 +15,8 @@ firebase.initializeApp(firebaseConfig);
 const contactFormDB = firebase.database().ref("contactFormDB");
 
 // Function to open entry view and store data in localStorage
-function openEntryView(name, email, phone, company, interest, date, time, comments, entryId) {
-    console.log("Opening Entry View with:", { name, email, phone, company, interest, date, time, comments, entryId });
+function openEntryView(name, email, phone, company, interest, date, time, comments, entryId, source) {
+    console.log("Opening Entry View with:", { name, email, phone, company, interest, date, time, comments, entryId, source});
 
     if (!entryId) {
         console.error("⚠ Entry ID is missing! Cannot proceed.");
@@ -26,7 +26,6 @@ function openEntryView(name, email, phone, company, interest, date, time, commen
     const appointmentData = { name, email, phone, company, interest, date, time, comments, entryId };
     localStorage.setItem("appointmentData", JSON.stringify(appointmentData));
 
-    // Ensure entryId is added to the URL
     window.location.href = `entry.html?id=${entryId}&source=${source}`;
 }
 
@@ -134,19 +133,20 @@ if (status && typeof status === "string" && status.trim() !== "") {
         rescheduleBtn.style.display = "inline-block";
     }
 
-    // Parse source parameter from URL
     const urlParams = new URLSearchParams(window.location.search);
     const source = urlParams.get("source") || "index";
 
     const backButton = document.getElementById("backButton");
-    if (source === "inbox") {
-        backButton.href = "inbox.html";
-    } 
-    else if (source === "history") {
-        backButton.href = "History.html";
-    } 
-    else {
-        backButton.href = "index.html"; // fallback
+    if (backButton) {
+        if (source === "inbox") {
+            backButton.href = "inbox.html";
+        } else if (source === "history") {
+            backButton.href = "History.html";
+        } else if (source === "calendar") {
+            backButton.href = "Calendar.html";
+        } else {
+            backButton.href = "index.html";
+        }
     }
 
     console.log(`📩 Extracted Email from Storage: "${appointmentData.email}"`);
