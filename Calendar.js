@@ -444,29 +444,35 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Initial left panel setup and highlight today
-    function updateDateDisplay() {
-        const now = new Date();
-        const day = now.getDate();
+    function updateDateDisplay(dateOverride) {
+        // Use dateOverride if provided, otherwise today
+        let dateObj;
+        if (dateOverride) {
+            dateObj = new Date(dateOverride);
+        } else {
+            dateObj = new Date();
+        }
+        const day = dateObj.getDate();
         const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
             "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
         ];
-        const month = monthNames[now.getMonth()];
+        const month = monthNames[dateObj.getMonth()];
         document.getElementById('dayDisplay').textContent = String(day).padStart(2, '0');
         document.getElementById('monthDisplay').textContent = month;
-        const todayStr = now.toISOString().split('T')[0];
-        displayUpcomingAppointments(todayStr);
+        const dateStr = dateObj.toISOString().split('T')[0];
+        displayUpcomingAppointments(dateStr);
 
         if (selectedCell) {
             selectedCell.classList.remove('fc-day-selected');
             selectedCell = null;
         }
         setTimeout(() => {
-            const cell = document.querySelector(`.fc-day[data-date="${todayStr}"]`);
+            const cell = document.querySelector(`.fc-day[data-date="${dateStr}"]`);
             if (cell) {
                 cell.classList.add('fc-day-selected');
                 selectedCell = cell;
             }
-            selectedDateStr = todayStr;
+            selectedDateStr = dateStr;
         }, 0);
     }
 
@@ -482,12 +488,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // No need for setInterval, as the display will be correct on load.
     // setInterval(updateDateDisplay, 1000); 
 
-    //Realtime updates for when data changes in Firebase
+    // Realtime updates for when data changes in Firebase
     database.ref('contactFormDB').on('value', (snapshot) => {
-      // The 'value' event gives us the entire data set, so we reload everything.
-      calendar.removeAllEvents(); // Clear before loading
-      loadAndAddEvents(calendar);
-      displayUpcomingAppointments();
+        calendar.removeAllEvents(); // Clear before loading
+        loadAndAddEvents(calendar);
+        // Wait for events to be rendered, then update left panel
+        setTimeout(() => {
+            // Use selectedDateStr if set, otherwise today
+            const dateToShow = selectedDateStr || (new Date().toISOString().split('T')[0]);
+            updateDateDisplay(dateToShow);
+        }, 200);
     });
 
     // Make "Today" button select and highlight today
@@ -514,10 +524,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!restoreCalendarState()) {
             updateDateDisplay();
         }
-        // Only call updateDateDisplay if no state is present
-        if (!localStorage.getItem("calendarState")) {
-            updateDateDisplay();
-        }
+        // Wait for events to load, then update left panel
+        setTimeout(() => {
+            const dateToShow = selectedDateStr || (new Date().toISOString().split('T')[0]);
+            updateDateDisplay(dateToShow);
+        }, 200);
     });
 
     // Also restore state after browser back navigation
