@@ -135,6 +135,7 @@ if (status && typeof status === "string" && status.trim() !== "") {
 
     const urlParams = new URLSearchParams(window.location.search);
     const source = urlParams.get("source") || "index";
+    sessionStorage.setItem("sourcePage", source);
 
     const backButton = document.getElementById("backButton");
     if (backButton) {
@@ -248,7 +249,14 @@ function sendMail(status) {
         });
 
     setTimeout(() => {
-        window.location.href = "inbox.html";
+        const sourcePage = sessionStorage.getItem("sourcePage") || "inbox";
+        if (sourcePage.toLowerCase() === "calendar") {
+            window.location.href = "Calendar.html";
+        } else if (sourcePage.toLowerCase() === "history") {
+            window.location.href = "History.html";
+        } else {
+            window.location.href = "inbox.html";
+        }
     }, 3000);
 }
 
