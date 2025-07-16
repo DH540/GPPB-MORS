@@ -538,17 +538,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    document.addEventListener('visibilitychange', function () {
-        if (document.visibilityState === 'visible') {
-            setTimeout(() => {
-                calendar.updateSize();
-            }, 50);
-        }
-    });
-
-    window.addEventListener('focus', () => {
+    function fixCalendar() {
         setTimeout(() => {
             calendar.updateSize();
+            calendar.render(); 
         }, 50);
-    });
+    }
+
+    window.addEventListener('focus', fixCalendar);
+    window.addEventListener('resize', fixCalendar);
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            fixCalendar();
+        }
+    });       
 });
