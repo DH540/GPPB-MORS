@@ -310,3 +310,8 @@ body {
     color: #c62828 !important;
   }
 }
+#account-email {
+  font-size: 11.7px;
+  white-space: normal;
+  word-break: break-all;
+}

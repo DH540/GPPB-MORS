@@ -235,3 +235,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+document.addEventListener("DOMContentLoaded", () => {
+    const emailSpan = document.getElementById("account-email");
+    const auth = firebase.auth();
+
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            // ✅ Still logged in and account exists
+            const email = user.email;
+            if (emailSpan) emailSpan.textContent = email;
+            sessionStorage.setItem("adminEmail", email);
+        } else {
+            // ❌ User is not logged in or account was deleted
+            if (emailSpan) emailSpan.textContent = "Not signed in";
+            sessionStorage.removeItem("adminEmail");
+        }
+    });
+});
