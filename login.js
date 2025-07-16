@@ -87,51 +87,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const accountRef = db.ref("adminOtps/" + encodedEmail);
 
         try {
-            const snapshot = await accountRef.once('value');
-            const account = snapshot.val();
+        const snapshot = await accountRef.once('value');
+        const account = snapshot.val();
 
-            if (!account) {
-                message.style.color = "red";
-                message.textContent = "Account not found.";
-                return;
-            }
-
-            if (account.password !== password) {
-                message.style.color = "red";
-                message.textContent = "Incorrect password.";
-                return;
-            }
-
-            // Authenticated, generate OTP
-            const otp = Math.floor(100000 + Math.random() * 900000).toString();
-            await db.ref("adminOtps/" + encodedEmail).update({
-                otp,
-                timestamp: Date.now()
-            });
-
-            try {
-                await emailjs.send('service_yl0b9tl', 'template_4mpn41n', {
-                    email: username,
-                    otp_code: otp
-                });
-
-                sessionStorage.setItem("adminEmail", username);
-                message.style.color = "green";
-                message.textContent = "Login successful! Sending OTP...";
-                window.location.href = "verify.html";
-
-            } catch (emailError) {
-                console.error("EmailJS error:", emailError);
-                message.style.color = "red";
-                message.textContent = "OTP failed to send. Try again.";
-            }
-
-        } catch (error) {
-            console.error("Login error:", error);
+        if (!account) {
             message.style.color = "red";
-            message.textContent = "Login failed. Try again.";
+            message.textContent = "Account not found.";
+            return;
         }
-    });
+
+        if (account.password !== password) {
+            message.style.color = "red";
+            message.textContent = "Incorrect password.";
+            return;
+        }
+
+        // ✅ Successfully authenticated, proceed to admin dashboard
+        sessionStorage.setItem("adminEmail", username);
+        message.style.color = "green";
+        message.textContent = "Login successful!";
+        window.location.href = "inbox.html"; // ← change this if needed
+
+    } catch (error) {
+        console.error("Login error:", error);
+        message.style.color = "red";
+        message.textContent = "Login failed. Try again.";
+    }
+});
 
     // Allow Enter key to trigger login
     document.addEventListener("keydown", (event) => {
