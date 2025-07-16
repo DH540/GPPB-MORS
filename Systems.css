@@ -1,11 +1,10 @@
-@import url("index.css");
-
 body {
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Arial, sans-serif;
     min-height: 100vh;
     position: relative;
+    background-color: #e5e7eb;
 }
 
 body::before {
@@ -72,81 +71,84 @@ body::before {
     width: calc(100% - 12rem);
     margin-left: 12rem;
     overflow-y: auto;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
   }
 
-.account-panel {
-  background: #fff;
-  padding: 30px;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 850px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  display: flex;
-  flex-direction: column;
-  height: 90vh;             
-  overflow: hidden;
+  .main-content h2 {
+    font-size: 1.5rem;
+    text-align: center;
+    padding-bottom: 20px;
+  }
+
+.systems-panel {
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 850px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+    overflow-y: auto;
 }
 
-.account-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.header {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+    margin-bottom: 20px; 
+    gap: 15px; 
 }
 
-.mini-add-btn {
-  background-color: #3730F5;
-  color: #fff;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: none;
-  font-size: 1.1rem;
-  cursor: pointer;
-}
-.mini-add-btn:hover {
-  background-color: #2a23b7;
+.system-buttons-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+    gap: 20px; 
+    width: 100%; 
+    justify-content: start; 
 }
 
-.add-form {
-  margin-top: 20px;
-  margin-bottom: 30px;
+.system-tile {
+    background-color: #fff;
+    border: 1px solid #d1d5db; 
+    border-radius: 12px; 
+    padding: 20px;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 10px; 
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease; 
+    min-height: 150px; 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
+    color: #4b5563; 
+    font-weight: 500;
 }
 
-.account-list {
-  flex-grow: 1;
-  overflow-y: auto;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 10px;
-  max-height: 100%;
+.system-tile:hover {
+    background-color: #f8f8f8;
+    border-color: #9ca3af; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+    transform: translateY(-2px); 
 }
 
-.account-table {
-  width: 100%;
-  border-collapse: collapse;
+.system-logo {
+    max-width: 300px;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 5px;
 }
-.account-table th,
-.account-table td {
-  padding: 14px;
-  border-bottom: 1px solid #e5e7eb;
-  text-align: left;
+
+.logo {
+    width: 100px;
 }
-.account-table th {
-  background-color: #f3f4f6;
-  color: #111827;
-  font-weight: 600;
-}
-.remove-btn {
-  background-color: #e53935;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 6px 12px;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-.remove-btn:hover {
-  background-color: #c62828;
-}
+
 
 /* Responsive bottom nav for mobile */
 @media (max-width: 768px) {
