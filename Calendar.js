@@ -537,4 +537,12 @@ document.addEventListener('DOMContentLoaded', function() {
             restoreCalendarState();
         }
     });
+
+    document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') {
+        setTimeout(() => {
+            calendar.updateSize();
+        }, 50);
+    }
+});
 });
