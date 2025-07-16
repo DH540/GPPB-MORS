@@ -539,10 +539,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.addEventListener('visibilitychange', function () {
-    if (document.visibilityState === 'visible') {
+        if (document.visibilityState === 'visible') {
+            setTimeout(() => {
+                calendar.updateSize();
+            }, 50);
+        }
+    });
+
+    window.addEventListener('focus', () => {
         setTimeout(() => {
             calendar.updateSize();
         }, 50);
-    }
-});
+    });
 });
