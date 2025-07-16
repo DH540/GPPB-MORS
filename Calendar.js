@@ -117,14 +117,15 @@ window.addEventListener('load', function() {
     });
 
     // Helper to save calendar state before redirect
-    function saveCalendarState() {
-        const state = {
-            selectedDateStr,
-            viewType: calendar.view.type,
-            scrollTop: document.documentElement.scrollTop || document.body.scrollTop
-        };
-        localStorage.setItem("calendarState", JSON.stringify(state));
-    }
+ function saveCalendarState() {
+    calendar.updateSize(); 
+    const state = {
+        selectedDateStr,
+        viewType: calendar.view.type,
+        scrollTop: document.documentElement.scrollTop || document.body.scrollTop
+    };
+    localStorage.setItem("calendarState", JSON.stringify(state));
+}
 
     // Restore calendar state from localStorage
     function restoreCalendarState() {
@@ -541,9 +542,15 @@ window.addEventListener('load', function() {
     function fixCalendar() {
         setTimeout(() => {
             calendar.updateSize();
-            calendar.render(); 
-        }, 50);
+        }, 100); 
     }
+
+    setTimeout(() => {
+    updateLeftPanelForDate(selectedDateStr, calendar.view.type !== "dayGridMonth");
+    window.scrollTo(0, state.scrollTop || 0);
+    fixCalendar(); 
+    }, 200);
+
 
     window.addEventListener('focus', fixCalendar);
     window.addEventListener('resize', fixCalendar);
