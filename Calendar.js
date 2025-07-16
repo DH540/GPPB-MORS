@@ -11,7 +11,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-document.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('load', function() {
     var calendarEl = document.getElementById('calendar');
     
     // Check if the device is mobile based on screen width
