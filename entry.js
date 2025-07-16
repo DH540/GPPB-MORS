@@ -263,7 +263,7 @@ function sendMail(status) {
 const statusMessages = {
   approved: "We're excited to meet you on the scheduled date. Please be on time",
   cancelled: "Unfortunately, your request could not be accommodated at this time",
-  rescheduled: "Please take note of the updated date and time for your consultation"
+  rescheduled: "We apologize for the inconvenience. Please take note of the updated date and time for your consultation"
 };
 
 function getCustomMessage(status) {
