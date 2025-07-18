@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <title>History</title>
   <link rel="icon" type="image/x-icon" href="images/logo.png">
@@ -22,9 +26,11 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script src="History.js"></script>
-    
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    
+    <script src="./authy.js"></script>
+    <script src="History.js"></script>
+   
 
     <!--TESTING BAR GRAPH-->
 
@@ -48,7 +54,7 @@
                 <span id="account-email">Loading...</span>
 
             </div>
-            <a href="index.html">Sign out</a>
+            <a href="#" class="signout">Sign out</a>
         </div>
     </div>
 
@@ -152,11 +158,12 @@
         <i class="fas fa-users-cog text-lg"></i>
         <span class="text-xs mt-1">Systems</span>
       </a>
-      <a href="index.html" class="flex flex-col items-center text-red-600 hover:text-red-800 signout">
-        <i class="fas fa-sign-out-alt text-lg"></i>
-        <span class="text-xs mt-1">Sign Out</span>
-      </a>
+      <a href="#" class="flex flex-col items-center text-red-600 hover:text-red-800 signout">
+  <i class="fas fa-sign-out-alt text-lg"></i>
+  <span class="text-xs mt-1">Sign Out</span>
+</a>
     </nav>
   </div>
+<script src="signout.js"></script>
 </body>
 </html>

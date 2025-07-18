@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Systems</title>
   <link rel="icon" type="image/x-icon" href="images/logo.png">
@@ -16,6 +19,7 @@
 
   <!-- systems.js must come AFTER Firebase is loaded -->
   <script src="systems.js"></script>
+ <script src="./authy.js"></script>
 </head>
 <body>
 
@@ -36,7 +40,10 @@
           <i class="fas fa-user-circle text-2xl"></i>
           <span id="account-email">Loading...</span>
         </div>
-        <a href="index.html">Sign out</a>
+        <a href="#" class="signout">
+  <i class="fas fa-sign-out-alt text-red-600"></i>
+  <span>Sign Out</span>
+</a>
       </div>
     </div>
 
@@ -86,5 +93,6 @@
       </a>
     </div>
   </div>
+  <script src="./signout.js"></script>
 </body>
 </html>

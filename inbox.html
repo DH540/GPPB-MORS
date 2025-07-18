@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Inbox</title>
     <link rel="icon" type="image/x-icon" href="images/logo.png">
@@ -10,6 +13,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="inbox.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./authy.js"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="Inbox.css">
@@ -34,7 +38,7 @@
                     <span id="account-email">Loading...</span>
 
                 </div>
-                <a href="index.html">Sign out</a>
+                <a href="#" class="signout">Sign out</a>
             </div>
         </div>
 
@@ -108,7 +112,7 @@
         <i class="fas fa-sliders-h"></i>
         <span>Systems</span>
       </a>
-      <a href="index.html" class="signout">
+      <a href="#" class="signout">
         <i class="fas fa-sign-out-alt" style="color: #dc2626;"></i>
         <span>Sign Out</span>
       </a>
@@ -126,6 +130,6 @@
             </div>
         </div>
     </div>
-
+<script src="./signout.js"></script>
 </body>
 </html>
