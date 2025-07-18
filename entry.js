@@ -135,6 +135,7 @@ if (status && typeof status === "string" && status.trim() !== "") {
 
     const urlParams = new URLSearchParams(window.location.search);
     const source = urlParams.get("source") || "index";
+    sessionStorage.setItem("sourcePage", source);
 
     const backButton = document.getElementById("backButton");
     if (backButton) {
@@ -248,14 +249,21 @@ function sendMail(status) {
         });
 
     setTimeout(() => {
-        window.location.href = "inbox.html";
+        const sourcePage = sessionStorage.getItem("sourcePage") || "inbox";
+        if (sourcePage.toLowerCase() === "calendar") {
+            window.location.href = "Calendar.html";
+        } else if (sourcePage.toLowerCase() === "history") {
+            window.location.href = "History.html";
+        } else {
+            window.location.href = "inbox.html";
+        }
     }, 3000);
 }
 
 const statusMessages = {
   approved: "We're excited to meet you on the scheduled date. Please be on time",
   cancelled: "Unfortunately, your request could not be accommodated at this time",
-  rescheduled: "Please take note of the updated date and time for your consultation"
+  rescheduled: "We apologize for the inconvenience. Please take note of the updated date and time for your consultation"
 };
 
 function getCustomMessage(status) {
@@ -309,3 +317,20 @@ function submitReschedule() {
     })
     .catch(error => console.error("❌ Error updating date and time:", error));
 }
+document.addEventListener("DOMContentLoaded", () => {
+    const emailSpan = document.getElementById("account-email");
+    const auth = firebase.auth();
+
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            // ✅ Still logged in and account exists
+            const email = user.email;
+            if (emailSpan) emailSpan.textContent = email;
+            sessionStorage.setItem("adminEmail", email);
+        } else {
+            // ❌ User is not logged in or account was deleted
+            if (emailSpan) emailSpan.textContent = "Not signed in";
+            sessionStorage.removeItem("adminEmail");
+        }
+    });
+});

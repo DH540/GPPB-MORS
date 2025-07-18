@@ -11,7 +11,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-document.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('load', function() {
     var calendarEl = document.getElementById('calendar');
     
     // Check if the device is mobile based on screen width
@@ -117,14 +117,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Helper to save calendar state before redirect
-    function saveCalendarState() {
-        const state = {
-            selectedDateStr,
-            viewType: calendar.view.type,
-            scrollTop: document.documentElement.scrollTop || document.body.scrollTop
-        };
-        localStorage.setItem("calendarState", JSON.stringify(state));
-    }
+ function saveCalendarState() {
+    calendar.updateSize(); 
+    const state = {
+        selectedDateStr,
+        viewType: calendar.view.type,
+        scrollTop: document.documentElement.scrollTop || document.body.scrollTop
+    };
+    localStorage.setItem("calendarState", JSON.stringify(state));
+}
 
     // Restore calendar state from localStorage
     function restoreCalendarState() {
@@ -535,6 +536,44 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('pageshow', function(event) {
         if (event.persisted) {
             restoreCalendarState();
+        }
+    });
+
+    function fixCalendar() {
+        setTimeout(() => {
+            calendar.updateSize();
+        }, 100); 
+    }
+
+    setTimeout(() => {
+    updateLeftPanelForDate(selectedDateStr, calendar.view.type !== "dayGridMonth");
+    window.scrollTo(0, state.scrollTop || 0);
+    fixCalendar(); 
+    }, 200);
+
+
+    window.addEventListener('focus', fixCalendar);
+    window.addEventListener('resize', fixCalendar);
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            fixCalendar();
+        }
+    });       
+});
+document.addEventListener("DOMContentLoaded", () => {
+    const emailSpan = document.getElementById("account-email");
+    const auth = firebase.auth();
+
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            // ✅ Still logged in and account exists
+            const email = user.email;
+            if (emailSpan) emailSpan.textContent = email;
+            sessionStorage.setItem("adminEmail", email);
+        } else {
+            // ❌ User is not logged in or account was deleted
+            if (emailSpan) emailSpan.textContent = "Not signed in";
+            sessionStorage.removeItem("adminEmail");
         }
     });
 });

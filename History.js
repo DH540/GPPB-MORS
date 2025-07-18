@@ -318,14 +318,12 @@ async function exportCsvAsPdfWithGraph() {
 
   const items = Object.values(data);
 
-  // Step 1: Count statuses
   const statusCounts = {};
   items.forEach(entry => {
     const status = (entry.status || "Unknown").toLowerCase();
     statusCounts[status] = (statusCounts[status] || 0) + 1;
   });
 
-  // Step 2: Create chart
   const ctx = document.getElementById("statusChart").getContext("2d");
   const chart = new Chart(ctx, {
     type: "bar",
@@ -344,9 +342,7 @@ async function exportCsvAsPdfWithGraph() {
         legend: { display: false }
       },
       scales: {
-        y: {
-          beginAtZero: true
-        }
+        y: { beginAtZero: true }
       }
     }
   });
@@ -354,123 +350,86 @@ async function exportCsvAsPdfWithGraph() {
   await new Promise(resolve => setTimeout(resolve, 500));
   const chartImage = chart.toBase64Image();
 
-  //  Create PDF (landscape)
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: "landscape" })
-
+  const doc = new jsPDF({ orientation: "landscape" });
   doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
   doc.text("GPPB-MORS", 14, 15);
 
-  //  Parse CSV into table format
   const csv = jsonToCsv(items);
-const lines = csv.trim().split("\r\n");
-const rawRows = lines.map(line => line.split(",").map(cell => cell.replace(/^"|"$/g, "")));
+  const lines = csv.trim().split("\r\n");
+  const rawRows = lines.map(line => line.split(",").map(cell => cell.replace(/^"|"$/g, "")));
 
-const desiredOrder = [
-  "firstName",
-  "lastName",
-  "email",
-  "phoneNumber",
-  "company",
-  "jobPosition",
-  "consultationInterest",
-  "appointmentDate",
-  "appointmentTime",
-  "status",
-  //"additionaInfo"
-];
+  const desiredOrder = [
+    "firstName", "lastName", "email", "phoneNumber", "company", "jobPosition",
+    "consultationInterest", "appointmentDate", "appointmentTime", "status"
+  ];
 
-// Map raw header positions
-const headerMap = {};
-lines[0].split(",").forEach((h, i) => {
-  headerMap[h.replace(/^"|"$/g, "")] = i;
-});
+  const headerMap = {};
+  lines[0].split(",").forEach((h, i) => {
+    headerMap[h.replace(/^"|"$/g, "")] = i;
+  });
 
-// Build ordered headers
-const headers = desiredOrder.map(key => {
-  switch (key) {
-    case "appointmentDate": return "Appointment Date";
-    case "appointmentTime": return "Appointment Time";
-    case "firstName": return "First Name";
-    case "lastName": return "Last Name";
-    case "email": return "Email";
-    case "phoneNumber": return "Phone Number";
-    case "company": return "Company";
-    case "consultationInterest": return "Consultation Interest";
-    case "jobPosition": return "Job Position";
-    case "status": return "Status";
-    //case "additionaInfo": return "Additional Info"; <- benched for now
-    default: return key;
-  }
-});
+  const headers = desiredOrder.map(key => {
+    switch (key) {
+      case "appointmentDate": return "Appointment Date";
+      case "appointmentTime": return "Appointment Time";
+      case "firstName": return "First Name";
+      case "lastName": return "Last Name";
+      case "email": return "Email";
+      case "phoneNumber": return "Phone Number";
+      case "company": return "Company";
+      case "consultationInterest": return "Consultation Interest";
+      case "jobPosition": return "Job Position";
+      case "status": return "Status";
+      default: return key;
+    }
+  });
 
-// Build ordered rows
-const rows = rawRows.slice(1).map(row =>
-  desiredOrder.map(key => {
-    const index = headerMap[key];
-    return index !== undefined ? row[index] : "";
-  })
-);
+  const rows = rawRows.slice(1).map(row =>
+    desiredOrder.map(key => {
+      const index = headerMap[key];
+      return index !== undefined ? row[index] : "";
+    })
+  );
 
-
-  // Step 5: Add table
   doc.autoTable({
-  startY: 22,
-  head: [headers],
-  body: rows,
-  styles: {
-    fontSize: 9,
-    cellPadding: 1,
-    overflow: 'linebreak',
-    valign: 'middle'
-  },
-  headStyles: {
-    fillColor: [59, 130, 246],
-    textColor: 255,
-    fontSize: 9
-  },
-  alternateRowStyles: {
-    fillColor: [245, 245, 245]
-  },
-  margin: { left: 10, right: 10 },
-  tableWidth: "auto",
-  columnStyles: {
-    4: { cellWidth: 40 }, // email
-    3: { cellWidth: 30 }, // company
-    2: { cellWidth: 22 }, // time
-    5: { cellWidth: 30 }, // interest
-    6: { cellWidth: 25 }, // first name
-    7: { cellWidth: 25 }, // job pos
-    8: { cellWidth: 25 }, // last name
-    9: { cellWidth: 30 }, // phone
-  },
-  didDrawPage: function (data) {
-    doc.lastTableY = data.cursor.y;
-  }
-});
+    startY: 22,
+    head: [headers],
+    body: rows,
+    styles: { fontSize: 9, cellPadding: 1, overflow: 'linebreak', valign: 'middle' },
+    headStyles: { fillColor: [59, 130, 246], textColor: 255, fontSize: 9 },
+    alternateRowStyles: { fillColor: [245, 245, 245] },
+    margin: { left: 10, right: 10 },
+    tableWidth: "auto",
+    didDrawPage: function (data) {
+      doc.lastTableY = data.cursor.y;
+    }
+  });
 
-
-  
+  const canvas = document.getElementById("statusChart");
+  const imgWidth = 120;
+  const aspectRatio = canvas.height / canvas.width;
+  const imgHeight = imgWidth * aspectRatio;
   const chartTop = doc.lastTableY + 10;
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "bold");
-  doc.text("Status Overview", 14, chartTop);
-  // Smaller chart dimensions
-const canvas = document.getElementById("statusChart");
+  const pageHeight = doc.internal.pageSize.getHeight();
 
-// dont ask me how these lines of code work, I dont know anymore.
-const imgWidth = 120; 
-const aspectRatio = canvas.height / canvas.width;
-const imgHeight = imgWidth * aspectRatio;
+  if (chartTop + imgHeight + 20 > pageHeight) {
+    doc.addPage();
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text("Status Overview", 14, 15);
+    doc.addImage(chartImage, "PNG", 14, 20, imgWidth, imgHeight);
+  } else {
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text("Status Overview", 14, chartTop);
+    doc.addImage(chartImage, "PNG", 14, chartTop + 5, imgWidth, imgHeight);
+  }
 
-doc.setFontSize(12);
-doc.text("Status Overview", 14, chartTop);
-doc.addImage(chartImage, "PNG", 14, chartTop + 5, imgWidth, imgHeight);
-
-  doc.save("contactFormDB-export-with-graph.pdf");
+  doc.save("GPPB-MORS-Export.pdf");
   chart.destroy();
 }
+
 
 
 
@@ -569,4 +528,21 @@ document.addEventListener("click", function (event) {
   if (!dropdown.contains(event.target)) {
     menu.classList.add("hidden");
   }
+});
+document.addEventListener("DOMContentLoaded", () => {
+    const emailSpan = document.getElementById("account-email");
+    const auth = firebase.auth();
+
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            // ✅ Still logged in and account exists
+            const email = user.email;
+            if (emailSpan) emailSpan.textContent = email;
+            sessionStorage.setItem("adminEmail", email);
+        } else {
+            // ❌ User is not logged in or account was deleted
+            if (emailSpan) emailSpan.textContent = "Not signed in";
+            sessionStorage.removeItem("adminEmail");
+        }
+    });
 });

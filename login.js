@@ -1,4 +1,5 @@
-/// LOGIN MODAL FIXED - REMOVED OTP VERIFICATION FROM LOGIN PAGE
+/// LOGIN MODAL FIXED - USING FIREBASE AUTH
+
 const firebaseConfig = {
     apiKey: "AIzaSyBEJMTq5PQNrwDELbuqGfIFGFxJ3S-ke_Q",
     authDomain: "css151l-6290e.firebaseapp.com",
@@ -24,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle consultation form (if present)
     const form = document.querySelector('form');
     if (form && form.id !== "admin-login-form") {
-        form.addEventListener('submit', async function(e) {
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
 
             try {
@@ -33,8 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     lastName: this.querySelector('input[placeholder="Last Name"]').value,
                     jobPosition: this.querySelector('input[placeholder="Position"]').value,
                     email: this.querySelector('input[placeholder="johndoe@example.com"]').value,
-                    phoneNumber: this.querySelector('input[placeholder="+63"]').value + ' ' +
-                                this.querySelector('input[placeholder="91234567890"]').value,
+                    phoneNumber:
+                        this.querySelector('input[placeholder="+63"]').value +
+                        ' ' +
+                        this.querySelector('input[placeholder="91234567890"]').value,
                     company: this.querySelector('input[placeholder="Company Name"]').value,
                     consultationInterest: this.querySelectorAll('input[type="text"]')[4].value,
                     appointmentDate: this.querySelector('input[type="date"]').value,
@@ -74,62 +77,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
 
-        const username = emailInput.value.trim();
+        const email = emailInput.value.trim();
         const password = passwordInput.value.trim();
 
-        if (!username || !password) {
+        if (!email || !password) {
             message.style.color = "orange";
             message.textContent = "Please enter both email and password.";
             return;
         }
 
-        const encodedEmail = username.replace(/\./g, ',');
-        const accountRef = db.ref("adminOtps/" + encodedEmail);
-
+        const auth = firebase.auth();
         try {
-            const snapshot = await accountRef.once('value');
-            const account = snapshot.val();
-
-            if (!account) {
-                message.style.color = "red";
-                message.textContent = "Account not found.";
-                return;
-            }
-
-            if (account.password !== password) {
-                message.style.color = "red";
-                message.textContent = "Incorrect password.";
-                return;
-            }
-
-            // Authenticated, generate OTP
-            const otp = Math.floor(100000 + Math.random() * 900000).toString();
-            await db.ref("adminOtps/" + encodedEmail).update({
-                otp,
-                timestamp: Date.now()
-            });
-
-            try {
-                await emailjs.send('service_yl0b9tl', 'template_4mpn41n', {
-                    email: username,
-                    otp_code: otp
-                });
-
-                sessionStorage.setItem("adminEmail", username);
-                message.style.color = "green";
-                message.textContent = "Login successful! Sending OTP...";
-                window.location.href = "verify.html";
-
-            } catch (emailError) {
-                console.error("EmailJS error:", emailError);
-                message.style.color = "red";
-                message.textContent = "OTP failed to send. Try again.";
-            }
-
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+            sessionStorage.setItem("adminEmail", email);
+            message.style.color = "green";
+            message.textContent = "Login successful!";
+            window.location.href = "inbox.html"; // or wherever you want to redirect
         } catch (error) {
-            console.error("Login error:", error);
+            console.error("Auth error:", error);
             message.style.color = "red";
-            message.textContent = "Login failed. Try again.";
+            message.textContent = "INVALID EMAIL OR PASSWORD. Please try again."; ;
         }
     });
 

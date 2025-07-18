@@ -300,3 +300,18 @@ body {
 .dropdown-option:hover {
   background-color: #e5e7eb; /* hover:bg-gray-200 */
 }
+
+
+@media (max-width: 768px) {
+  .signout {
+    color: #e53935 !important;
+  }
+  .signout:hover {
+    color: #c62828 !important;
+  }
+}
+#account-email {
+  font-size: 11.7px;
+  white-space: normal;
+  word-break: break-all;
+}
