@@ -119,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Close modal when clicking cancel
     cancelBtn.addEventListener('click', () => {
         captchaModal.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Restore scrolling
         pendingFormData = null;
         setCaptcha(); // Reset captcha
     });
@@ -127,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     captchaModal.addEventListener('click', (e) => {
         if (e.target === captchaModal) {
             captchaModal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restore scrolling
             pendingFormData = null;
             setCaptcha(); // Reset captcha
         }
@@ -143,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Close modal and proceed with form submission
         captchaModal.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Restore scrolling
         await processFormSubmission(pendingFormData);
     });
 
@@ -210,6 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Store form data and show captcha modal
             pendingFormData = formData;
             setCaptcha(); // Generate new captcha
+            document.body.style.overflow = 'hidden'; // Prevent page scrolling
             captchaModal.style.display = 'block';
             document.getElementById('captchaInput').focus();
 
