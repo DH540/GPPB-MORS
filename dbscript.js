@@ -109,9 +109,31 @@ document.addEventListener('DOMContentLoaded', () => {
     setCaptcha();
     document.getElementById('refreshCaptcha').addEventListener('click', setCaptcha);
 
-    document.querySelector('form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        // Captcha validation
+    // Modal functionality
+    const captchaModal = document.getElementById('captcha-modal');
+    const cancelBtn = document.getElementById('cancel-captcha');
+    const verifyBtn = document.getElementById('verify-captcha');
+
+    let pendingFormData = null;
+
+    // Close modal when clicking cancel
+    cancelBtn.addEventListener('click', () => {
+        captchaModal.style.display = 'none';
+        pendingFormData = null;
+        setCaptcha(); // Reset captcha
+    });
+
+    // Close modal when clicking outside
+    captchaModal.addEventListener('click', (e) => {
+        if (e.target === captchaModal) {
+            captchaModal.style.display = 'none';
+            pendingFormData = null;
+            setCaptcha(); // Reset captcha
+        }
+    });
+
+    // Handle captcha verification
+    verifyBtn.addEventListener('click', async () => {
         const captchaInput = document.getElementById('captchaInput').value.trim();
         if (captchaInput !== window.currentCaptcha) {
             alert('Incorrect Captcha. Please try again.');
@@ -119,6 +141,48 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Close modal and proceed with form submission
+        captchaModal.style.display = 'none';
+        await processFormSubmission(pendingFormData);
+    });
+
+    // Process the actual form submission
+    async function processFormSubmission(formData) {
+        console.log('Form submission started');
+
+        try {
+            const emailParams = {
+                from_name: 'GPPB-TSO',
+                to_email: formData.email,
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                phoneNumber: formData.phoneNumber,
+                appointmentDate: formData.appointmentDate,
+                appointmentTime: formData.appointmentTime,
+                consultationInterest: formData.consultationInterest
+            };
+            console.log('Email parameters prepared:', emailParams);
+
+            // Save to Firebase
+            const dbResponse = await contactFormDB.push(formData);
+            console.log("Data saved to Firebase with key:", dbResponse.key);
+
+            // Store data in sessionStorage before redirecting
+            sessionStorage.setItem('consultationData', JSON.stringify(formData));
+            window.location.href = './receipt.html';
+
+        } catch (error) {
+            console.error('Detailed error information:', {
+                message: error.message,
+                stack: error.stack,
+                error: error
+            });
+            alert('There was an error processing your consultation request. Please try again. Error: ' + error.message);
+        }
+    }
+
+    document.querySelector('form').addEventListener('submit', async function(e) {
+        e.preventDefault();
         console.log('Form submission started');
 
         try {
@@ -143,38 +207,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const emailParams = {
-                from_name: 'GPPB-TSO',
-                to_email: formData.email,
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                phoneNumber: formData.phoneNumber,
-                appointmentDate: formData.appointmentDate,
-                appointmentTime: formData.appointmentTime,
-                consultationInterest: formData.consultationInterest
-            };
-            console.log('Email parameters prepared:', emailParams);
-
-            console.log('Attempting to send email with:', {
-                serviceId: 'default_service',
-                templateId: 'template_1gom91e'
-            });
-
-            // Save to Firebase
-            const dbResponse = await contactFormDB.push(formData);
-            console.log("Data saved to Firebase with key:", dbResponse.key);
-
-            // Store data in sessionStorage before redirecting
-            sessionStorage.setItem('consultationData', JSON.stringify(formData));
-            window.location.href = './receipt.html';
+            // Store form data and show captcha modal
+            pendingFormData = formData;
+            setCaptcha(); // Generate new captcha
+            captchaModal.style.display = 'block';
+            document.getElementById('captchaInput').focus();
 
         } catch (error) {
-            console.error('Detailed error information:', {
-                message: error.message,
-                stack: error.stack,
-                error: error
-            });
-            alert('There was an error processing your consultation request. Please try again. Error: ' + error.message);
+            console.error('Error collecting form data:', error);
+            alert('There was an error processing your form. Please try again.');
         }
     });
 });

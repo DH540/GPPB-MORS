@@ -40,6 +40,80 @@
             max-width: 320px;
             min-width: 220px;
         }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            margin-top: 10px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .cancel-btn, .verify-btn {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .cancel-btn {
+            background-color: #f44336; /* Red */
+        }
+
+        .refresh-captcha-btn {
+            background-color: #3730F5; /* Changed from #008CBA to match theme */
+        }
+
+        .refresh-captcha-btn:hover {
+            background-color: #2a23b7; /* Added hover state */
+        }
+
+        .captcha-display {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
@@ -134,18 +208,33 @@
                     <textarea></textarea>
                 </div>
                 <br>
-                <!-- Captcha Section -->
-                <div class="center-captcha-row">
-                    <div class="form-group" id="captcha-container">
-                        <label for="captchaInput">Captcha: <span id="captcha-text"></span></label>
-                        <div style="display: flex; gap: 8px; align-items: center;">
-                            <input type="text" id="captchaInput" required placeholder="Enter Captcha" style="flex:1;">
-                            <button type="button" id="refreshCaptcha" class="refresh-captcha-btn">Refresh Captcha</button>
-                        </div>
-                    </div>
-                </div>
                 <button type="submit" class="submit-btn" href="receipt.html">Submit</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Captcha Modal -->
+    <div id="captcha-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Complete Captcha Verification</h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" id="captcha-container">
+                    <label for="captchaInput">Enter the code shown below:</label>
+                    <div class="captcha-display">
+                        <span id="captcha-text"></span>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center; margin-top: 10px;">
+                        <input type="text" id="captchaInput" required placeholder="Enter Captcha" style="flex:1;">
+                        <button type="button" id="refreshCaptcha" class="refresh-captcha-btn">Refresh</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="cancel-captcha" class="cancel-btn">Cancel</button>
+                <button type="button" id="verify-captcha" class="verify-btn">Verify & Submit</button>
+            </div>
         </div>
     </div>
 </body>
