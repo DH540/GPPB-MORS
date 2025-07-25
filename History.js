@@ -448,7 +448,8 @@ window.exportContactFormDBAsCsv = function () {
       const itemsArray = Object.values(data);
 
       // Convert JSON array to CSV string
-     const csv = jsonToCsv(items);
+     const csv = jsonToCsv(itemsArray);
+
 const lines = csv.trim().split("\r\n");
 const rawRows = lines.map(line => line.split(",").map(cell => cell.replace(/^"|"$/g, "")));
 
